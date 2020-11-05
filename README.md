@@ -1,8 +1,7 @@
-# Team 4: BruinDoodle :pencil2::bear:
-
-
+# Team 4: BruinDoodle :bear::pencil2:
+skribbl.io but better
 
 ## Dependencies
-Python
-* SpeechRecognition
-* pyaudio
+Python :snake:
+* SpeechRecognition :speech_balloon:
+* pyaudio :sound:
