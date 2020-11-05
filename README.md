@@ -4,6 +4,6 @@ skribbl.io but better
 ## Dependencies
 Python :snake:
 * SpeechRecognition :speech_balloon:
-* pyaudio :sound:
+* PyAudio :sound:
 * OpenCV :camera:
 * Socket.IO :zap:
