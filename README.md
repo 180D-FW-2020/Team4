@@ -5,3 +5,5 @@ skribbl.io but better
 Python :snake:
 * SpeechRecognition :speech_balloon:
 * pyaudio :sound:
+* OpenCV :camera:
+* Socket.IO :zap:
