@@ -1,4 +1,4 @@
-# Team 4: BruinDoodle :pencil::bear:
+# Team 4: BruinDoodle :draw::bear:
 
 
 
