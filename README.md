@@ -1,5 +1,4 @@
-# Team4
-BruinDoodle
+# Team 4: BruinDoodle :pencil::bear:
 
 
 
