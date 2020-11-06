@@ -8,3 +8,5 @@ Python 3.5 :snake:
 * OpenCV :camera:
 * Socket.IO :zap:
 * Imutils
+
+For web app for now - npm ci && npm start
