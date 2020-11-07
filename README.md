@@ -9,4 +9,7 @@ Python 3.5 :snake:
 * Socket.IO :zap:
 * Imutils
 
-For web app for now - npm ci && npm start
+Web app installation for now
+```
+$ npm ci && npm start
+```
