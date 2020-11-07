@@ -9,7 +9,7 @@ Python 3.5 :snake:
 * Socket.IO :zap:
 * Imutils
 
-Web app installation for now
+Whiteboard installation for now
 ```
 $ npm ci && npm start
 ```
