@@ -1,4 +1,4 @@
-# Team 4: BruinDoodle :bear::pencil2:
+# Team 4: BruinDoodle.io :bear::pencil2:
 skribbl.io but better
 
 ## Dependencies
@@ -8,3 +8,8 @@ Python 3.5 :snake:
 * OpenCV :camera:
 * Socket.IO :zap:
 * Imutils
+
+Whiteboard installation for now
+```
+$ npm ci && npm start
+```
