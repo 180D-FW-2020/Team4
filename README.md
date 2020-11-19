@@ -8,6 +8,7 @@ Python 3.5 :snake:
 * OpenCV :camera:
 * Socket.IO :zap:
 * Imutils :wrench:
+* Pandas :panda:
 
 Whiteboard installation for now
 ```
