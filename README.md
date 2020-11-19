@@ -7,7 +7,7 @@ Python 3.5 :snake:
 * PyAudio :sound:
 * OpenCV :camera:
 * Socket.IO :zap:
-* Imutils
+* Imutils :wrench:
 
 Whiteboard installation for now
 ```
