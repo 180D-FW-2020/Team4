@@ -77,7 +77,8 @@
     var scolor = event.results[0][0].transcript;
     //diagnostic.textContent = 'Result received: ' + scolor + '.';
     console.log ('Result received: ' + scolor + '.');
-    bg.style.backgroundColor = scolor;
+    //bg.style.backgroundColor = scolor;
+    current.color = scolor;
     console.log('Confidence: ' + event.results[0][0].confidence);
   }
 
