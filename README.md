@@ -15,5 +15,5 @@ Whiteboard installation for now
 $ npm ci && npm start
 ```
 BrunDoodle.io
-Server - node server.js
-Client - npm run serve
+* Server - node server.js
+* Client - npm run serve
