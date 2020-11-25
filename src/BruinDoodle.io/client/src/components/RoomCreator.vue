@@ -1,7 +1,7 @@
 <template>
   <card-modal
     :visible="isVisible"
-    title="Create a room"
+    title="Create Room"
     transition="fade"
     @cancel="close"
     @ok="createRoom"
@@ -9,18 +9,18 @@
   >
     <form class="columns is-multiline">
       <div class="field column is-12">
-        <label class="label">Room name</label>
+        <label class="label">Room Name</label>
         <div class="control">
           <input
             class="input"
             type="text"
-            placeholder="Enter the name.."
+            placeholder="Enter a name..."
             v-model="name"
             required
           />
         </div>
         <p class="help is-danger" v-if="errors['name']">
-          You have to enter the name.
+          You have to enter a name.
         </p>
       </div>
 
@@ -30,13 +30,13 @@
           <input
             class="input"
             type="text"
-            placeholder="Text input"
+            placeholder="Enter a password..."
             v-model="password"
             :disabled="!isPrivate"
           />
         </div>
         <p class="help is-danger" v-if="errors['password']">
-          Minimum password length is 3
+          Minimum password length is 3 characters.
         </p>
       </div>
 
@@ -46,19 +46,19 @@
           <input
             class="input"
             type="number"
-            placeholder="Text input"
+            placeholder="Enter a number..."
             v-model="maxUsers"
             min="2"
             required
           />
         </div>
         <p class="help is-danger" v-if="errors['users']">
-          Minimum users quantity is 2
+          There must at least be 2 players to start a game.
         </p>
       </div>
 
       <div class="column is-6">
-        <label class="label">Word choosing time</label>
+        <label class="label">Word Selection Time</label>
         <div class="field has-addons">
           <div class="control is-fullwidth">
             <input
@@ -82,7 +82,7 @@
       </div>
 
       <div class="column is-6">
-        <label class="label">Round time</label>
+        <label class="label">Round Time</label>
         <div class="field has-addons">
           <div class="control is-fullwidth">
             <input
@@ -109,8 +109,8 @@
         <div class="control">
           <switches
             v-model="isPrivate"
-            text-enabled="The room is private"
-            text-disabled="The room is public"
+            text-enabled="The room is private."
+            text-disabled="The room is public."
             theme="bulma"
             color="default"
           ></switches>

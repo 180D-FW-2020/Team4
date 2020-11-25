@@ -3,7 +3,10 @@
     <section class="hero">
       <div class="hero-body">
         <div class="container">
-          <h1 class="title">Rooms</h1>
+          <h1 class="title">Rooms 🛋️</h1>
+          <h2 class="subtitle">
+            Choose a room, or create a new one to start playing! 🤓
+          </h2>
         </div>
       </div>
     </section>
@@ -11,19 +14,19 @@
       <table class="table is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Name 📋</th>
             <th>Type</th>
-            <th>Users</th>
-            <th>Actions</th>
+            <th>Player(s)</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="room in rooms" :key="room.id">
             <td>{{room.name}}</td>
-            <td>{{room.isPrivate ? 'Private' : 'Public'}}</td>
+            <td>{{room.isPrivate ? 'Private 🔐' : 'Public 🌎'}}</td>
             <td>{{room.users.length}}/{{room.maxUsers}}</td>
             <td class="is-paddingless">
-              <router-link :to="'./room/'+room.id" class="button is-light is-fullwidth">join</router-link>
+              <router-link :to="'./room/'+room.id" class="button is-primary is-fullwidth">Join</router-link>
             </td>
           </tr>
         </tbody>

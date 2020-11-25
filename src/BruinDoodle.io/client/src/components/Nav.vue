@@ -32,7 +32,7 @@
       <div class="navbar-end">
         <div class="navbar-item" v-if="!inRoom">
           <button class="button is-primary" @click="openCreator">
-            <strong>Create a room</strong>
+            <strong>Create Room</strong>
           </button>
         </div>
       </div>
