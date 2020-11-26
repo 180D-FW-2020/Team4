@@ -2,9 +2,8 @@ Strawberry
 Eclipse
 Chandelier
 Ketchup
-Toothpaste
 Rainbow
-Bunk bed
+Bunk Bed
 Boardgame
 Beehive
 Lemon
@@ -19,6 +18,7 @@ Fireworks
 Igloo
 Ferris wheel
 Banana peel
+Banana
 Lawnmower
 Summer
 Whisk
@@ -47,7 +47,6 @@ North Pole
 Farm
 Disney World
 Mexico
-Giraffe
 Koala
 Wasp
 Scorpion
@@ -62,7 +61,7 @@ Meerkat
 Eagle
 Mailman
 Superman
-Justin Beiber
+Justin Bieber
 Cowboy 
 Alexander Hamilton
 Robin Hood
@@ -70,12 +69,11 @@ Vampire
 Pirate
 Girl Scout
 Pikachu
-Spongebob
+SpongeBob
 Baby Yoda
 Pilgrim
 Cinderella
 Baker
-Abe Lincoln
 Thief
 Leprechaun
 Harry Potter
@@ -102,12 +100,452 @@ Applause
 Blizzard
 Sunburn
 Time machine
-Lace
 Monday
-Atlantis
 Swamp
 Panama Canal
 Sunscreen
 Dictionary
 Vanilla
 Century
+Cheese
+Bone
+Socks
+Leaf
+Whale
+Pie
+Shirt
+Orange
+Lollipop
+Bed
+Mouth
+Person
+Snake
+Jar
+Spoon
+Lamp
+Kite
+Monkey
+Swing
+Cloud
+Snowman
+Baby
+Eyes
+Pen
+Giraffe
+Grapes
+Book
+Ocean
+Star
+Cow
+Lips
+Worm
+Sun
+Basketball
+Hat
+Bus
+Chair
+Purse
+Head
+Shoe
+Ghost
+Coat
+Chicken
+Heart
+Jellyfish
+Tree
+Seashell
+Duck
+Bracelet
+Grass
+Jacket
+Slide
+Doll
+Spider
+Clock
+Cup
+Bridge
+Apple
+Balloon
+Drum
+Ears
+Egg
+Bread
+Nose
+House
+Airplane
+Inchworm
+Hippo
+Light
+Turtle
+Ball
+Carrot
+Cherry
+Ice
+Pencil
+Circle
+Ant
+Girl
+Glasses
+Flower
+Mouse
+Alligator
+Bell
+Robot
+Smile
+Bike
+Rocket
+Dinosaur
+Dog
+Bunny
+Cookie
+Bowl
+Clog
+Chestnut
+Commercial
+Atlantis
+Mine
+Comfy
+Ironic
+Implode
+Lie
+Philosopher
+Hang
+Vision
+Dorsal
+Hail
+Upgrade
+Peasant
+Stout
+Yolk
+Car
+Important
+Retail
+Laser
+Crisp
+Overture
+Blacksmith
+Ditch
+Exercise
+Mime
+Pastry
+Kilogram
+Ligament
+Stowaway
+Opaque
+Drought
+Shrew
+Tinting
+Mooch
+Lyrics
+Neutron
+Stockholder
+Flotsam
+Cartography
+Ice Fishing
+Eureka
+Darkness
+Dripping
+Wobble
+Brunette
+Rubber
+Tutor
+Migrate
+Myth
+Psychologist
+Quarantine
+Slump
+Landfill
+Diagonal
+Inquisition
+Husband
+Ten
+Exponential
+Neighborhood
+Jazz
+Catalog
+Gallop
+Snag
+Acre
+Protestant
+Random
+Twang
+Flutter
+Fireside
+Clue
+Figment
+Ringleader
+Parody
+Jungle
+Armada
+Mirror
+Newsletter
+Sauce
+Observatory
+Bookend
+Drawback
+Fabric
+Siesta
+Aristocrat
+Addendum
+Rainwater
+Barber
+Scream
+Glitter
+Archaeologist
+Loiterer
+Positive
+Dizzy
+Czar
+Hydrogen
+Horse
+Door
+Song
+Trip
+Backbone
+Bomb
+Round
+Treasure
+Garbage
+Park
+Palace
+Baseball
+Coal
+Queen
+Dominoes
+Photograph
+Computer
+Hockey
+Aircraft
+Pepper
+Key
+iPad
+Cake
+Circus
+Password
+Bicycle
+Skate
+Electricity
+Lightsaber
+Nature
+Shallow
+Toast
+Outside
+America
+Roller
+Blading
+Gingerbread
+Man
+Bowtie
+Bulb
+Music
+Popsicle
+Knee
+Pineapple
+Tusk
+Sprinkler
+Money
+Spool
+Lighthouse
+Doormat
+Face
+Flute
+Owl
+Gate
+Suitcase
+Bathroom
+Scale
+Peach
+Newspaper
+Watering
+Can
+Hook
+School
+Beaver
+Hair
+Dryer
+Mushroom
+Dollar
+Soda
+Chin
+Garden
+Ticket
+Boot
+Cello
+Rain
+Clam
+Pelican
+Stingray
+Nail
+Sheep
+Stoplight
+Coconut
+Crib
+Hippopotamus
+Ring
+Video
+Camera
+Snowflake
+Picture Frame
+Gel
+Leg Warmers
+Paint Brush
+Bath Fizzers
+Drill Press
+Chalk
+Rubber Duck
+Wireless Control
+Word Search
+Spring
+Stone
+Rug
+Thermometer
+Stockings
+CD
+Fake Flowers
+Model Car
+Check Book
+Vase
+Hanger
+Cookie Jar
+Speakers
+Screw
+Grid Paper
+Boom Box
+Sailboat
+Toothpick
+Helmet
+Puddle
+Toe Ring
+Clay Pot
+Thread
+Bow
+Flag
+Plastic Fork
+Scotch Tape
+Lamp Shade
+Sketch Pad
+Tissue Box
+Shoelace
+Needle
+Deodorant
+Button
+Sticky Note
+Candy Wrapper
+Toothpaste
+Sharpie
+Shawl
+Eye Liner
+Twister
+Photo Album
+Sandpaper
+Bookmark
+White Out
+Pool Stick
+Outlet
+Quilt
+Seat Belt
+Mouse Pad
+Tire Swing
+Nail Filer
+Cork
+Stop Sign
+Rusty Nail
+Gage
+Rubber Band
+Zipper
+Canvas
+Sponge
+Key Chain
+Eraser
+Bottle Cap
+Candle
+Face Wash
+Lace
+Lip Gloss
+Buckle
+Shovel
+Slipper
+Glow Stick
+Cable
+Ice Cube
+Credit Card
+Nail Clippers
+Sunglasses
+Tweezers
+Hair Tie
+Charger
+Blouse
+Card
+Pablo Picasso
+J.K. Rowling
+Joseph Stalin
+Nelson Mandela
+Amelia Earhart
+Adolf Hitler
+Audrey Hepburn
+Mother Teresa
+Margaret Thatcher
+J.R.R. Tolkien
+Prince Charles
+Lionel Messi
+Oprah Winfrey
+Vincent Van Gogh
+Muhammad Ali
+Steve Jobs
+Richard Branson
+Thomas Edison
+George Bush 
+Usain Bolt
+Ludwig Beethoven
+Leonardo da Vinci
+Plato
+Michael Jackson
+Pope Francis
+Tom Cruise
+Anne Frank
+Albert Einstein
+Henry Ford
+Pele
+Leo Tolstoy
+Michael Jordon
+Malcolm X
+Martin Luther King
+Christopher Columbus
+Jesse Owens
+Mahatma Gandhi
+Tiger Woods
+Paul McCartney
+Neil Armstrong
+Charles Darwin
+Marilyn Monroe
+Roger Federer
+Mao Zedong
+George Orwell
+John Lennon
+Winston Churchill
+Coco Chanel
+Madonna
+Cleopatra
+Billie Holiday
+Elvis Presley
+Jacqueline Kennedy Onassis
+Sting
+Ronald Reagan
+Walt Disney
+Abraham Lincoln
+John F. Kennedy
+Barack Obama
+Ernest Hemingway
+Sigmund Freud
+Bill Gates
+Alfred Hitchcock
+Franklin D. Roosevelt
+David Beckham
+Vladimir Putin
+Fidel Castro
+Dalai Lama
+V. Lenin
+C.S. Lewis
+Oscar Wilde
+UCLA
+Avocadoes
