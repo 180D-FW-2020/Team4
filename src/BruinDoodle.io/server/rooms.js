@@ -19,7 +19,7 @@ const CREATE_ROOM = function (socket, options) {
     name: options.name,
     isPrivate: options.isPrivate || false,
     password: options.password || "",
-    maxUsers: options.maxUsers || 8,
+    maxUsers: 8,
     roundTime: options.roundTime || 120,
     wordTime: options.wordTime || 25,
     users: [],
@@ -64,7 +64,7 @@ const JOIN_ROOM = function (socket, id, password) {
   let flag = true;
 
   if (typeof room == "undefined") {
-    socket.emit("join_room_error", "This room doesn't exist");
+    socket.emit("join_room_error", "This room doesn't exist!");
     return false;
   }
 
@@ -73,13 +73,13 @@ const JOIN_ROOM = function (socket, id, password) {
   }
 
   if (room.users.length == room.maxUsers) {
-    var msg = "There is max amount of users.";
+    var msg = "Room is full!";
     flag = false;
   }
 
   if (room.isPrivate) {
     if (room.password != password) {
-      var msg = "Wrong password";
+      var msg = "Wrong password!";
       flag = false;
     }
   }

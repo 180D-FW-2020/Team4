@@ -3,7 +3,7 @@
     <section class="hero">
       <div class="hero-body">
         <div class="container">
-          <h1 class="title">Rooms 🛋️</h1>
+          <h1 class="title">Rooms</h1>
           <h2 class="subtitle">
             Choose a room, or create a new one to start playing! 🤓
           </h2>

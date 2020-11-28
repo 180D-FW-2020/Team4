@@ -8,10 +8,10 @@ class ROOM {
     this.name = options.name;
     this.isPrivate = options.isPrivate || false;
     this.password = options.password || "";
-    this.maxUsers = options.maxUsers || 8;
+    this.maxUsers = 8;
     this.users = [...options.users] || [];
     this.queue = [...options.users] || [];
-    this.roundTime = options.roundTime || 120;
+    this.roundTime = options.roundTime || 180;
     this.wordTime = options.wordTime || 25;
     this.points =
       {
@@ -48,7 +48,7 @@ class ROOM {
         if (time <= 0) {
           CHAT.sendServerMessage(
             this.id,
-            `Painter didn't chose the word, skipping the round.`
+            `👨‍🎨 didn't choose a word, skipping round...`
           );
           this.initRound();
           clearInterval(interval);
@@ -67,7 +67,7 @@ class ROOM {
       if (time <= 0) {
         CHAT.sendServerMessage(
           this.id,
-          `No one guessed the word. The word was: ${this.round.word}`
+          `No one guessed the word: ${this.round.word}`
         );
         this.stopRound();
         clearInterval(interval);
@@ -86,12 +86,12 @@ class ROOM {
       io.to(this.id).emit("round_started");
       io.to(this.painter).emit("receive_password", word);
       CHAT.sendServerMessage(this.id, `Round started!`);
-      CHAT.sendCallbackID(this.painter, `The secret word is: ${word}`);
+      CHAT.sendCallbackID(this.painter, `The chosen word is: ${word}`);
       this.countDown(this.roundTime);
     } else {
       CHAT.sendCallbackID(
         this.painter,
-        `You need at least 2 players to start the game!`
+        `You need at least 2 players to start!`
       );
     }
   }
@@ -125,7 +125,7 @@ class ROOM {
     this.painter = newPainter;
 
     io.to(this.id).emit("painter_changed", newPainter);
-    CHAT.sendCallbackID(this.painter, "You are a new painter!");
+    CHAT.sendCallbackID(this.painter, "You are the new 👨‍🎨");
 
     return true;
   }
@@ -155,7 +155,7 @@ class ROOM {
       this.stopRound();
       CHAT.sendServerMessage(
         this.id,
-        `Painter (${name}) left the game, choosing another painter...`
+        `${name} left the game, choosing another 👨‍🎨`
       );
     }
 

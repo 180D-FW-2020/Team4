@@ -5,8 +5,12 @@
         <h1 class="title is-2 has-text-centered" v-if="room">
           {{ room.name.toUpperCase() }}
         </h1>
-        <h2 v-if="room" class="subtitle is-4 has-text-centered">
-          ⏰
+        <h2 v-if="room && time >= 10" class="subtitle is-4 has-text-centered">
+          {{ parseInt(time / 60) }}:{{
+            time % 60 <= 9 ? "0" + (time % 60) : time % 60
+          }}
+        </h2>
+        <h2 v-else-if="room && time > 0" class="subtitle is-4 has-text-centered has-text-danger has-text-weight-bold">
           {{ parseInt(time / 60) }}:{{
             time % 60 <= 9 ? "0" + (time % 60) : time % 60
           }}
@@ -16,7 +20,7 @@
       <div class="column is-3">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">Players: {{ users.length }}</p>
+            <p class="card-header-title">🏆</p>
           </header>
           <div class="card-content">
             <ul class="content playerlist" v-if="showUsers">
@@ -49,8 +53,9 @@
         >
           <header class="card-header">
             <div class="card-header-title">
-              <p>Choose next word</p> 
-              <span>{{ wordTime }}s</span>
+              <p>Choose next word...</p> 
+              <span v-if="wordTime < 10" class="has-text-danger">{{ wordTime }}</span>
+              <span v-else>{{ wordTime }}</span>
             </div>
           </header>
           <div class="card-content">
@@ -74,7 +79,7 @@
         <div class="card card--painter" v-if="iDraw && roundStarted">
           <header class="card-header">
             <div class="card-header-title">
-              <p>Your secret word</p>
+              <p>The chosen word is...</p>
             </div>
           </header>
           <div class="card-content">
@@ -88,7 +93,7 @@
       <div class="column is-3" id="chat">
         <div class="card chat">
           <header class="card-header">
-            <p class="card-header-title">Chat</p>
+            <p class="card-header-title">💬</p>
           </header>
           <div class="chat-body" ref="chat">
             <ul class="chat-messages">
@@ -98,14 +103,23 @@
                 class="chat-message"
               >
                 <span
-                  class="has-text-weight-bold"
+                  class="has-text-weight-bold is-size-7"
                   v-if="message.sender != 'server'"
                   >{{ message.sender }}:</span
                 >
-                <span v-if="message.sender == 'server'">
-                  <strong>{{ message.msg }}</strong>
+                <span v-if="message.sender == 'server' && (message.msg.includes('No one guessed the word:') || message.msg.includes('left the game, choosing another 👨‍🎨') || message.msg.includes(`You need at least 2 players to start!`))" class="has-text-weight-bold has-text-danger is-size-7">
+                  {{ message.msg }}
                 </span>
-                <span v-else>{{ " " + message.msg }}</span>
+                <span v-else-if="message.sender == 'server' && (message.msg.includes('joined the game!') || message.msg.includes(`Congratulations! You've guessed the word!`) || message.msg.includes(`guessed the word:`))" class="has-text-weight-bold has-text-success is-size-7">
+                  {{ message.msg }}
+                </span>
+                <span v-else-if="message.sender == 'server' && (message.msg.includes(`You're so close!`) || message.msg.includes(`The chosen word is:`))" class="has-text-weight-bold has-text-warning is-size-7">
+                  {{ message.msg }}
+                </span>
+                <span v-else-if="message.sender == 'server'" class="has-text-weight-bold is-size-7">
+                  {{ message.msg }}
+                </span>
+                <span v-else class="is-size-7">{{ " " + message.msg }}</span>
               </li>
             </ul>
           </div>
@@ -185,7 +199,7 @@ export default {
     },
     async getName() {
       const name = await this.$swal({
-        title: "Enter your name",
+        title: "Enter your name:",
         input: "text",
         showCancelButton: false,
         inputPlaceholder: "Your name is...",
@@ -199,10 +213,10 @@ export default {
     },
     async getPassword() {
       const { value: password } = await this.$swal({
-        title: "Enter your password",
+        title: "Enter the password:",
         input: "password",
         showCancelButton: true,
-        inputPlaceholder: "Enter your password",
+        inputPlaceholder: "The password is...",
         inputAttributes: {
           autocapitalize: "off",
           autocorrect: "off",
@@ -249,7 +263,7 @@ export default {
         this.getUsers();
         this.joinRoom();
       } else {
-        this.$swal({ title: "This room does not exist", type: "error" });
+        this.$swal({ title: "This room doesn't exist.", type: "error" });
         this.$router.push("/rooms");
       }
     },

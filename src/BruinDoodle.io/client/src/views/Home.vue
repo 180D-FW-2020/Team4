@@ -18,7 +18,7 @@
         <div class="hero-body">
           <div class="content">
             <h4 class="title is-3 ">How to Play 📃</h4>
-            <p>Every round takes at most 120 seconds. ⏰</p>
+            <p>Every round takes at most 180 seconds. ⏰</p>
             <p>You need at least ✌️ players to start a game.</p>
             <p>👨‍🎨 Channel your inner Bob Ross to draw the selected word.</p>
             <p>🙋‍♀️ Use that big 🧠 of yours to guess the word.</p>
