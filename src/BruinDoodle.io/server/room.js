@@ -13,6 +13,7 @@ class ROOM {
     this.queue = [...options.users] || [];
     this.roundTime = options.roundTime || 180;
     this.wordTime = options.wordTime || 25;
+    this.maxRounds = options.maxRounds || 3;
     this.points =
       {
         ...options.points,
@@ -48,7 +49,7 @@ class ROOM {
         if (time <= 0) {
           CHAT.sendServerMessage(
             this.id,
-            `👨‍🎨 didn't choose a word, skipping round...`
+            `Painter didn't choose a word, skipping round...`
           );
           this.initRound();
           clearInterval(interval);
@@ -125,7 +126,7 @@ class ROOM {
     this.painter = newPainter;
 
     io.to(this.id).emit("painter_changed", newPainter);
-    CHAT.sendCallbackID(this.painter, "You are the new 👨‍🎨");
+    CHAT.sendCallbackID(this.painter, "You are the new painter!");
 
     return true;
   }
@@ -155,7 +156,7 @@ class ROOM {
       this.stopRound();
       CHAT.sendServerMessage(
         this.id,
-        `${name} left the game, choosing another 👨‍🎨`
+        `${name} left the game, choosing another painter...`
       );
     }
 

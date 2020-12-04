@@ -40,25 +40,25 @@
         </p>
       </div>
 
-      <!-- <div class="field column is-6">
-        <label class="label">No. of Players</label>
+      <div class="field column is-6">
+        <label class="label">Rounds</label>
         <div class="control">
           <input
             class="input"
             type="number"
             placeholder="Enter a number..."
-            v-model="maxUsers"
+            v-model="maxRounds"
             min="2"
             required
           />
         </div>
-        <p class="help is-danger" v-if="errors['users']">
-          Minimum number of players is 2.
+        <p class="help is-danger" v-if="errors['num_rounds']">
+          Minimum number of rounds is 2.
         </p>
-        <p class="help is-danger" v-else-if="errors['max_users']">
-          Maximum number of players is 8.
+        <p class="help is-danger" v-else-if="errors['max_num_rounds']">
+          Maximum number of roudns is 10.
         </p>
-      </div> -->
+      </div>
 
       <div class="column is-6">
         <label class="label">Word Selection Time</label>
@@ -106,10 +106,10 @@
             </a>
           </p>
         </div>
-        <p class="help is-danger" v-if="errors['round']">
+        <p class="help is-danger" v-if="errors['rounds']">
           Minimum round time is 30 seconds.
         </p>
-        <p class="help is-danger" v-else-if="errors['max_round']">
+        <p class="help is-danger" v-else-if="errors['max_rounds']">
           Maximum round time is 180 seconds.
         </p>
       </div>
@@ -139,7 +139,7 @@ export default {
     return {
       name: "",
       password: "",
-      maxUsers: 8,
+      maxRounds: 3,
       roundTime: 60,
       wordTime: 25,
       isPrivate: false,
@@ -174,19 +174,19 @@ export default {
         }
       }
 
-      // if (roomdata.maxUsers < 2) {
-      //   this.$set(this.$data.errors, "users", true);
-      //   flag = false;
-      // } else {
-      //   this.$set(this.$data.errors, "users", false);
-      // }
+      if (roomdata.maxRounds < 2) {
+        this.$set(this.$data.errors, "num_rounds", true);
+        flag = false;
+      } else {
+        this.$set(this.$data.errors, "num_rounds", false);
+      }
 
-      // if (roomdata.maxUsers > 8) {
-      //   this.$set(this.$data.errors, "max_users", true);
-      //   flag = false;
-      // } else {
-      //   this.$set(this.$data.errors, "max_users", false);
-      // }
+      if (roomdata.maxRounds > 10) {
+        this.$set(this.$data.errors, "max_num_rounds", true);
+        flag = false;
+      } else {
+        this.$set(this.$data.errors, "max_num_rounds", false);
+      }
 
       if (roomdata.roundTime < 30) {
         this.$set(this.$data.errors, "round", true);
@@ -233,7 +233,7 @@ export default {
     resetForm() {
       this.$data.name = "";
       this.$data.password = "";
-      this.$data.maxUsers = 8;
+      this.$data.maxRounds = 3;
       this.$data.isPrivate = false;
       this.$data.errors = {};
     },
