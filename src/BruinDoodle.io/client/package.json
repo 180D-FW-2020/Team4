@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "SET NODE_ENV=development & vue-cli-service serve",
     "build": "SET NODE_ENV=production & vue-cli-service build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "start": "npm run serve"
   },
   "dependencies": {
     "bulma": "^0.7.2",
