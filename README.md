@@ -9,9 +9,6 @@ Python 3.5 :snake:
 * OpenCV :camera:
 * Socket.IO :zap:
 
-Whiteboard installation for now
-```
-$ npm ci && npm start
 ```
 BrunDoodle.io
 * Server - ``` $ node server.js ```
