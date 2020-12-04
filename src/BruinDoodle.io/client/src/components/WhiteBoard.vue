@@ -35,7 +35,7 @@
         </div>
         <div class="card-footer">
           <a href="#" class="card-footer-item" @click.prevent="clearBoard"
-            >Clear the board</a
+            >Clear</a
           >
         </div>
       </footer>

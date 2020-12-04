@@ -73,7 +73,7 @@ io.on("connection", socket => {
           ROOMS.givePoints(socket);
           CHAT.sendCallback(socket, {
             self: `Congratulations! You've guessed the word!`,
-            broadcast: `${socket.name} guessed the word (${room.round.word}) and earned 1 point!`
+            broadcast: `${socket.name} guessed the word: ${room.round.word}`
           });
           room.stopRound();
         } else {
