@@ -9,7 +9,7 @@ Python 3.5 :snake:
 * OpenCV :camera:
 * Socket.IO :zap:
 
-```
+
 BrunDoodle.io
 * Server - ``` $ node server.js ```
 * Client - ``` $ npm run serve ```
