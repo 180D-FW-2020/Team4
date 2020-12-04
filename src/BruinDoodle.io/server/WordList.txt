@@ -173,7 +173,7 @@ Bread
 Nose
 House
 Airplane
-Inchworm
+Darabi
 Hippo
 Light
 Turtle
@@ -205,24 +205,19 @@ Commercial
 Atlantis
 Mine
 Comfy
-Ironic
-Implode
 Lie
 Philosopher
 Hang
 Vision
-Dorsal
 Hail
 Upgrade
 Peasant
 Stout
 Yolk
 Car
-Important
 Retail
 Laser
 Crisp
-Overture
 Blacksmith
 Ditch
 Exercise
@@ -230,19 +225,14 @@ Mime
 Pastry
 Kilogram
 Ligament
-Stowaway
 Opaque
 Drought
-Shrew
 Tinting
-Mooch
 Lyrics
 Neutron
 Stockholder
-Flotsam
 Cartography
 Ice Fishing
-Eureka
 Darkness
 Dripping
 Wobble
@@ -253,10 +243,8 @@ Migrate
 Myth
 Psychologist
 Quarantine
-Slump
 Landfill
 Diagonal
-Inquisition
 Husband
 Ten
 Exponential
@@ -266,17 +254,14 @@ Catalog
 Gallop
 Snag
 Acre
-Protestant
+Bikini
 Random
 Twang
-Flutter
 Fireside
 Clue
-Figment
 Ringleader
 Parody
 Jungle
-Armada
 Mirror
 Newsletter
 Sauce
@@ -285,8 +270,7 @@ Bookend
 Drawback
 Fabric
 Siesta
-Aristocrat
-Addendum
+Coronavirus
 Rainwater
 Barber
 Scream
@@ -315,6 +299,7 @@ Dominoes
 Photograph
 Computer
 Hockey
+Flavio
 Aircraft
 Pepper
 Key
@@ -332,7 +317,6 @@ Toast
 Outside
 America
 Roller
-Blading
 Gingerbread
 Man
 Bowtie
@@ -356,7 +340,6 @@ Bathroom
 Scale
 Peach
 Newspaper
-Watering
 Can
 Hook
 School
@@ -380,21 +363,16 @@ Sheep
 Stoplight
 Coconut
 Crib
-Hippopotamus
 Ring
 Video
 Camera
 Snowflake
 Picture Frame
 Gel
-Leg Warmers
 Paint Brush
-Bath Fizzers
-Drill Press
 Chalk
 Rubber Duck
 Wireless Control
-Word Search
 Spring
 Stone
 Rug
@@ -433,14 +411,13 @@ Sticky Note
 Candy Wrapper
 Toothpaste
 Sharpie
-Shawl
+Scarf
 Eye Liner
 Twister
 Photo Album
 Sandpaper
 Bookmark
 White Out
-Pool Stick
 Outlet
 Quilt
 Seat Belt
@@ -450,7 +427,6 @@ Nail Filer
 Cork
 Stop Sign
 Rusty Nail
-Gage
 Rubber Band
 Zipper
 Canvas
@@ -481,37 +457,25 @@ J.K. Rowling
 Joseph Stalin
 Nelson Mandela
 Amelia Earhart
-Adolf Hitler
-Audrey Hepburn
 Mother Teresa
-Margaret Thatcher
 J.R.R. Tolkien
-Prince Charles
-Lionel Messi
 Oprah Winfrey
 Vincent Van Gogh
 Muhammad Ali
 Steve Jobs
-Richard Branson
 Thomas Edison
 George Bush 
 Usain Bolt
 Ludwig Beethoven
 Leonardo da Vinci
-Plato
 Michael Jackson
 Pope Francis
-Tom Cruise
+Vin Diesel
 Anne Frank
 Albert Einstein
 Henry Ford
-Pele
-Leo Tolstoy
-Michael Jordon
-Malcolm X
+Michael Jordan
 Martin Luther King
-Christopher Columbus
-Jesse Owens
 Mahatma Gandhi
 Tiger Woods
 Paul McCartney
@@ -519,33 +483,87 @@ Neil Armstrong
 Charles Darwin
 Marilyn Monroe
 Roger Federer
-Mao Zedong
 George Orwell
 John Lennon
 Winston Churchill
 Coco Chanel
 Madonna
 Cleopatra
-Billie Holiday
 Elvis Presley
-Jacqueline Kennedy Onassis
 Sting
-Ronald Reagan
 Walt Disney
 Abraham Lincoln
 John F. Kennedy
 Barack Obama
-Ernest Hemingway
 Sigmund Freud
 Bill Gates
-Alfred Hitchcock
-Franklin D. Roosevelt
 David Beckham
 Vladimir Putin
-Fidel Castro
 Dalai Lama
-V. Lenin
-C.S. Lewis
-Oscar Wilde
 UCLA
-Avocadoes
+Avocado
+BPlate
+Royce Hall
+Lonzo Ball
+Bomb Shelter
+Bruin Bear
+Habibi Cafe
+Roccos Tavern
+Triangle
+Ackerman
+Greenhouse
+Diddy Riese
+Rose Bowl
+Westwood
+Postmates
+Bird Scooter
+Lime
+Janss Steps
+Andre
+Bruinwalk
+CCLE
+Daily Bruin
+Boelter
+Sculpture Garden
+Sawtelle
+The Hill
+Death Stairs
+Awkward Steps
+19P
+Tunneling
+Midnight Yell
+Undie Run
+Wooden
+Powell Cat
+Inverted Fountain
+Bruin Bash
+Pauley Pavillion
+Trojans
+Gene Block
+Zoom
+The Study
+IEEE
+ACM
+Tinder
+Bumble
+Trapped in the Closet
+Minecraft
+Thirsty Thursday
+UCPD
+Midterm Szn
+Rona Szn
+Lakers
+Dodgers
+Crying
+Finals Week
+De Neve Late Night
+Chicken Tenders
+Hedrick Fire Alarms
+In N Out
+Trader Joes
+Netflix
+Netflix n Chill
+Resflix
+Game of Thrones
+Feast
+Kerckhoff
