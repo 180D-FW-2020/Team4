@@ -19,17 +19,29 @@ def index():
         print('file uploaded successfully')
         return render_template('index.html', request="POST")
     else:
-        activeColor = "#000"
-        prevPos= { "x": 50, "y": 38 }
-        pos= { "x": 51, "y": 80 }
-        coords = { "prevPos": prevPos, "currPos": pos }
-        paintObj = { "color": activeColor, "coords": coords }
-        pc.paint(paintObj)
         return render_template("index.html")
 
 def gen(camera):
     while True:
         frame = camera.get_frame()
+        prevX = camera.get_prevX()
+        prevY = camera.get_prevY()
+        currX = camera.get_currX()
+        currY = camera.get_currY()
+        activeColor = "#000"
+        if(prevX==-1 or prevY==-1):
+            prevPos= { "x": null, "y": null }
+        else:
+            prevPos= { "x": prevX, "y": prevY}
+        if(currX==-1 or currY==-1):
+            pos= { "x": null, "y": null }
+        else:
+            pos= { "x": currX, "y": currY }
+            
+        coords = { "prevPos": prevPos, "currPos": pos }
+        paintObj = { "color": activeColor, "coords": coords }
+        pc.paint(paintObj)
+
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 

@@ -21,12 +21,37 @@ pinkUpper = (179,255,255)
 thickness_amt = 5
 color = (0,0,255)
 
+prev_x = 0
+prev_y = 0
+
+curr_x = 0
+curr_y = 0
+
 time.sleep(2.0)
 
 class VideoCamera(object):
     def __init__(self):
         self.video = VideoStream(src=0).start()
-    
+    def get_prevX(self):
+        if(pts[1] is not None):
+            return pts[1][0]
+        else:
+            return -1
+    def get_currX(self):
+        if(pts[0] is not None):
+            return pts[0][0]
+        else:
+            return -1
+    def get_prevY(self):
+        if(pts[1] is not None):
+            return pts[1][1]
+        else:
+            return -1
+    def get_currY(self):
+        if(pts[0] is not None):
+            return pts[0][1]
+        else:
+            return -1
     def get_frame(self):
         frame = self.video.read()
         frame = cv2.flip(frame,1)
@@ -62,7 +87,6 @@ class VideoCamera(object):
 
         #Add the point to the pts list => create drawing
         pts.appendleft(center)
-
         #connect the points with a line
         for i in range(1,len(pts)):
             if pts[i-1] is None or pts[i] is None:
