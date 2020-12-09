@@ -4,6 +4,8 @@ from flask import Flask, request, render_template, Response
 from microphone_recognition import mr
 from camera import VideoCamera
 import os
+import py_client as pc
+
 
 app = Flask(__name__)
 
@@ -18,6 +20,7 @@ def index():
 
         return render_template('index.html', request="POST")
     else:
+        pc.my_message("no")
         return render_template("index.html")
 
 def gen(camera):

@@ -12,7 +12,12 @@ global.CHAT = CHAT;
 io.on("connection", socket => {
   // Connect
   console.log(`User connected: ${socket.id}`);
+  console.log(JSON.stringify(socket.handshake.headers.origin));
   socket.name = socket.id;
+
+  socket.on("my response", msg => {
+    console.log(msg);
+  });
 
   // Disconnect
   socket.on("disconnect", () => {
