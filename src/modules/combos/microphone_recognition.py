@@ -69,4 +69,14 @@ def mr():
     except sr.RequestError as e:
         print("Could not request results from IBM Speech to Text service; {0}".format(e))
 
-    return (list)
+    thing = checkIfDuplicates(list)
+
+    return (thing)
+
+
+def checkIfDuplicates(listOfElems):
+    ''' Check if given list contains any duplicates '''    
+    for elem in listOfElems:
+        if listOfElems.count(elem) > 1:
+            return elem
+    return listOfElems[0]

@@ -7,9 +7,9 @@ def connect():
     print('connection established')
 
 @sio.event
-def my_message(data):
+def send_message(data):
     print('message received with ', data)
-    sio.emit('my response', {'response': data})
+    sio.emit('send_message', data)
 
 @sio.event
 def disconnect():

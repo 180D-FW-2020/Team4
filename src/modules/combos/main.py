@@ -17,10 +17,9 @@ def index():
         with open('audio.wav', 'wb') as audio:
             f.save(audio)
         print('file uploaded successfully')
-
         return render_template('index.html', request="POST")
     else:
-        pc.my_message("no")
+        pc.send_message("no")
         return render_template("index.html")
 
 def gen(camera):
@@ -31,12 +30,13 @@ def gen(camera):
 
 
 @app.route('/audio', methods=['POST', 'GET'])
-def hello():
+def guess():
     if request.method == "POST":
         f = request.files['audio_data']
         with open('audio.wav', 'wb') as audio:
             f.save(audio)
-        print (mr())
+        guess = mr()
+        pc.send_message(guess)
         return render_template("index.html")
     else:
         return render_template("index.html")
