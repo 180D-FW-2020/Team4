@@ -12,7 +12,8 @@ ap.add_argument("-v","--video",help="path to the (optional) video file")
 ap.add_argument("-b","--buffer",type=int, default=128,help="max buffer size")
 args = vars(ap.parse_args())
 pts = deque(maxlen=args['buffer']) 
-
+pts.appendleft(None)
+pts.appendleft(None)
 #We want to track the color pink
 pinkLower = (94,113,175)
 pinkUpper = (179,255,255)
