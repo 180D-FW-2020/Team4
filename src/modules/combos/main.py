@@ -19,7 +19,12 @@ def index():
         print('file uploaded successfully')
         return render_template('index.html', request="POST")
     else:
-        pc.send_message("no")
+        activeColor = "#000"
+        prevPos= { "x": 50, "y": 38 }
+        pos= { "x": 51, "y": 80 }
+        coords = { "prevPos": prevPos, "currPos": pos }
+        paintObj = { "color": activeColor, "coords": coords }
+        pc.paint(paintObj)
         return render_template("index.html")
 
 def gen(camera):

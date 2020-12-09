@@ -102,11 +102,28 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    let room = ROOMS.getSocketRoom(socket);
-    if (room.painter == socket.id && room.round != null) {
+    console.log(coords);
+    other = socket;
+    if (typeof(socket.handshake.headers.origin)=='undefined'){
+      clients.forEach(function (cl) {
+        if (socket.handshake.address==cl.handshake.address){
+          if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
+            other = cl;
+          }
+        }
+    });
+    }
+    let room = ROOMS.getSocketRoom(other);
+    if (room.painter == other.id && room.round != null) {
       socket.to(room.id).emit('paint', coords);
       room.round.addLine(coords);
     }
+
+    //let room = ROOMS.getSocketRoom(socket);
+    //if (room.painter == socket.id && room.round != null) {
+      //socket.to(room.id).emit('paint', coords);
+      //room.round.addLine(coords);
+    //}
   });
 
   socket.on("clear", () => {
