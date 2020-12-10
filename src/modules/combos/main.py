@@ -5,7 +5,7 @@ from flask_mqtt import Mqtt
 from microphone_recognition import mr
 from camera import VideoCamera
 import os
-import py_client as pc
+#import py_client as pc
 
 
 app = Flask(__name__)
@@ -63,7 +63,7 @@ def gen(camera):
 
         coords = { "prevPos": prevPos, "currPos": pos }
         paintObj = { "color": activeColor, "coords": coords }
-        pc.paint(paintObj)
+        #pc.paint(paintObj)
 
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
@@ -76,7 +76,7 @@ def guess():
         with open('audio.wav', 'wb') as audio:
             f.save(audio)
         guess = mr()
-        pc.send_message(guess)
+        #pc.send_message(guess)
         return render_template("index.html")
     else:
         return render_template("index.html")
