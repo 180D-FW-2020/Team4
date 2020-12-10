@@ -87,4 +87,7 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
+    client = mqtt.Client()
+    client.loop_start()
+
     app.run(debug=True)
