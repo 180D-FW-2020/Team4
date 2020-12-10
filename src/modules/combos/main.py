@@ -30,11 +30,11 @@ def gen(camera):
         currY = camera.get_currY()
         activeColor = "#000"
         if(prevX==-1 or prevY==-1):
-            prevPos= { "x": null, "y": null }
+            prevPos= { "x": "null", "y": "null" }
         else:
             prevPos= { "x": prevX, "y": prevY}
         if(currX==-1 or currY==-1):
-            pos= { "x": null, "y": null }
+            pos= { "x": "null", "y": "null" }
         else:
             pos= { "x": currX, "y": currY }
             
