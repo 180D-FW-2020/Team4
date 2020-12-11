@@ -1,37 +1,45 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, request, render_template, Response
-from flask_mqtt import Mqtt
+from paho.mqtt import client as mqtt_client
 from microphone_recognition import mr
 from camera import VideoCamera
 import os
+import random
+import threading
 #import py_client as pc
-
 
 app = Flask(__name__)
 
-app.config['MQTT_BROKER_URL'] = 'broker.hivemq.com'  # use the free broker from HIVEMQ
-app.config['MQTT_BROKER_PORT'] = 1883  # default port for non-tls connection
-app.config['MQTT_USERNAME'] = ''  # set the username here if you need authentication for the broker
-app.config['MQTT_PASSWORD'] = ''  # set the password here if the broker demands authentication
-app.config['MQTT_KEEPALIVE'] = 5  # set the time interval for sending a ping to the broker to 5 seconds
-app.config['MQTT_TLS_ENABLED'] = False  # set TLS to disabled for testing purposes
+broker = 'broker.hivemq.com'
+port = 1883
+topic = "/python/mqtt"
+# generate client ID with pub prefix randomly
+client_id = f'python-mqtt-{random.randint(0, 100)}'
 
-mqtt = Mqtt()
+def connect_mqtt() -> mqtt_client:
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print("Connected to MQTT Broker!")
+        else:
+            print("Failed to connect, return code %d\n", rc)
 
-received = []
+    client = mqtt_client.Client(client_id)
+    client.on_connect = on_connect
+    client.connect(broker, port)
+    return client
 
-@mqtt.on_connect()
-def handle_connect(client, userdata, flags, rc):
-    mqtt.subscribe('/python/mqtt')
+def subscribe(client: mqtt_client):
+    def on_message(client, userdata, msg):
+        print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
 
-@mqtt.on_message()
-def handle_mqtt_message(client, userdata, message):
-    data = dict(
-        topic=message.topic,
-        payload=message.payload.decode()
-    )
-    print(data)
+    client.subscribe(topic)
+    client.on_message = on_message
+
+def run():
+    client = connect_mqtt()
+    subscribe(client)
+    client.loop_forever()
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
@@ -53,11 +61,11 @@ def gen(camera):
         currY = camera.get_currY()
         activeColor = "#000"
         if(prevX==-1 or prevY==-1):
-            prevPos= { "x": null, "y": null }
+            prevPos= { "x": 'null', "y": 'null' }
         else:
             prevPos= { "x": prevX, "y": prevY}
         if(currX==-1 or currY==-1):
-            pos= { "x": null, "y": null }
+            pos= { "x": 'null', "y": 'null' }
         else:
             pos= { "x": currX, "y": currY }
 
@@ -87,7 +95,6 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    client = mqtt.Client()
-    client.loop_start()
-
-    app.run(debug=True)
+  clientloop_thread = threading.Thread(target=run, daemon=True)
+  clientloop_thread.start()
+  app.run(debug=True)
