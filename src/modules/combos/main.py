@@ -4,6 +4,8 @@ from flask import Flask, request, render_template, Response
 from paho.mqtt import client as mqtt_client
 from microphone_recognition import mr
 from camera import VideoCamera
+from selenium import webdriver
+import time
 import os
 import random
 import threading
@@ -13,9 +15,25 @@ app = Flask(__name__)
 
 broker = 'broker.hivemq.com'
 port = 1883
-topic = "/python/mqtt"
+topic = "/python/mqtt/snakes"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
+
+options = webdriver.ChromeOptions()
+options.add_argument('--ignore-certificate-errors')
+options.add_argument("--test-type")
+#options.binary_location = "/usr/bin/chromium"
+driver = webdriver.Chrome(executable_path='/Users/joanibajlozi/Desktop/chromedriver',options=options)
+#driver.get('localhost:5000')
+sel_setup = 0
+
+def click_record():
+    submit_button = driver.find_elements_by_xpath('//*[@id="recordButton"]')[0]
+    submit_button.click()
+
+def click_stop():
+    submit_button = driver.find_elements_by_xpath('//*[@id="stopButton"]')[0]
+    submit_button.click()
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -31,7 +49,13 @@ def connect_mqtt() -> mqtt_client:
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
-        print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+        # print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+        received = msg.payload.decode()
+        print(received)
+        if received == "Upward_Lift":
+            click_record()
+            time.sleep(5)
+            click_stop()
 
     client.subscribe(topic)
     client.on_message = on_message
@@ -53,6 +77,10 @@ def index():
         return render_template("index.html")
 
 def gen(camera):
+    global sel_setup
+    if sel_setup == 0:
+        driver.get('localhost:5000')
+        sel_setup = 1
     while True:
         frame = camera.get_frame()
         prevX = camera.get_prevX()
@@ -97,4 +125,4 @@ def video_feed():
 if __name__ == "__main__":
   clientloop_thread = threading.Thread(target=run, daemon=True)
   clientloop_thread.start()
-  app.run(debug=True)
+  app.run()
