@@ -5,14 +5,10 @@ from paho.mqtt import client as mqtt_client
 from microphone_recognition import mr
 from camera import VideoCamera
 from selenium import webdriver
-<<<<<<< Updated upstream
 import time
-=======
->>>>>>> Stashed changes
 import os
 import random
 import threading
-import time
 #import py_client as pc
 
 app = Flask(__name__)
@@ -43,22 +39,6 @@ def click_stop():
     submit_button = driver.find_elements_by_xpath('//*[@id="stopButton"]')[0]
     submit_button.click()
 
-options = webdriver.ChromeOptions()
-options.add_argument('--ignore-certificate-errors')
-options.add_argument("--test-type")
-#options.binary_location = "/usr/bin/chromium"
-driver = webdriver.Chrome(executable_path='/Users/joanibajlozi/Desktop/chromedriver',options=options)
-#driver.get('localhost:5000')
-sel_setup = 0
-
-def click_record():
-    submit_button = driver.find_elements_by_xpath('//*[@id="recordButton"]')[0]
-    submit_button.click()
-
-def click_stop():
-    submit_button = driver.find_elements_by_xpath('//*[@id="stopButton"]')[0]
-    submit_button.click()
-
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
@@ -80,10 +60,6 @@ def subscribe(client: mqtt_client):
             click_record()
             time.sleep(5)
             click_stop()
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     client.subscribe(topic)
     client.on_message = on_message
 
@@ -104,10 +80,6 @@ def index():
         return render_template("index.html")
 
 def gen(camera):
-    global sel_setup
-    if sel_setup == 0:
-        driver.get('localhost:5000')
-        sel_setup = 1
     while True:
         frame = camera.get_frame()
         prevX = camera.get_prevX()
