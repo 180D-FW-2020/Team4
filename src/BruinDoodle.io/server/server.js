@@ -8,16 +8,20 @@ const CHAT = require("./chat");
 global.io = io;
 global.CHAT = CHAT;
 
+var clients = [];
 
 io.on("connection", socket => {
   // Connect
   console.log(`User connected: ${socket.id}`);
+  console.log(JSON.stringify(socket.handshake.headers.origin));
   socket.name = socket.id;
+  clients.push(socket);
 
   // Disconnect
   socket.on("disconnect", () => {
     ROOMS.leaveRoom(socket);
     console.log(`User disconnected: ${socket.id}`);
+    clients.splice(clients.indexOf(socket), 1);
   });
 
   // Set socket's name
@@ -60,25 +64,35 @@ io.on("connection", socket => {
   });
 
   socket.on("send_message", msg => {
-    let room = ROOMS.getSocketRoom(socket);
+    other = socket;
+    if (typeof(socket.handshake.headers.origin)=='undefined'){
+      clients.forEach(function (cl) {
+        if (socket.handshake.address==cl.handshake.address){
+          if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
+            other = cl;
+          }
+        }
+    });
+    }
+    let room = ROOMS.getSocketRoom(other);
     if (room) {
       CHAT.sendMessage(room.id, {
         msg,
-        sender: socket.name
+        sender: other.name
       });
 
-      if (room.round != null && socket.id != room.painter) {
+      if (room.round != null && other.id != room.painter) {
         // Checking if the message is correct
         if (room.round.check(msg)) {
-          ROOMS.givePoints(socket);
-          CHAT.sendCallback(socket, {
+          ROOMS.givePoints(other);
+          CHAT.sendCallback(other, {
             self: `Congratulations! You've guessed the word!`,
-            broadcast: `${socket.name} guessed the word: ${room.round.word}`
+            broadcast: `${other.name} guessed the word: ${room.round.word}`
           });
           room.stopRound();
         } else {
           if (room.round.isClose(msg)) {
-            CHAT.sendCallback(socket, {
+            CHAT.sendCallback(other, {
               self: `You're so close!`
             });
           }
@@ -88,11 +102,28 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    let room = ROOMS.getSocketRoom(socket);
-    if (room.painter == socket.id && room.round != null) {
+    console.log(coords);
+    other = socket;
+    if (typeof(socket.handshake.headers.origin)=='undefined'){
+      clients.forEach(function (cl) {
+        if (socket.handshake.address==cl.handshake.address){
+          if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
+            other = cl;
+          }
+        }
+    });
+    }
+    let room = ROOMS.getSocketRoom(other);
+    if (room.painter == other.id && room.round != null) {
       socket.to(room.id).emit('paint', coords);
       room.round.addLine(coords);
     }
+
+    //let room = ROOMS.getSocketRoom(socket);
+    //if (room.painter == socket.id && room.round != null) {
+      //socket.to(room.id).emit('paint', coords);
+      //room.round.addLine(coords);
+    //}
   });
 
   socket.on("clear", () => {

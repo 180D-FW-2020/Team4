@@ -15,7 +15,7 @@ Vue.config.productionTip = false;
 Vue.use(
   new VueSocketIO({
     debug: false,
-    connection: "https://tranquil-ridge-32141.herokuapp.com/", //"http://localhost:5050",
+    connection: "http://192.168.68.117:5050", //"https://tranquil-ridge-32141.herokuapp.com/", //"http://localhost:5050",
   })
 );
 
