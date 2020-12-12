@@ -5,19 +5,43 @@ from paho.mqtt import client as mqtt_client
 from microphone_recognition import mr
 from camera import VideoCamera
 from selenium import webdriver
+<<<<<<< Updated upstream
 import time
+=======
+>>>>>>> Stashed changes
 import os
 import random
 import threading
+import time
 #import py_client as pc
 
 app = Flask(__name__)
 
+########################## MQTT Setup ###############################
 broker = 'broker.hivemq.com'
 port = 1883
 topic = "/python/mqtt/snakes"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
+#####################################################################
+
+options = webdriver.ChromeOptions()
+options.add_argument('--ignore-certificate-errors')
+options.add_argument("--test-type")
+driver = webdriver.Chrome(executable_path='C:/Users/Joani/Desktop/Team4/src/modules/combos/chromedriver',options=options)
+sel_setup = 0
+
+def click_record():
+    global sel_setup
+    if sel_setup == 0:
+        driver.get('localhost:5000')
+        sel_setup = 1
+    submit_button = driver.find_elements_by_xpath('//*[@id="recordButton"]')[0]
+    submit_button.click()
+
+def click_stop():
+    submit_button = driver.find_elements_by_xpath('//*[@id="stopButton"]')[0]
+    submit_button.click()
 
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
@@ -56,7 +80,10 @@ def subscribe(client: mqtt_client):
             click_record()
             time.sleep(5)
             click_stop()
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     client.subscribe(topic)
     client.on_message = on_message
 
