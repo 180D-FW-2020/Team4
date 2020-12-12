@@ -28,6 +28,10 @@ driver = webdriver.Chrome(executable_path='/Users/joanibajlozi/Desktop/chromedri
 sel_setup = 0
 
 def click_record():
+    global sel_setup
+    if sel_setup == 0:
+        driver.get('localhost:5000')
+        sel_setup = 1
     submit_button = driver.find_elements_by_xpath('//*[@id="recordButton"]')[0]
     submit_button.click()
 
@@ -77,10 +81,6 @@ def index():
         return render_template("index.html")
 
 def gen(camera):
-    global sel_setup
-    if sel_setup == 0:
-        driver.get('localhost:5000')
-        sel_setup = 1
     while True:
         frame = camera.get_frame()
         prevX = camera.get_prevX()
