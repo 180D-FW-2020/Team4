@@ -3,7 +3,7 @@ skribbl.io but better
 
 no one has money to buy a domain \
 BruinDoodle.io - https://bruindoodleio.herokuapp.com/ \
-Speech and Video Interface - https://dry-mountain-58133.herokuapp.com/
+Speech and Video Interface - https://bruindoodleiosvi.herokuapp.com/
 
 
 ## Dependencies
