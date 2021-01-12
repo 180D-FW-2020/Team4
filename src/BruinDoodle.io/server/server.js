@@ -67,7 +67,9 @@ io.on("connection", socket => {
     other = socket;
     if (typeof(socket.handshake.headers.origin)=='undefined'){
       clients.forEach(function (cl) {
+        console.log(socket.handshake.address);
         if (socket.handshake.address==cl.handshake.address){
+          console.log(socket.handshake.address);
           if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
             other = cl;
           }
@@ -102,7 +104,7 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    console.log(coords);
+    //console.log(coords);
     other = socket;
     if (typeof(socket.handshake.headers.origin)=='undefined'){
       clients.forEach(function (cl) {
