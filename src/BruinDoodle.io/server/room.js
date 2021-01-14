@@ -21,6 +21,7 @@ class ROOM {
     this.painter = null;
     this.created = true;
     this.round = null;
+    this.numRounds = 0;
   }
 
   async getWord() {
@@ -105,9 +106,12 @@ class ROOM {
     io.to(this.id).emit("round_stopped");
     CHAT.sendServerMessage(this.id, `Round finished!`);
     io.to(this.id).emit("countdown", 0);
-
+    this.numRounds++;
+    console.log(this.numRounds)
+    console.log(this.maxRounds*this.users.length)
     // Restart
-    this.initRound();
+    if (this.numRounds < (this.maxRounds*this.users.length)) this.initRound();
+    //else do something
   }
 
   clearBoard() {
