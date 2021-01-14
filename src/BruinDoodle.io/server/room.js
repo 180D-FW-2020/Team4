@@ -51,7 +51,9 @@ class ROOM {
             this.id,
             `Painter didn't choose a word, skipping round...`
           );
-          this.initRound();
+          //this.initRound();
+          var num = Math.floor(Math.random() * (2 - 0) + 0);
+          this.startRound(words[num])
           clearInterval(interval);
         } else if (this.round != null) {
           clearInterval(interval);
