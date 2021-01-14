@@ -41,6 +41,27 @@
       </div>
 
       <div class="field column is-6">
+        <label class="label">Max Players</label>
+        <div class="control">
+          <input
+            class="input"
+            type="number"
+            placeholder="Enter a number..."
+            v-model="maxPlayers"
+            min="2"
+            max="50"
+            required
+          />
+        </div>
+        <p class="help is-danger" v-if="errors['players']">
+          Minimum number of players is 2.
+        </p>
+        <p class="help is-danger" v-if="errors['max_players']">
+          Minimum number of players is 50.
+        </p>
+      </div>
+
+      <div class="field column is-6">
         <label class="label">Rounds</label>
         <div class="control">
           <input
@@ -49,41 +70,15 @@
             placeholder="Enter a number..."
             v-model="maxRounds"
             min="2"
+            max="10"
             required
           />
         </div>
         <p class="help is-danger" v-if="errors['num_rounds']">
           Minimum number of rounds is 2.
         </p>
-        <p class="help is-danger" v-else-if="errors['max_num_rounds']">
-          Maximum number of roudns is 10.
-        </p>
-      </div>
-
-      <div class="column is-6">
-        <label class="label">Word Selection Time</label>
-        <div class="field has-addons">
-          <div class="control is-fullwidth">
-            <input
-              class="input"
-              type="number"
-              placeholder="Text input"
-              v-model="wordTime"
-              min="2"
-              required
-            />
-          </div>
-          <p class="control">
-            <a class="button is-static">
-              s
-            </a>
-          </p>
-        </div>
-        <p class="help is-danger" v-if="errors['word']">
-          Minimum word selection time is 10 seconds.
-        </p>
-        <p class="help is-danger" v-else-if="errors['max_word']">
-          Maximum word selection time is 60 seconds.
+        <p class="help is-danger" v-if="errors['max_num_rounds']">
+          Maximum number of rounds is 10.
         </p>
       </div>
 
@@ -94,9 +89,10 @@
             <input
               class="input"
               type="number"
-              placeholder="Text input"
+              placeholder="Enter a number..."
               v-model="roundTime"
               min="30"
+              max="180"
               required
             />
           </div>
@@ -111,6 +107,34 @@
         </p>
         <p class="help is-danger" v-else-if="errors['max_rounds']">
           Maximum round time is 180 seconds.
+        </p>
+      </div>
+
+      <div class="column is-6">
+        <label class="label">Word Selection Time</label>
+        <div class="field has-addons">
+          <div class="control is-fullwidth">
+            <input
+              class="input"
+              type="number"
+              placeholder="Enter a number..."
+              v-model="wordTime"
+              min="10"
+              max="60"
+              required
+            />
+          </div>
+          <p class="control">
+            <a class="button is-static">
+              s
+            </a>
+          </p>
+        </div>
+        <p class="help is-danger" v-if="errors['word']">
+          Minimum word selection time is 10 seconds.
+        </p>
+        <p class="help is-danger" v-else-if="errors['max_word']">
+          Maximum word selection time is 60 seconds.
         </p>
       </div>
 
@@ -139,6 +163,7 @@ export default {
     return {
       name: "",
       password: "",
+      maxPlayers: 2,
       maxRounds: 3,
       roundTime: 60,
       wordTime: 25,
@@ -174,6 +199,20 @@ export default {
         }
       }
 
+      if (roomdata.maxPlayers < 2) {
+        this.$set(this.$data.errors, "players", true);
+        flag = false;
+      } else {
+        this.$set(this.$data.errors, "players", false);
+      }
+
+      if (roomdata.maxPlayers > 50) {
+        this.$set(this.$data.errors, "max_players", true);
+        flag = false;
+      } else {
+        this.$set(this.$data.errors, "max_players", false);
+      }
+
       if (roomdata.maxRounds < 2) {
         this.$set(this.$data.errors, "num_rounds", true);
         flag = false;
@@ -189,17 +228,17 @@ export default {
       }
 
       if (roomdata.roundTime < 30) {
-        this.$set(this.$data.errors, "round", true);
+        this.$set(this.$data.errors, "rounds", true);
         flag = false;
       } else {
-        this.$set(this.$data.errors, "round", false);
+        this.$set(this.$data.errors, "rounds", false);
       }
 
       if (roomdata.roundTime > 180) {
-        this.$set(this.$data.errors, "max_round", true);
+        this.$set(this.$data.errors, "max_rounds", true);
         flag = false;
       } else {
-        this.$set(this.$data.errors, "max_round", false);
+        this.$set(this.$data.errors, "max_rounds", false);
       }
 
       if (roomdata.wordTime < 10) {
@@ -233,6 +272,7 @@ export default {
     resetForm() {
       this.$data.name = "";
       this.$data.password = "";
+      this.$data.maxPlayers = 2;
       this.$data.maxRounds = 3;
       this.$data.isPrivate = false;
       this.$data.errors = {};

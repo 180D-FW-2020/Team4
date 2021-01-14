@@ -24,7 +24,7 @@
           <tr v-for="room in rooms" :key="room.id">
             <td>{{room.name}}</td>
             <td>{{room.isPrivate ? 'Private 🔐' : 'Public 🌎'}}</td>
-            <td>{{room.users.length}}/{{room.maxUsers}}</td>
+            <td>{{room.users.length}}/{{room.maxPlayers}}</td>
             <td class="is-paddingless">
               <router-link :to="'./room/'+room.id" class="button is-primary is-fullwidth">Join</router-link>
             </td>

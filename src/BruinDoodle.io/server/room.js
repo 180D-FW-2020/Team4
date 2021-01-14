@@ -8,7 +8,7 @@ class ROOM {
     this.name = options.name;
     this.isPrivate = options.isPrivate || false;
     this.password = options.password || "";
-    this.maxUsers = 8;
+    this.maxPlayers = options.maxPlayers || 8;
     this.users = [...options.users] || [];
     this.queue = [...options.users] || [];
     this.roundTime = options.roundTime || 180;
