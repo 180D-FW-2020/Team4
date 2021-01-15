@@ -225,6 +225,16 @@ export default {
 
       return password;
     },
+    displayUsers(sortedUsers) {
+      var text = "";
+      var c = 1;
+      var user;
+      for (user in sortedUsers){
+        text = text + "#" + c + " " + sortedUsers[user].name + "-" + sortedUsers[user].points + " \n";
+        c++;
+      }
+      return text;
+    },
     sendMessage(e) {
       e.preventDefault();
       if (this.message.length != 0) {
@@ -297,6 +307,14 @@ export default {
     },
     round_stopped() {
       this.roundStarted = false;
+    },
+    game_ended() {
+      console.log(this.sortedUsers)
+      this.$swal({ 
+        title: "Goodbye", 
+        text: this.displayUsers(this.sortedUsers),
+        type: "info" });
+      this.$router.push("/rooms");
     },
     painter_changed(painter) {
       this.setPainter(painter);

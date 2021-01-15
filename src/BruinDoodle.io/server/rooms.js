@@ -19,9 +19,10 @@ const CREATE_ROOM = function (socket, options) {
     name: options.name,
     isPrivate: options.isPrivate || false,
     password: options.password || "",
-    maxUsers: 8,
+    maxPlayers: options.maxPlayers || 8,
     roundTime: options.roundTime || 120,
     wordTime: options.wordTime || 25,
+    maxRounds: options.maxRounds || 3,
     users: [],
     points: {},
     created: true,
@@ -72,7 +73,7 @@ const JOIN_ROOM = function (socket, id, password) {
     return false; // You're already in this room;
   }
 
-  if (room.users.length == room.maxUsers) {
+  if (room.users.length == room.maxPlayers) {
     var msg = "Room is full!";
     flag = false;
   }

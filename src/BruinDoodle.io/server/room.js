@@ -8,7 +8,7 @@ class ROOM {
     this.name = options.name;
     this.isPrivate = options.isPrivate || false;
     this.password = options.password || "";
-    this.maxUsers = 8;
+    this.maxPlayers = options.maxPlayers || 8;
     this.users = [...options.users] || [];
     this.queue = [...options.users] || [];
     this.roundTime = options.roundTime || 180;
@@ -21,6 +21,7 @@ class ROOM {
     this.painter = null;
     this.created = true;
     this.round = null;
+    this.numRounds = 0;
   }
 
   async getWord() {
@@ -47,11 +48,13 @@ class ROOM {
     let interval = setInterval(() => {
       if (this.users.length > 1) {
         if (time <= 0) {
-          CHAT.sendServerMessage(
-            this.id,
-            `Painter didn't choose a word, skipping round...`
-          );
-          this.initRound();
+          //CHAT.sendServerMessage(
+            //this.id,
+            //`Painter didn't choose a word, skipping round...`
+          //);
+          //this.initRound();
+          var num = Math.floor(Math.random() * (2 - 0) + 0);
+          this.startRound(words[num])
           clearInterval(interval);
         } else if (this.round != null) {
           clearInterval(interval);
@@ -103,9 +106,14 @@ class ROOM {
     io.to(this.id).emit("round_stopped");
     CHAT.sendServerMessage(this.id, `Round finished!`);
     io.to(this.id).emit("countdown", 0);
-
+    this.numRounds++;
     // Restart
-    this.initRound();
+    if (this.numRounds < (this.maxRounds*this.users.length)) {
+      this.initRound();
+    } else {
+      io.to(this.id).emit("game_ended");
+    }
+    //else do something
   }
 
   clearBoard() {
