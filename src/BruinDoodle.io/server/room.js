@@ -48,10 +48,10 @@ class ROOM {
     let interval = setInterval(() => {
       if (this.users.length > 1) {
         if (time <= 0) {
-          CHAT.sendServerMessage(
-            this.id,
-            `Painter didn't choose a word, skipping round...`
-          );
+          //CHAT.sendServerMessage(
+            //this.id,
+            //`Painter didn't choose a word, skipping round...`
+          //);
           //this.initRound();
           var num = Math.floor(Math.random() * (2 - 0) + 0);
           this.startRound(words[num])
@@ -107,10 +107,12 @@ class ROOM {
     CHAT.sendServerMessage(this.id, `Round finished!`);
     io.to(this.id).emit("countdown", 0);
     this.numRounds++;
-    console.log(this.numRounds)
-    console.log(this.maxRounds*this.users.length)
     // Restart
-    if (this.numRounds < (this.maxRounds*this.users.length)) this.initRound();
+    if (this.numRounds < (this.maxRounds*this.users.length)) {
+      this.initRound();
+    } else {
+      io.to(this.id).emit("game_ended");
+    }
     //else do something
   }
 

@@ -22,6 +22,7 @@ const CREATE_ROOM = function (socket, options) {
     maxPlayers: options.maxPlayers || 8,
     roundTime: options.roundTime || 120,
     wordTime: options.wordTime || 25,
+    maxRounds: options.maxRounds || 3,
     users: [],
     points: {},
     created: true,
