@@ -1,5 +1,11 @@
 function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     let self = this;
+    var socket = io('http://localhost:5000');
+
+    socket.on('connect', function(){
+        console.log("Connected...!", socket.connected)
+    });
+
     this.errorOutput = document.getElementById(errorOutputId);
 
     const OPENCV_URL = '/static/js/opencv.js';
@@ -89,20 +95,27 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     //setInterval(() => {
                         //             cap.read(src);
                         
+                    
+                    cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+                    cv.imshow('canvasOutput', dst);
                     var type = "image/png"
                     var data = document.getElementById("canvasOutput").toDataURL(type);
+                    //console.log(data)
                     data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
-                        
+                    
                     socket.emit('image', data);
                         //         }, 10000/FPS);
                         
-                        
                     //socket.on('response_back', function(image){
-                        //             const image_id = document.getElementById('image');
-                        //             image_id.src = image;
-                        //         });
-                    cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-                    cv.imshow('canvasOutput', dst);
+                        //cv.imshow('canvasOutput', image);
+                        //console.log(image)
+                    //});
+                    socket.on('response_back', function(image){
+                                    //const image_id = document.getElementById('image');
+                                    var image_id = document.getElementById('sockOutput');
+                                    image_id.src = image;
+                                    //cv.imshow('canvasOutput', image)
+                                });
                     // schedule the next one.
                     let delay = 1000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);

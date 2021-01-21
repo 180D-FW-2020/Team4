@@ -2,42 +2,49 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, request, render_template, Response
 from flask_cors import CORS
+from flask_socketio import SocketIO
 from microphone_recognition import mr
 from camera import VideoCamera
 import os
-import py_client as pc
-import socketio
+#import py_client as pc
+#import socketio
+import cv2
+import imutils
+import io
+import base64
+from PIL import Image
+import numpy as np
 
 #sio = socketio.Server()
 
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
+sio = SocketIO(app)
 
-# @sio.on('image')
-# def image(data_image):
-#     sbuf = StringIO()
-#     sbuf.write(data_image)
+@sio.on('image')
+def image(data_image):
+    sbuf = io.StringIO()
+    sbuf.write(data_image)
+    # decode and convert into image
+    b = io.BytesIO(base64.b64decode(data_image))
+    pimg = Image.open(b)
 
-#     # decode and convert into image
-#     b = io.BytesIO(base64.b64decode(data_image))
-#     pimg = Image.open(b)
+    ## converting RGB to BGR, as opencv standards
+    frame = cv2.cvtColor(np.array(pimg), cv2.COLOR_RGB2BGR)
 
-#     ## converting RGB to BGR, as opencv standards
-#     frame = cv2.cvtColor(np.array(pimg), cv2.COLOR_RGB2BGR)
+    # Process the image frame
+    frame = imutils.resize(frame, width=700)
+    frame = cv2.flip(frame, 1)
+    imgencode = cv2.imencode('.jpg', frame)[1]
 
-#     # Process the image frame
-#     frame = imutils.resize(frame, width=700)
-#     frame = cv2.flip(frame, 1)
-#     imgencode = cv2.imencode('.jpg', frame)[1]
-
-#     # base64 encode
-#     stringData = base64.b64encode(imgencode).decode('utf-8')
-#     b64_src = 'data:image/jpg;base64,'
-#     stringData = b64_src + stringData
-
-#     # emit the frame back
-#     emit('response_back', stringData)
+    # base64 encode
+    stringData = base64.b64encode(imgencode).decode('utf-8')
+    b64_src = 'data:image/jpg;base64,'
+    stringData = b64_src + stringData
+    #stringData = "hihihihi"
+    # emit the frame back
+    sio.emit('response_back', stringData)
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
@@ -82,7 +89,7 @@ def guess():
         with open('audio.wav', 'wb') as audio:
             f.save(audio)
         guess = mr()
-        pc.send_message(guess)
+        #pc.send_message(guess)
         return render_template("index.html")
     else:
         return render_template("index.html")
@@ -93,4 +100,5 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    #app.run(debug=True)
+    sio.run(app)

@@ -4,7 +4,7 @@ sio = socketio.Client()
 
 @sio.event
 def connect():
-    print('connection established')
+    print('server connection established')
 
 @sio.event
 def send_message(msg):
