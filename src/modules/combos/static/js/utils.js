@@ -96,10 +96,12 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                         //             cap.read(src);
                         
                     
-                    cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+                    //cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+                    cv.cvtColor(src, dst, cv.COLOR_RGBA2RGB);
                     cv.imshow('canvasOutput', dst);
                     var type = "image/png"
                     var data = document.getElementById("canvasOutput").toDataURL(type);
+                    //var data = document.getElementById("videoInput").toDataURL(type);
                     //console.log(data)
                     data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
                     
@@ -113,7 +115,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     socket.on('response_back', function(image){
                                     //const image_id = document.getElementById('image');
                                     var image_id = document.getElementById('sockOutput');
-                                    console.log(image);
+                                    //console.log(image);
                                     self.loadImageToCanvas(image, 'sockOutput');
                                     //image_id.src = image;
                                     //cv.imshow('canvasOutput', image)

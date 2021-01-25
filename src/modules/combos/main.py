@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, Response
 from flask_cors import CORS
 from flask_socketio import SocketIO
 from microphone_recognition import mr
-from camera import VideoCamera
+from camera import VideoCamera as cam
 import os
 #import py_client as pc
 #import socketio
@@ -32,11 +32,11 @@ def image(data_image):
 
     ## converting RGB to BGR, as opencv standards
     frame = cv2.cvtColor(np.array(pimg), cv2.COLOR_RGB2BGR)
-
+    imgencode = cam.get_frame(frame)
     # Process the image frame
-    frame = imutils.resize(frame, width=700)
-    frame = cv2.flip(frame, 1)
-    imgencode = cv2.imencode('.jpg', frame)[1]
+    #frame = imutils.resize(frame, width=700)
+    #frame = cv2.flip(frame, 1)
+    #imgencode = cv2.imencode('.jpg', frame)[1]
 
     # base64 encode
     stringData = base64.b64encode(imgencode).decode('utf-8')
