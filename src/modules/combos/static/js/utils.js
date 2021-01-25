@@ -113,7 +113,9 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     socket.on('response_back', function(image){
                                     //const image_id = document.getElementById('image');
                                     var image_id = document.getElementById('sockOutput');
-                                    image_id.src = image;
+                                    console.log(image);
+                                    self.loadImageToCanvas(image, 'sockOutput');
+                                    //image_id.src = image;
                                     //cv.imshow('canvasOutput', image)
                                 });
                     // schedule the next one.

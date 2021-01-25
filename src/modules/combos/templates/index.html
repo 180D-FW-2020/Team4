@@ -63,6 +63,8 @@ let videoInput = document.getElementById('videoInput');
 let startAndStop = document.getElementById('startAndStop');
 let canvasOutput = document.getElementById('canvasOutput');
 let canvasContext = canvasOutput.getContext('2d');
+let sockOutput = document.getElementById('sockOutput');
+let sockContext = sockOutput.getContext('2d');
 
 startAndStop.addEventListener('click', () => {
     if (!streaming) {
@@ -85,6 +87,7 @@ function onVideoStarted() {
 function onVideoStopped() {
     streaming = false;
     canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
+    sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
     startAndStop.innerText = 'Start';
 }
 
