@@ -37,14 +37,31 @@ def image(data_image):
     #frame = imutils.resize(frame, width=700)
     #frame = cv2.flip(frame, 1)
     #imgencode = cv2.imencode('.jpg', frame)[1]
-
+    prevX = cam.get_prevX()
+    prevY = cam.get_prevY()
+    currX = cam.get_currX()
+    currY = cam.get_currY()
+    activeColor = "#000"
+    if(prevX==-1 or prevY==-1):
+        prevPos= { "x": "null", "y": "null" }
+    else:
+        prevPos= { "x": prevX, "y": prevY}
+    if(currX==-1 or currY==-1):
+        pos= { "x": "null", "y": "null" }
+    else:
+        pos= { "x": currX, "y": currY }
+            
+    coords = { "prevPos": prevPos, "currPos": pos }
+    paintObj = { "color": activeColor, "coords": coords }
+    sio.emit('pos', paintObj)
+    #pc.paint(paintObj)
     # base64 encode
     stringData = base64.b64encode(imgencode).decode('utf-8')
     b64_src = 'data:image/jpg;base64,'
     stringData = b64_src + stringData
     #stringData = "hihihihi"
     # emit the frame back
-    sio.emit('response_back', stringData)
+    #sio.emit('response_back', stringData)
 
 @app.route("/", methods=['POST', 'GET'])
 def index():

@@ -185,11 +185,15 @@ class ROOM {
 
   getUsers() {
     let usrs = [];
+    
     for (let user of this.users) {
+      //console.log(io.sockets.sockets.get(user).name);
+      //console.log(Array.from(io.sockets.sockets)[0]);
+      //console.log(io.sockets.sockets)
       usrs.push({
         id: user,
         points: this.points[user] || 0,
-        name: io.sockets.sockets[user].name || user,
+        name: io.sockets.sockets.get(user).name || user,
       });
     }
     return usrs;

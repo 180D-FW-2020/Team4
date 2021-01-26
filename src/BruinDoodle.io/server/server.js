@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, { 
+  cors: {
+    origin: '*'
+  }
+});
 const ROOMS = require("./rooms");
 const CHAT = require("./chat");
 
@@ -104,7 +108,7 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    //console.log(coords);
+    //console.log('paint');
     other = socket;
     if (typeof(socket.handshake.headers.origin)=='undefined'){
       clients.forEach(function (cl) {

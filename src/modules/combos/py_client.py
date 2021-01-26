@@ -1,25 +1,25 @@
 import socketio
 
-sio = socketio.Client()
+siow = socketio.Client()
 
-@sio.event
-def connect():
+@siow.event
+def connection():
     print('server connection established')
 
-@sio.event
+@siow.event
 def send_message(msg):
     print('message received with ', msg)
-    sio.emit('send_message', msg)
+    siow.emit('send_message', msg)
 
-@sio.event
+@siow.event
 def paint(paintObj):
     #print('message received with ', paintObj)
-    sio.emit('paint', paintObj)
+    siow.emit('paint', paintObj)
 
-@sio.event
+@siow.event
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://192.168.68.117:5050') #'http://192.168.68.117:5050') #https://tranquil-ridge-32141.herokuapp.com/')
+siow.connect('http://192.168.68.117:5050') #'http://192.168.68.117:5050') #https://tranquil-ridge-32141.herokuapp.com/')
 
 #sio.wait()

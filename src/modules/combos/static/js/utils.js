@@ -6,6 +6,11 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         console.log("Connected...!", socket.connected)
     });
 
+    var sockets = io('http://localhost:5050', { transports: ["websocket"] });
+    //sockets.on('connection', function(){
+        //console.log("Connected...!", sockets.connected)
+    //});
+
     this.errorOutput = document.getElementById(errorOutputId);
 
     const OPENCV_URL = '/static/js/opencv.js';
@@ -112,9 +117,14 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                         //cv.imshow('canvasOutput', image);
                         //console.log(image)
                     //});
+                    socket.on('pos', function(paintObj){
+                        
+                        sockets.emit('paint', paintObj);
+                        //console.log('hi');
+                    });
                     socket.on('response_back', function(image){
                                     //const image_id = document.getElementById('image');
-                                    var image_id = document.getElementById('sockOutput');
+                                    //var image_id = document.getElementById('sockOutput');
                                     //console.log(image);
                                     self.loadImageToCanvas(image, 'sockOutput');
                                     //image_id.src = image;
