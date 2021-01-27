@@ -144,13 +144,55 @@
           </footer>
         </div>
       </div>
+
+      <div class="column is-full">
+        <div class="control">
+          <button 
+            id="startAndStop" 
+            class = "button is-primary is-borderless"
+            disabled>
+            Start
+          </button>
+        </div>
+        <div>
+          <table cellpadding="0" cellspacing="0" width="0" border="0">
+              <tr>
+                  <td>
+                      <video id="videoInput" width=320 height=240></video>
+                  </td>
+                  <td>
+                      <canvas id="canvasOutput" width=320 height=240></canvas>
+                  </td>
+                  <td>
+                      <canvas id="sockOutput" width=320 height=240></canvas>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td>
+                      <div class="caption">videoInput</div>
+                  </td>
+                  <td>
+                      <div class="caption">canvasOutput</div>
+                  </td>
+                  <td>
+                      <div class="caption">sockOutput</div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+              </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Whiteboard from "../components/WhiteBoard";
-
 export default {
   name: "About",
   data() {
@@ -335,6 +377,54 @@ export default {
   },
   mounted() {
     this.getRoomInfo();
+    let socketScript = document.createElement('script');
+      socketScript.setAttribute('src', '/static/js/socket.io.js');
+      document.body.appendChild(socketScript);
+    let webrtcScript = document.createElement('script');
+      webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
+      document.body.appendChild(webrtcScript);
+    let utilsScript = document.createElement('script');
+      utilsScript.setAttribute('src', '/static/js/utils.js');
+      document.body.appendChild(utilsScript);
+    
+    let utils = new Utils('errorMessage');
+    let streaming = false;
+    let videoInput = document.getElementById('videoInput');
+    let startAndStop = document.getElementById('startAndStop');
+    let canvasOutput = document.getElementById('canvasOutput');
+    let canvasContext = canvasOutput.getContext('2d');
+    let sockOutput = document.getElementById('sockOutput');
+    let sockContext = sockOutput.getContext('2d');
+
+    startAndStop.addEventListener('click', () => {
+      if (!streaming) {
+          utils.clearError();
+          utils.startCamera('qvga', onVideoStarted, 'videoInput');
+      } else {
+          utils.stopCamera();
+          onVideoStopped();
+      }
+    });
+
+    function onVideoStarted() {
+      streaming = true;
+      startAndStop.innerText = 'Stop';
+      videoInput.width = videoInput.videoWidth;
+      videoInput.height = videoInput.videoHeight;
+      utils.executeCode('codeEditor');
+    }
+
+    function onVideoStopped() {
+      streaming = false;
+      canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
+      sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
+      startAndStop.innerText = 'Start';
+    }
+
+    utils.loadOpenCv(() => {
+      startAndStop.removeAttribute('disabled');
+    });
+
   },
   watch: {
     "$route.params.id": function(id) {
@@ -344,6 +434,47 @@ export default {
   },
 };
 </script>
+
+<!--<script type="text/javascript">
+/*let utils = new Utils('errorMessage');
+
+let streaming = false;
+let videoInput = document.getElementById('videoInput');
+let startAndStop = document.getElementById('startAndStop');
+let canvasOutput = document.getElementById('canvasOutput');
+let canvasContext = canvasOutput.getContext('2d');
+let sockOutput = document.getElementById('sockOutput');
+let sockContext = sockOutput.getContext('2d');
+
+startAndStop.addEventListener('click', () => {
+    if (!streaming) {
+        utils.clearError();
+        utils.startCamera('qvga', onVideoStarted, 'videoInput');
+    } else {
+        utils.stopCamera();
+        onVideoStopped();
+    }
+});
+
+function onVideoStarted() {
+    streaming = true;
+    startAndStop.innerText = 'Stop';
+    videoInput.width = videoInput.videoWidth;
+    videoInput.height = videoInput.videoHeight;
+    utils.executeCode('codeEditor');
+}
+
+function onVideoStopped() {
+    streaming = false;
+    canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
+    sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
+    startAndStop.innerText = 'Start';
+}
+
+utils.loadOpenCv(() => {
+    startAndStop.removeAttribute('disabled');
+});*/
+</script>-->
 
 <style lang="scss" scoped>
 .is-borderless {
