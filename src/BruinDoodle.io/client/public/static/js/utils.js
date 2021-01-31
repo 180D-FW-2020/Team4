@@ -1,12 +1,12 @@
 function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     let self = this;
-    ////var socket = io('http://localhost:5000');
+    var socket = io('http://localhost:5000', { withCredentials: false  });
 
     //socket.on('connect', function(){
         //console.log("Connected...!", socket.connected)
     //});
 
-    //var sockets = io('http://localhost:5050', { withCredentials: false  });//,transports: ["websocket"]
+    var sockets = io('http://localhost:5050', { withCredentials: false  });//,transports: ["websocket"]
     //sockets.emit('setName', "Laptop1")
     //sockets.on('connection', function(){
         //console.log("Connected...!", sockets.connected)
@@ -111,17 +111,18 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     //console.log(data)
                     data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
                     
-                    ////socket.emit('image', data);
+                    socket.emit('image', data);
                         //         }, 10000/FPS);
                         
                     //socket.on('response_back', function(image){
                         //cv.imshow('canvasOutput', image);
                         //console.log(image)
                     //});
-                    ////socket.on('pos', function(paintObj){
-                        ////sockets.emit('paint', paintObj);
-                        //console.log('hi');
-                    ////});
+                    socket.on('pos', function(paintObj){
+                        ////this.$socket.emit("paint", paintObj);
+                        sockets.emit('paint', paintObj);
+                        ////console.log('hi');
+                    });
                     ////socket.on('response_back', function(image){
                                     //const image_id = document.getElementById('image');
                                     //var image_id = document.getElementById('sockOutput');

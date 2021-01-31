@@ -20,7 +20,7 @@ import numpy as np
 
 app = Flask(__name__)
 #CORS(app)
-sio = SocketIO(app)
+sio = SocketIO(app, cors_allowed_origins="*")
 
 @sio.on('image')
 def image(data_image):
