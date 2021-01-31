@@ -1,6 +1,6 @@
 function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     let self = this;
-    //var socket = io('http://localhost:5000');
+    ////var socket = io('http://localhost:5000');
 
     //socket.on('connect', function(){
         //console.log("Connected...!", socket.connected)
@@ -79,7 +79,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         img.src = url;
     };
 
-    this.executeCode = function(textAreaId) {
+    this.executeCode = function(textAreaId, streaming) {
         try {
             let video = document.getElementById('videoInput');
             let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
@@ -111,30 +111,30 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     //console.log(data)
                     data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
                     
-                    socket.emit('image', data);
+                    ////socket.emit('image', data);
                         //         }, 10000/FPS);
                         
                     //socket.on('response_back', function(image){
                         //cv.imshow('canvasOutput', image);
                         //console.log(image)
                     //});
-                    socket.on('pos', function(paintObj){
-                        sockets.emit('paint', paintObj);
+                    ////socket.on('pos', function(paintObj){
+                        ////sockets.emit('paint', paintObj);
                         //console.log('hi');
-                    });
-                    socket.on('response_back', function(image){
+                    ////});
+                    ////socket.on('response_back', function(image){
                                     //const image_id = document.getElementById('image');
                                     //var image_id = document.getElementById('sockOutput');
                                     //console.log(image);
-                                    self.loadImageToCanvas(image, 'sockOutput');
+                                    ////self.loadImageToCanvas(image, 'sockOutput');
                                     //image_id.src = image;
                                     //cv.imshow('canvasOutput', image)
-                                });
+                                ////});
                     // schedule the next one.
                     let delay = 1000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);
                 } catch (err) {
-                    utils.printError(err);
+                    self.printError(err);
                 }
             };
 
@@ -168,7 +168,8 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         } else if (err instanceof Error) {
             err = err.stack.replace(/\n/g, '<br>');
         }
-        this.errorOutput.innerHTML = err;
+        console.log(err);
+        //this.errorOutput.innerHTML = err;
     };
 
     this.loadCode = function(scriptId, textAreaId) {

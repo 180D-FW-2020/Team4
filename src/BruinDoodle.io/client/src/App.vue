@@ -12,8 +12,8 @@
   </div>
 </template>
 <script>
-import Nav from "./components/Nav";
-import Footer from "./components/Footer";
+import Nav from "./components/Nav.vue";
+import Footer from "./components/Footer.vue";
 import RoomCreator from "./components/RoomCreator.vue";
 
 export default {

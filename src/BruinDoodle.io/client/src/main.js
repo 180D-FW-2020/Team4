@@ -6,6 +6,7 @@ import router from "./router.js";
 import App from "./App.vue";
 import Colors from "./styles/variables.scss";
 import "./registerServiceWorker";
+import LoadScript from "vue-plugin-load-script";
 
 // Bulma
 import "./styles/index.scss";
@@ -31,6 +32,8 @@ Vue.use(VueSweetAlert, {
   confirmButtonColor: Colors.primary,
   cancelButtonColor: Colors.light,
 });
+
+Vue.use(LoadScript);
 
 // Initializing
 new Vue({

@@ -1,3 +1,12 @@
+<!--metaInfo: {
+title: ‘SITE TITLE’,
+script: [
+{ src: ‘/assets/js/bootstrap.js’, body: true },
+{ src: ‘/assets/js/moment.js’, body: true },
+
+]
+}-->
+
 <template>
   <div class="section-xs container">
     <div class="columns is-multiline">
@@ -150,7 +159,7 @@
           <button 
             id="startAndStop" 
             class = "button is-primary is-borderless"
-            disabled>
+            >
             Start
           </button>
         </div>
@@ -377,53 +386,61 @@ export default {
   },
   mounted() {
     this.getRoomInfo();
-    let socketScript = document.createElement('script');
-      socketScript.setAttribute('src', '/static/js/socket.io.js');
-      document.body.appendChild(socketScript);
-    let webrtcScript = document.createElement('script');
-      webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
-      document.body.appendChild(webrtcScript);
+    //let socketScript = document.createElement('script');
+      //socketScript.setAttribute('src', '/static/js/socket.io.js');
+      //document.body.appendChild(socketScript);
     let utilsScript = document.createElement('script');
       utilsScript.setAttribute('src', '/static/js/utils.js');
       document.body.appendChild(utilsScript);
+    //let webrtcScript = document.createElement('script');
+      //webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
+      //document.body.appendChild(webrtcScript);
     
-    let utils = new Utils('errorMessage');
-    let streaming = false;
-    let videoInput = document.getElementById('videoInput');
-    let startAndStop = document.getElementById('startAndStop');
-    let canvasOutput = document.getElementById('canvasOutput');
-    let canvasContext = canvasOutput.getContext('2d');
-    let sockOutput = document.getElementById('sockOutput');
-    let sockContext = sockOutput.getContext('2d');
+    this.$loadScript('/static/js/utils')
+    .then(()=> {
+      let utils = new Utils('errorMessage');
+      let streaming = false;
+      let videoInput = document.getElementById('videoInput');
+      let startAndStop = document.getElementById('startAndStop');
+      let canvasOutput = document.getElementById('canvasOutput');
+      let canvasContext = canvasOutput.getContext('2d');
+      let sockOutput = document.getElementById('sockOutput');
+      let sockContext = sockOutput.getContext('2d');
 
-    startAndStop.addEventListener('click', () => {
-      if (!streaming) {
-          utils.clearError();
-          utils.startCamera('qvga', onVideoStarted, 'videoInput');
-      } else {
-          utils.stopCamera();
-          onVideoStopped();
+      startAndStop.addEventListener('click', () => {
+        if (!streaming) {
+            //utils.clearError();
+            utils.startCamera('qvga', onVideoStarted, 'videoInput');
+        } else {
+            utils.stopCamera();
+            onVideoStopped();
+        }
+      });
+
+      function onVideoStarted() {
+        streaming = true;
+        startAndStop.innerText = 'Stop';
+        videoInput.width = videoInput.videoWidth;
+        videoInput.height = videoInput.videoHeight;
+        utils.executeCode('codeEditor', streaming);
       }
+
+      function onVideoStopped() {
+        streaming = false;
+        canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
+        sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
+        startAndStop.innerText = 'Start';
+      }
+
+      utils.loadOpenCv(() => {
+        startAndStop.removeAttribute('disabled');
+      });
+    })
+    .catch(()=> {
+      console.log("Brokennnnnnnnnn");
     });
 
-    function onVideoStarted() {
-      streaming = true;
-      startAndStop.innerText = 'Stop';
-      videoInput.width = videoInput.videoWidth;
-      videoInput.height = videoInput.videoHeight;
-      utils.executeCode('codeEditor');
-    }
-
-    function onVideoStopped() {
-      streaming = false;
-      canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
-      sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
-      startAndStop.innerText = 'Start';
-    }
-
-    utils.loadOpenCv(() => {
-      startAndStop.removeAttribute('disabled');
-    });
+    
 
   },
   watch: {
@@ -434,47 +451,6 @@ export default {
   },
 };
 </script>
-
-<!--<script type="text/javascript">
-/*let utils = new Utils('errorMessage');
-
-let streaming = false;
-let videoInput = document.getElementById('videoInput');
-let startAndStop = document.getElementById('startAndStop');
-let canvasOutput = document.getElementById('canvasOutput');
-let canvasContext = canvasOutput.getContext('2d');
-let sockOutput = document.getElementById('sockOutput');
-let sockContext = sockOutput.getContext('2d');
-
-startAndStop.addEventListener('click', () => {
-    if (!streaming) {
-        utils.clearError();
-        utils.startCamera('qvga', onVideoStarted, 'videoInput');
-    } else {
-        utils.stopCamera();
-        onVideoStopped();
-    }
-});
-
-function onVideoStarted() {
-    streaming = true;
-    startAndStop.innerText = 'Stop';
-    videoInput.width = videoInput.videoWidth;
-    videoInput.height = videoInput.videoHeight;
-    utils.executeCode('codeEditor');
-}
-
-function onVideoStopped() {
-    streaming = false;
-    canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
-    sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
-    startAndStop.innerText = 'Start';
-}
-
-utils.loadOpenCv(() => {
-    startAndStop.removeAttribute('disabled');
-});*/
-</script>-->
 
 <style lang="scss" scoped>
 .is-borderless {
