@@ -1,21 +1,29 @@
 import Vue from "vue";
 import VueSocketIO from "vue-socket.io";
 import VueSweetAlert from "vue-sweetalert2";
+import SocketIO from 'socket.io-client'
 import router from "./router.js";
 import App from "./App.vue";
 import Colors from "./styles/variables.scss";
 import "./registerServiceWorker";
+import LoadScript from "vue-plugin-load-script";
 
 // Bulma
 import "./styles/index.scss";
 
 Vue.config.productionTip = false;
 
+/* Establish Connection */
+const socketConnection = SocketIO('http://192.168.68.117:5050', {
+  withCredentials: false,
+});
+
 // Vue + Socket.io
 Vue.use(
   new VueSocketIO({
     debug: false,
-    connection: "http://192.168.68.117:5050", //"https://tranquil-ridge-32141.herokuapp.com/", //"http://localhost:5050",
+    connection: socketConnection,//"http://192.168.68.117:5050", 
+    //transports: ["websocket"], //"https://tranquil-ridge-32141.herokuapp.com/", //"http://localhost:5050",
   })
 );
 
@@ -24,6 +32,8 @@ Vue.use(VueSweetAlert, {
   confirmButtonColor: Colors.primary,
   cancelButtonColor: Colors.light,
 });
+
+Vue.use(LoadScript);
 
 // Initializing
 new Vue({

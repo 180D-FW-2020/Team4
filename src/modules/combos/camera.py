@@ -8,7 +8,7 @@ import imutils
 import time
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-v","--video",help="path to the (optional) video file")
+#ap.add_argument("-v","--video",help="path to the (optional) video file")
 ap.add_argument("-b","--buffer",type=int, default=128,help="max buffer size")
 args = vars(ap.parse_args())
 pts = deque(maxlen=args['buffer']) 
@@ -33,30 +33,30 @@ time.sleep(2.0)
 class VideoCamera(object):
     def __init__(self):
         self.video = VideoStream(src=0).start()
-    def get_prevX(self):
+    def get_prevX():#get_prevX(self):
         if(pts[1] is not None):
             return pts[1][0]
         else:
             return -1
-    def get_currX(self):
+    def get_currX():#get_currX(self):
         if(pts[0] is not None):
             return pts[0][0]
         else:
             return -1
-    def get_prevY(self):
+    def get_prevY():#get_prevY(self):
         if(pts[1] is not None):
             return pts[1][1]
         else:
             return -1
-    def get_currY(self):
+    def get_currY():#get_currY(self):
         if(pts[0] is not None):
             return pts[0][1]
         else:
             return -1
-    def get_frame(self):
-        frame = self.video.read()
-        frame = cv2.flip(frame,1)
-        frame = frame[1] if args.get("video",False) else frame
+    def get_frame(frame):#get_frame(self):
+        #frame = self.video.read()
+        #frame = cv2.flip(frame,1)
+        #frame = frame[1] if args.get("video",False) else frame
 
         blurred = cv2.GaussianBlur(frame,(25,25),0) 
 

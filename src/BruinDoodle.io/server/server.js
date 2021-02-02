@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, { 
+  cors: {
+    origin: '*'
+  }
+});
 const ROOMS = require("./rooms");
 const CHAT = require("./chat");
 
@@ -104,15 +108,33 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    //console.log(coords);
+    //console.log('paint');
     other = socket;
-    if (typeof(socket.handshake.headers.origin)=='undefined'){
+    if (socket.handshake.headers.origin=='http://localhost:8081'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
+      //console.log("sssssssssssssssssssssssss")
       clients.forEach(function (cl) {
-        if (socket.handshake.address==cl.handshake.address){
-          if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
+        //console.log(cl.name);
+        if (cl.name!='Laptop1'){
+          //console.log(typeof JSON.stringify(cl.handshake.headers.origin) == 'string');
+          //if (String(cl.handshake.headers.origin) == "https://mighty-headland-55869.herokuapp.com/"){ //'http://192.168.68.117:8081'){
+            //other = cl;
+            //console.log("double yay")
+          //}
+          //console.log(cl.handshake.headers.origin)
+          if (cl.handshake.headers.origin == 'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
             other = cl;
+            //console.log("double yay")
           }
         }
+        //console.log("boop");
+        //console.log(cl.handshake.address);
+        //if (socket.handshake.address==cl.handshake.address){
+          //console.log(cl.handshake.headers);
+          //if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
+          //console.log("test");  
+          //other = cl;
+          //}
+        //}
     });
     }
     let room = ROOMS.getSocketRoom(other);
