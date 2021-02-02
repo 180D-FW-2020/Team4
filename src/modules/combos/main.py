@@ -54,11 +54,12 @@ def image(data_image):
     coords = { "prevPos": prevPos, "currPos": pos }
     paintObj = { "color": activeColor, "coords": coords }
     sio.emit('pos', paintObj)
+    print (paintObj)
     #pc.paint(paintObj)
     # base64 encode
-    stringData = base64.b64encode(imgencode).decode('utf-8')
-    b64_src = 'data:image/jpg;base64,'
-    stringData = b64_src + stringData
+    ###stringData = base64.b64encode(imgencode).decode('utf-8')
+    ###b64_src = 'data:image/jpg;base64,'
+    ###stringData = b64_src + stringData
     #stringData = "hihihihi"
     # emit the frame back
     #sio.emit('response_back', stringData)

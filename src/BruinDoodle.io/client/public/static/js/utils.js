@@ -7,7 +7,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     //});
 
     var sockets = io('http://localhost:5050', { withCredentials: false  });//,transports: ["websocket"]
-    //sockets.emit('setName', "Laptop1")
+    sockets.emit('setName', "Laptop1")
     //sockets.on('connection', function(){
         //console.log("Connected...!", sockets.connected)
     //});
@@ -132,7 +132,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                                     //cv.imshow('canvasOutput', image)
                                 ////});
                     // schedule the next one.
-                    let delay = 1000/FPS - (Date.now() - begin);
+                    let delay = 10000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);
                 } catch (err) {
                     self.printError(err);
