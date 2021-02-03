@@ -69,12 +69,16 @@ io.on("connection", socket => {
 
   socket.on("send_message", msg => {
     other = socket;
+    console.log(msg)
+    console.log('test1');
+    //console.log(socket.handshake);
     if (typeof(socket.handshake.headers.origin)=='undefined'){
+      console.log('test2');
       clients.forEach(function (cl) {
         console.log(socket.handshake.address);
         if (socket.handshake.address==cl.handshake.address){
           console.log(socket.handshake.address);
-          if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
+          if (cl.handshake.headers.origin == 'http://localhost:8081'){
             other = cl;
           }
         }
