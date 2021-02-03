@@ -151,6 +151,40 @@ script: [
               </div>
             </form>
           </footer>
+
+
+          <footer class="card-footer">
+            <form class="field has-addons voice-input">
+              <div class="control">
+                <button
+                  id = "recordButton"
+                  class="button is-primary is-borderless"
+                  value="Record">
+                  Record
+                </button>
+              </div>
+              <div class="control">
+                <button
+                  id = "pauseButton"
+                  class="button is-primary is-borderless"
+                  value="Pause">
+                  Pause
+                </button>
+              </div>
+              <div class="control">
+                <button
+                  id = "stopButton"
+                  type="submit"
+                  class="button is-primary is-borderless"
+                  value="Stop">
+                  Stop
+                </button>
+              </div>
+            </form>
+          </footer>
+
+
+
         </div>
       </div>
 
@@ -383,9 +417,18 @@ export default {
         return b.points - a.points;
       });
     },
+    isButtonDisabled() {
+      return true;
+    },
   },
   mounted() {
     this.getRoomInfo();
+    let recorderScript = document.createElement('script');
+      recorderScript.setAttribute('src', '/static/js/recorder.js');
+      document.body.appendChild(recorderScript);
+    let appScript = document.createElement('script');
+      appScript.setAttribute('src', '/static/js/app.js');
+      document.body.appendChild(appScript);
     let socketScript = document.createElement('script');
       socketScript.setAttribute('src', '/static/js/socket.io.js');
       document.body.appendChild(socketScript);
@@ -491,6 +534,12 @@ export default {
   .control:first-child {
     flex: 1;
   }
+}
+
+.voice-input {
+  display: flex;
+  justify-content: stretch;
+  width: 100%;
 }
 
 .card--painter {
