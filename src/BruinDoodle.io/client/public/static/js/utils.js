@@ -132,7 +132,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                                     //cv.imshow('canvasOutput', image)
                                 ////});
                     // schedule the next one.
-                    let delay = 10000/FPS - (Date.now() - begin);
+                    let delay = 5000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);
                 } catch (err) {
                     self.printError(err);

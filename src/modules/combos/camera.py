@@ -55,12 +55,16 @@ class VideoCamera(object):
             return -1
     def get_frame(frame):#get_frame(self):
         #frame = self.video.read()
-        #frame = cv2.flip(frame,1)
+        frame = cv2.flip(frame,1)
         #frame = frame[1] if args.get("video",False) else frame
-
-        blurred = cv2.GaussianBlur(frame,(25,25),0) 
-
-        hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+        scale_percent = 250
+        width = int(frame.shape[1] * scale_percent/100)
+        length = int(frame.shape[0] * scale_percent/100)
+        dimension = (width, length)
+        
+        frame = cv2.resize(frame, dimension, interpolation = cv2.INTER_AREA)
+        
+        
         #Gaussian Blur to smoothe the image
         blurred = cv2.GaussianBlur(frame,(25,25),0)    
         
