@@ -430,10 +430,10 @@ export default {
       appScript.setAttribute('src', '/static/js/app.js');
       document.body.appendChild(appScript);
     let socketScript = document.createElement('script');
-      socketScript.setAttribute('src', '/static/js/socket.io.js');
+      socketScript.setAttribute('src', './static/js/socket.io.js');
       document.body.appendChild(socketScript);
     let utilsScript = document.createElement('script');
-      utilsScript.setAttribute('src', '/static/js/utils.js');
+      utilsScript.setAttribute('src', './static/js/utils.js');
       document.body.appendChild(utilsScript);
     //let webrtcScript = document.createElement('script');
       //webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
