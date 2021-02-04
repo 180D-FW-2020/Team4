@@ -14,7 +14,7 @@ import "./styles/index.scss";
 Vue.config.productionTip = false;
 
 /* Establish Connection */
-const socketConnection = SocketIO('http://192.168.68.117:5050', {
+const socketConnection = SocketIO('http://192.168.1.34:5050', {
   withCredentials: false,
 });
 
@@ -33,7 +33,7 @@ Vue.use(VueSweetAlert, {
   cancelButtonColor: Colors.light,
 });
 
-Vue.use(LoadScript);
+Vue.use(LoadScript); 
 
 // Initializing
 new Vue({
