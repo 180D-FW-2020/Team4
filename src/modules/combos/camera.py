@@ -64,9 +64,7 @@ class VideoCamera(object):
         
         frame = cv2.resize(frame, dimension, interpolation = cv2.INTER_AREA)
         
-        blurred = cv2.GaussianBlur(frame,(25,25),0) 
-
-        hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+        
         #Gaussian Blur to smoothe the image
         blurred = cv2.GaussianBlur(frame,(25,25),0)    
         
