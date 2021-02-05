@@ -58,7 +58,6 @@ Dont use the above values, these are just an example.
 '''
 ############### END Calibration offsets #################
 
-
 #Kalman filter variables
 Q_angle = 0.02
 Q_gyro = 0.0015
@@ -417,5 +416,5 @@ def connect():
 @sio.event
 def disconnect():
     print('disconnected from server')
-
+    
 sio.connect('http://localhost:5000') # Put your IPv4 address
