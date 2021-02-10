@@ -22,6 +22,7 @@ class ROOM {
     this.created = true;
     this.round = null;
     this.numRounds = 0;
+    this.TimeLeft = 0;
   }
 
   async getWord() {
@@ -78,6 +79,7 @@ class ROOM {
       } else if (this.round == null) {
         clearInterval(interval);
       } else {
+        this.TimeLeft = time;
         time--;
         io.to(this.id).emit("countdown", time);
       }
@@ -174,8 +176,8 @@ class ROOM {
     return this.users.length == 0 ? true : false;
   }
 
-  givePoints({ id }, points = 1) {
-    this.points[id] += points;
+  givePoints({ id }, points = 500) {
+    this.points[id] += parseInt(points*(this.TimeLeft/this.roundTime));
     this.updateUsers();
   }
 
