@@ -71,7 +71,7 @@ io.on("connection", socket => {
   socket.on("send_message", msg => {
     other = socket;
     console.log(msg)
-    console.log('test1');
+    //console.log('test1');
     //console.log(socket.handshake);
     if (typeof(socket.handshake.headers.origin)=='undefined'){
       console.log('test2');
@@ -79,7 +79,7 @@ io.on("connection", socket => {
         console.log(socket.handshake.address);
         if (socket.handshake.address==cl.handshake.address){
           console.log(socket.handshake.address);
-          if (cl.handshake.headers.origin == 'http://localhost:8081'){
+          if (cl.handshake.headers.origin == 'http://localhost:8080'){
             other = cl;
           }
         }
@@ -99,8 +99,8 @@ io.on("connection", socket => {
           num_guessed++;
           if(num_guessed == (room.getUsers().length - 1))
           {
-            room.stopRound();
             num_guessed = 0;
+            room.stopRound();
           }
         } else {
           CHAT.sendMessage(room.id, {
@@ -120,7 +120,7 @@ io.on("connection", socket => {
   socket.on("paint", (coords) => {
     //console.log('paint');
     other = socket;
-    if (socket.handshake.headers.origin=='http://localhost:8081'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
+    if (socket.handshake.headers.origin=='http://localhost:8080'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
       //console.log("sssssssssssssssssssssssss")
       clients.forEach(function (cl) {
         //console.log(cl.name);
@@ -131,7 +131,7 @@ io.on("connection", socket => {
             //console.log("double yay")
           //}
           //console.log(cl.handshake.headers.origin)
-          if (cl.handshake.headers.origin == 'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
+          if (cl.handshake.headers.origin == 'http://localhost:8080'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
             other = cl;
             //console.log("double yay")
           }
