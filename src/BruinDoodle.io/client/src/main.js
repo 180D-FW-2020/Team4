@@ -14,7 +14,7 @@ import "./styles/index.scss";
 Vue.config.productionTip = false;
 
 /* Establish Connection */
-const socketConnection = SocketIO('http://192.168.68.117:5050', {
+const socketConnection = SocketIO('https://fathomless-river-82221.herokuapp.com/',{ // http://192.168.68.117:5050', {
   withCredentials: false,
 });
 
