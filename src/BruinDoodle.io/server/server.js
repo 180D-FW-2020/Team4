@@ -13,6 +13,7 @@ global.io = io;
 global.CHAT = CHAT;
 
 var clients = [];
+var num_guessed = 0;
 
 io.on("connection", socket => {
   // Connect
@@ -70,7 +71,7 @@ io.on("connection", socket => {
   socket.on("send_message", msg => {
     other = socket;
     console.log(msg)
-    console.log('test1');
+    //console.log('test1');
     //console.log(socket.handshake);
     if (typeof(socket.handshake.headers.origin)=='undefined'){
       console.log('test2');
@@ -86,10 +87,6 @@ io.on("connection", socket => {
     }
     let room = ROOMS.getSocketRoom(other);
     if (room) {
-      CHAT.sendMessage(room.id, {
-        msg,
-        sender: other.name
-      });
 
       if (room.round != null && other.id != room.painter) {
         // Checking if the message is correct
@@ -97,10 +94,19 @@ io.on("connection", socket => {
           ROOMS.givePoints(other);
           CHAT.sendCallback(other, {
             self: `Congratulations! You've guessed the word!`,
-            broadcast: `${other.name} guessed the word: ${room.round.word}`
+            broadcast: `${other.name} guessed the word`
           });
-          room.stopRound();
+          num_guessed++;
+          if(num_guessed == (room.getUsers().length - 1))
+          {
+            num_guessed = 0;
+            room.stopRound();
+          }
         } else {
+          CHAT.sendMessage(room.id, {
+            msg,
+            sender: other.name
+          });
           if (room.round.isClose(msg)) {
             CHAT.sendCallback(other, {
               self: `You're so close!`
