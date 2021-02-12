@@ -25,6 +25,7 @@ const CREATE_ROOM = function (socket, options) {
     maxRounds: options.maxRounds || 3,
     users: [],
     points: {},
+    powerUps: {},
     created: true,
   });
 
