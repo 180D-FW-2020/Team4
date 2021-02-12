@@ -140,7 +140,7 @@ function createDownloadLink(blob) {
     var moo=new XMLHttpRequest();
     var d=new FormData();
     d.append("audio_data",blob, filename);
-    moo.open("POST","http://localhost:5051/audio",true);
+    moo.open("POST","https://shrouded-waters-54653.herokuapp.com/audio",true);
     moo.send(d);
 
     //upload link
