@@ -6,7 +6,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         //console.log("Connected...!", socket.connected)
     //});
 
-    var sockets = io('http://localhost:5050', { withCredentials: false  });//,transports: ["websocket"]
+    var sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
     sockets.emit('setName', "Laptop1")
     //sockets.on('connection', function(){
         //console.log("Connected...!", sockets.connected)
