@@ -1,6 +1,6 @@
 function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     let self = this;
-    var socket = io('http://localhost:5000', { withCredentials: false  });
+    var socket = io('https://polar-mesa-13022.herokuapp.com/', { withCredentials: false  });
 
     //socket.on('connect', function(){
         //console.log("Connected...!", socket.connected)
