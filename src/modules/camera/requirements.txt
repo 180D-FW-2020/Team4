@@ -2,7 +2,6 @@ eventlet
 Flask==0.12.2
 Flask-Cors==3.0.10
 Flask-SocketIO==5.0.0
-gevent-websocket
 gunicorn
 imutils==0.5.3
 numpy==1.19.4
