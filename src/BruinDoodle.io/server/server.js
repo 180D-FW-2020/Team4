@@ -125,7 +125,7 @@ io.on("connection", socket => {
       //console.log("sssssssssssssssssssssssss");
       clients.forEach(function (cl) {
         //console.log(cl.name);
-        if (cl.name=='Laptop1'){
+        if (socket.name==(cl.name+"9")){
           //console.log(typeof JSON.stringify(cl.handshake.headers.origin) == 'string');
           //if (String(cl.handshake.headers.origin) == "https://mighty-headland-55869.herokuapp.com/"){ //'http://192.168.68.117:8081'){
             //other = cl;
@@ -134,7 +134,7 @@ io.on("connection", socket => {
           //console.log(cl.handshake.headers.origin)
           if (cl.handshake.headers.origin == 'https://bruindoodleio.herokuapp.com'){//'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
             other = cl;
-            //console.log("double yay ")
+            //console.log("double yay hi")
           }
         }
         //console.log("boop");
