@@ -79,6 +79,10 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         img.src = url;
     };
 
+    this.nameStuff = function(fname) {
+        sockets.emit('setName', fname+"9");
+    }
+
     this.executeCode = function(textAreaId, streaming) {
         try {
             let video = document.getElementById('videoInput');

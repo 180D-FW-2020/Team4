@@ -120,9 +120,9 @@ io.on("connection", socket => {
   socket.on("paint", (coords) => {
     //console.log('paint');
     other = socket;
-    console.log(socket.handshake.headers);
+    //console.log(socket.handshake.headers);
     if (socket.handshake.headers.origin=='https://bruindoodleio.herokuapp.com'){//'http://localhost:8081'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
-      console.log("sssssssssssssssssssssssss");
+      //console.log("sssssssssssssssssssssssss");
       clients.forEach(function (cl) {
         //console.log(cl.name);
         if (cl.name=='Laptop1'){
@@ -134,7 +134,7 @@ io.on("connection", socket => {
           //console.log(cl.handshake.headers.origin)
           if (cl.handshake.headers.origin == 'https://bruindoodleio.herokuapp.com'){//'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
             other = cl;
-            console.log("double yay ")
+            //console.log("double yay ")
           }
         }
         //console.log("boop");

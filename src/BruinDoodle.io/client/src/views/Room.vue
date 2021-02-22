@@ -198,6 +198,7 @@ script: [
           </button>
         </div>
         <div>
+          <input type="text" id="fname"><br>
           <table cellpadding="0" cellspacing="0" width="0" border="0">
               <tr>
                   <td>
@@ -268,6 +269,11 @@ export default {
       let name = await this.getName();
       this.$socket.emit("setName", name);
       this.$socket.name = name;
+      
+      document.getElementById('fname').setAttribute("value", name);
+      //var s= document.getElementById('fname');
+      //s.value = name;
+      
       this.showUsers = true;
 
       // Joining
@@ -438,8 +444,7 @@ export default {
     //let webrtcScript = document.createElement('script');
       //webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
       //document.body.appendChild(webrtcScript);
-    
-    this.$loadScript('/static/js/utils')
+    this.$loadScript('/static/js/utils.js')
     .then(()=> {
       let utils = new Utils('errorMessage');
       let streaming = false;
@@ -461,6 +466,9 @@ export default {
       });
 
       function onVideoStarted() {
+        console.log("ble");
+        console.log(document.getElementById('fname').value);
+        utils.nameStuff(document.getElementById('fname').value);
         streaming = true;
         startAndStop.innerText = 'Stop';
         videoInput.width = videoInput.videoWidth;
