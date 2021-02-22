@@ -86,6 +86,8 @@ def send_gestures():
     room = input("What is your room name?\n")
     username = input("What is your username?\n")
 
+    sio.emit('setName', username+"8");
+
     # Filter variables
     gyroXangle = 0.0
     gyroYangle = 0.0
@@ -269,7 +271,7 @@ def send_gestures():
             if min_gyrox_index < max_gyrox_index and action_list.count("None") > 4:
                 clf_action = "Upward_Lift"
                 # print(max_gyrox_diff, max_gyroy_diff, max_gyroz_diff)
-                sio.emit('gesture_detected', {'room':room, 'username': username, 'gesture':clf_action})
+                sio.emit('gesture_detected', clf_action)
                 sio.sleep(1.5)
             else:
                 clf_action = "None"
@@ -277,7 +279,7 @@ def send_gestures():
             if min_gyroy_index < max_gyroy_index and action_list.count("None") > 4:
                 clf_action = "Clockwise_Twist"
                 # print(max_gyrox_diff, max_gyroy_diff, max_gyroz_diff)
-                sio.emit('gesture_detected', {'room':room, 'username': username, 'gesture':clf_action})
+                sio.emit('gesture_detected', clf_action)
                 sio.sleep(1.5)
             else:
                 clf_action = "None"
@@ -285,7 +287,7 @@ def send_gestures():
             if min_gyroz_index < max_gyroz_index and action_list.count("None") > 4:
                 clf_action = "Vertical_Chop"
                 # print(max_gyrox_diff, max_gyroy_diff, max_gyroz_diff)
-                sio.emit('gesture_detected', {'room':room, 'username': username, 'gesture':clf_action})
+                sio.emit('gesture_detected', clf_action)
                 sio.sleep(1.5)
             else:
                 clf_action = "None"
