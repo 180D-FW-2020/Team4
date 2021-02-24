@@ -7,7 +7,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     //});
 
     var sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
-    sockets.emit('setName', "Laptop1a")
+    //sockets.emit('setName', "Laptop1a")
     //sockets.on('connection', function(){
         //console.log("Connected...!", sockets.connected)
     //});
