@@ -56,6 +56,8 @@ magXmax =  0
 magYmax =  0
 magZmax =  0
 
+sio = socketio.Client()
+
 '''
 Here is an example:
 magXmin =  -1748
@@ -83,8 +85,10 @@ def print_title():
 
 def send_gestures():
     print_title()
-    room = input("What is your room name?\n")
+    
     username = input("What is your username?\n")
+
+    sio.emit('setName', username+"8")
 
     # Filter variables
     gyroXangle = 0.0
@@ -268,25 +272,22 @@ def send_gestures():
         if max_gyrox_diff > GYRO_X_LIFT and max_gyroy_diff < GYRO_Y_LIFT and max_gyroz_diff < GYRO_Z_LIFT:
             if min_gyrox_index < max_gyrox_index and action_list.count("None") > 4:
                 clf_action = "Upward_Lift"
-                # print(max_gyrox_diff, max_gyroy_diff, max_gyroz_diff)
-                sio.emit('gesture_detected', {'room':room, 'username': username, 'gesture':clf_action})
-                sio.sleep(1.5)
+                sio.emit('gesture_detected', clf_action)
+                sio.sleep(0.5)
             else:
                 clf_action = "None"
         elif max_gyroy_diff > GYRO_Y_TWIST and max_gyrox_diff < GYRO_X_TWIST and max_gyroz_diff < GYRO_Z_TWIST: 
             if min_gyroy_index < max_gyroy_index and action_list.count("None") > 4:
                 clf_action = "Clockwise_Twist"
-                # print(max_gyrox_diff, max_gyroy_diff, max_gyroz_diff)
-                sio.emit('gesture_detected', {'room':room, 'username': username, 'gesture':clf_action})
-                sio.sleep(1.5)
+                sio.emit('gesture_detected', clf_action)
+                sio.sleep(0.5)
             else:
                 clf_action = "None"
         elif max_gyroz_diff > GYRO_Z_CHOP and max_gyrox_diff < GYRO_X_CHOP and max_gyroy_diff < GYRO_Y_CHOP:
             if min_gyroz_index < max_gyroz_index and action_list.count("None") > 4:
                 clf_action = "Vertical_Chop"
-                # print(max_gyrox_diff, max_gyroy_diff, max_gyroz_diff)
-                sio.emit('gesture_detected', {'room':room, 'username': username, 'gesture':clf_action})
-                sio.sleep(1.5)
+                sio.emit('gesture_detected', clf_action)
+                sio.sleep(0.5)
             else:
                 clf_action = "None"
         else:
@@ -314,8 +315,6 @@ def send_gestures():
 
         time.sleep(0.05)
 
-sio = socketio.Client()
-
 @sio.event
 def connect():
     print('connection established')
@@ -325,4 +324,4 @@ def connect():
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://192.168.1.109:5000') # Change your IPv4 Address!
+sio.connect('http://192.168.1.34:5050') # Change your IPv4 Address!

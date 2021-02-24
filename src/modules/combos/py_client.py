@@ -20,6 +20,6 @@ def paint(paintObj):
 def disconnect():
     print('disconnected from server')
 
-siow.connect('http://192.168.68.117:5050') #'http://192.168.68.117:5050') #https://tranquil-ridge-32141.herokuapp.com/')
+siow.connect('http://192.168.1.34:5050') #'http://192.168.68.117:5050') #https://tranquil-ridge-32141.herokuapp.com/')
 
 #sio.wait()

@@ -351,34 +351,40 @@ class ROOM {
     return usrs;
   }
   useArtistPowerUp_1({ id }){
-    var valid = Math.floor(powerUps[id]/32);
+    var valid = Math.floor(this.powerUps[id]/32);
     if(valid == 1)
     {
-      powerUps[id] -= 32;
+      this.powerUps[id] -= 32;
       time += 20;
       this.TimeLeft = time;
       io.to(this.id).emit("countdown", time);
+    }
+    else {
+      console.log("Gesture not available");
     }
   }
   useArtistPowerUp_2({ id }){
     var temp = this.powerUps[id]%32;
     temp = temp%16;
-    var valid = Math.floor(powerUps[id]/16);
+    var valid = Math.floor(this.powerUps[id]/16);
     if(valid == 1)
     {
       //do power up here
-      powerUps[id] -= 16;
+      this.powerUps[id] -= 16;
+    }
+    else {
+      console.log("Gesture not available");
     }
   }
   useGuesserPowerUp_1({ id }){
     var temp = this.powerUps[id]%32;
     temp = temp%16;
     temp = temp%8;
-    var valid = Math.floor(powerUps[id]/4);
+    var valid = Math.floor(this.powerUps[id]/4);
     if(valid == 1)
     {
       //reveal letter here
-      powerUps[id] -= 4;
+      this.powerUps[id] -= 4;
     }
   }
   useGuesserPowerUp_2({ id }){
@@ -386,11 +392,11 @@ class ROOM {
     temp = temp%16;
     temp = temp%8;
     temp = temp%4;
-    var valid = Math.floor(powerUps[id]/2);
+    var valid = Math.floor(this.powerUps[id]/2);
     if(valid == 1)
     {
       //remove all hints for everyone in round
-      powerUps[id] -= 2;
+      this.powerUps[id] -= 2;
     }
   }
   useGuesserPowerUp_3({ id }){
@@ -402,7 +408,7 @@ class ROOM {
     if(valid == 1)
     {
       //extra points
-      powerUps[id] -= 1;
+      this.powerUps[id] -= 1;
     }
   }
 }
