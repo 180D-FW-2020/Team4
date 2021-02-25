@@ -78,8 +78,8 @@ io.on("connection", socket => {
       clients.forEach(function (cl) {
         console.log(socket.handshake.address);
         if (socket.handshake.address==cl.handshake.address){
-          console.log(socket.handshake.address);
-          if (cl.handshake.headers.origin == 'http://192.168.1.252:8080'){
+          console.log(socket.handshake.headers.origin);
+          if (cl.handshake.headers.origin == 'http://localhost:8081'){
             other = cl;
           }
         }
@@ -120,7 +120,7 @@ io.on("connection", socket => {
   socket.on("paint", (coords) => {
     //console.log('paint');
     other = socket;
-    if (socket.handshake.headers.origin=='http://192.168.1.252:8080'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
+    if (socket.handshake.headers.origin=='http://localhost:8081'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
       //console.log("sssssssssssssssssssssssss")
       clients.forEach(function (cl) {
         //console.log(cl.name);
@@ -131,7 +131,7 @@ io.on("connection", socket => {
             //console.log("double yay")
           //}
           //console.log(cl.handshake.headers.origin)
-          if (cl.handshake.headers.origin == 'http://192.168.1.252:8080'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
+          if (cl.handshake.headers.origin == 'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
             other = cl;
             //console.log("double yay")
           }
