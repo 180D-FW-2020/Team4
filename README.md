@@ -1,18 +1,17 @@
 # Team 4: BruinDoodle.io :bear::pencil2:
-skribbl.io but better  
+skribbl.io but better
 
-no one has money to buy a domain 😔\
-BruinDoodle.io - https://bruindoodleio.herokuapp.com/ 
-
+No one has 💸 to buy a domain. 😔
+Play the game here! ➡️ https://bruindoodleio.herokuapp.com/
 
 ## Dependencies
-Python 3.5 :snake:
-* SpeechRecognition :speech_balloon:
-* PyAudio :sound:
-* OpenCV :camera:
-* Socket.IO :zap:
+Python 3.5 🐍
+* SpeechRecognition 🗣️
+* PyAudio 🔊
+* OpenCV 📷
+* Socket.IO ⚡
 
-
+## Installation
 BrunDoodle.io
 * Server - ``` $ node server.js ```
 * Client - ``` $ npm run serve ```
