@@ -1,4 +1,4 @@
-# Team 4: BruinDoodle.io :bear::pencil2:
+# Team 4: BruinDoodle.io 🐻✏️
 skribbl.io but better
 
 No one has 💸 to buy a domain. 😔 \
