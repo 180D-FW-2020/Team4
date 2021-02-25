@@ -56,6 +56,30 @@ script: [
           </footer>
         </div>
 
+        <div class="card card--painter">
+          <header class="card-header">
+            <p class="card-header-title">⚡</p>
+          </header>
+          <!--
+          <div class="card-content">
+            <ul class="content playerlist" v-if="showUsers">
+              <li
+                v-for="user in sortedUsers"
+                :key="user.id"
+                v-if="painter == user.id"
+              >
+                <strong>{{ user.name }} ✏️</strong> :
+                <span class="has-text-weight-bold">{{ user.points }}</span>
+              </li>
+              <li :key="user.id" v-else>
+                {{ user.name }} :
+                <span class="has-text-weight-bold">{{ user.points }}</span>
+              </li>
+            </ul>
+          </div>
+          -->
+        </div>
+
         <div
           class="card card--painter"
           v-if="iDraw && !roundStarted && words.length > 0"
@@ -93,6 +117,23 @@ script: [
           </header>
           <div class="card-content">
             <p class="content">{{ password }}</p>
+          </div>
+        </div>
+
+        <div class="card card--painter">
+          <header class="card-header card-video">
+            <p id="headerVideo" class="card-header-title">📷</p>
+            <div class="control control-video">
+              <button 
+                id="startAndStop" 
+                class = "button is-primary is-borderless"
+                >
+                Start
+              </button>
+            </div>
+          </header>
+          <div class="card-content content-video">
+            <video id="videoInput" width=320 height=240 hidden></video>
           </div>
         </div>
       </div>
@@ -152,81 +193,74 @@ script: [
             </form>
           </footer>
 
-
-          <footer class="card-footer">
-            <form class="field has-addons voice-input">
-              <div class="control">
+          <footer class="card-footer" hidden>
+            <form class="field has-addons voice-input" hideen>
+              <div class="control" hidden>
                 <button
                   id = "recordButton"
                   class="button is-primary is-borderless"
-                  value="Record">
+                  value="Record"
+                  hidden
+                  >
                   Record
                 </button>
               </div>
-              <div class="control">
+              <div class="control" hidden>
                 <button
                   id = "pauseButton"
                   class="button is-primary is-borderless"
-                  value="Pause">
+                  value="Pause"
+                  hidden
+                  >
                   Pause
                 </button>
               </div>
-              <div class="control">
+              <div class="control" hidden>
                 <button
                   id = "stopButton"
                   type="submit"
                   class="button is-primary is-borderless"
-                  value="Stop">
+                  value="Stop"
+                  hidden
+                  >
                   Stop
                 </button>
               </div>
             </form>
           </footer>
+        </div>
 
-
-
+        <div class="card card--painter">
+          <header class="card-header card-audio">
+            <p id="headerAudio" class="card-header-title">🔈</p>
+            <div class="control control-video">
+              <button 
+                id="playAndPause"
+                class = "button is-primary is-borderless"
+                >
+                Start
+              </button>
+            </div>
+          </header>
         </div>
       </div>
 
       <div class="column is-full">
-        <div class="control">
-          <button 
-            id="startAndStop" 
-            class = "button is-primary is-borderless"
-            >
-            Start
-          </button>
-        </div>
         <div>
           <input type="hidden" id="fname"><br>
           <table cellpadding="0" cellspacing="0" width="0" border="0">
               <tr>
-                  <td>
-                      <video id="videoInput" width=320 height=240></video>
-                  </td>
-                  <td>
-                      <canvas id="canvasOutput" width=320 height=240></canvas>
-                  </td>
-                  <td>
-                      <canvas id="sockOutput" width=320 height=240></canvas>
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-              </tr>
-              <tr>
-                  <td>
-                      <div class="caption">videoInput</div>
-                  </td>
-                  <td>
-                      <div class="caption">canvasOutput</div>
-                  </td>
-                  <td>
-                      <div class="caption">sockOutput</div>
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                <!--
+                <td>
+                    <video id="videoInput" width=320 height=240></video>
+                </td>
+                -->
+                <td>
+                    <canvas id="canvasOutput" width=320 height=240 hidden></canvas>
+                </td>
+                <td>
+                    <canvas id="sockOutput" width=320 height=240 hidden></canvas>
+                </td>
               </tr>
           </table>
         </div>
@@ -253,6 +287,8 @@ export default {
       roundStarted: false,
       time: 0,
       wordTime: 0,
+      numRounds: 0,
+      maxRounds: 0,
     };
   },
   components: { Whiteboard },
@@ -416,6 +452,12 @@ export default {
     countdown_painter(time) {
       this.wordTime = time;
     },
+    get_numRounds(numRounds) {
+      this.numRounds = numRounds;
+    },
+    get_maxRounds(maxRounds) {
+      this.maxRounds = maxRounds;
+    },
   },
   computed: {
     sortedUsers() {
@@ -454,6 +496,7 @@ export default {
       let canvasContext = canvasOutput.getContext('2d');
       let sockOutput = document.getElementById('sockOutput');
       let sockContext = sockOutput.getContext('2d');
+      let headerVideo = document.getElementById('headerVideo');
 
       startAndStop.addEventListener('click', () => {
         if (!streaming) {
@@ -471,8 +514,11 @@ export default {
         utils.nameStuff(document.getElementById('fname').value);
         streaming = true;
         startAndStop.innerText = 'Stop';
+        startAndStop.className = 'button is-danger is-borderless';
+        headerVideo.innerText = '📸';
         videoInput.width = videoInput.videoWidth;
         videoInput.height = videoInput.videoHeight;
+        videoInput.hidden = false;
         utils.executeCode('codeEditor', streaming);
       }
 
@@ -481,6 +527,9 @@ export default {
         canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
         sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
         startAndStop.innerText = 'Start';
+        startAndStop.className = 'button is-primary is-borderless';
+        headerVideo.innerText = '📷';
+        videoInput.hidden = true;
       }
 
       utils.loadOpenCv(() => {
@@ -491,9 +540,6 @@ export default {
       console.log(err);
       console.log("Brokennnnnnnn")
     });
-
-    
-
   },
   watch: {
     "$route.params.id": function(id) {
@@ -560,5 +606,22 @@ export default {
 .is-word {
   white-space: normal;
   height: auto;
+}
+
+.control-video {
+  box-sizing: content-box;
+}
+
+.card-video {
+  line-height: 1.4;
+}
+
+.card-audio {
+  line-height: 1.4;
+}
+
+.content-video {
+  padding: 0rem;
+  font-size: 0em;
 }
 </style>

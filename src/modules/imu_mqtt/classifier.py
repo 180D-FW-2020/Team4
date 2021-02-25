@@ -88,7 +88,9 @@ def send_gestures():
     
     username = input("What is your username?\n")
 
+
     sio.emit('setName', username+"8")
+
 
     # Filter variables
     gyroXangle = 0.0
@@ -272,6 +274,7 @@ def send_gestures():
         if max_gyrox_diff > GYRO_X_LIFT and max_gyroy_diff < GYRO_Y_LIFT and max_gyroz_diff < GYRO_Z_LIFT:
             if min_gyrox_index < max_gyrox_index and action_list.count("None") > 4:
                 clf_action = "Upward_Lift"
+
                 sio.emit('gesture_detected', clf_action)
                 sio.sleep(0.5)
             else:
@@ -279,6 +282,7 @@ def send_gestures():
         elif max_gyroy_diff > GYRO_Y_TWIST and max_gyrox_diff < GYRO_X_TWIST and max_gyroz_diff < GYRO_Z_TWIST: 
             if min_gyroy_index < max_gyroy_index and action_list.count("None") > 4:
                 clf_action = "Clockwise_Twist"
+
                 sio.emit('gesture_detected', clf_action)
                 sio.sleep(0.5)
             else:
@@ -286,6 +290,7 @@ def send_gestures():
         elif max_gyroz_diff > GYRO_Z_CHOP and max_gyrox_diff < GYRO_X_CHOP and max_gyroy_diff < GYRO_Y_CHOP:
             if min_gyroz_index < max_gyroz_index and action_list.count("None") > 4:
                 clf_action = "Vertical_Chop"
+
                 sio.emit('gesture_detected', clf_action)
                 sio.sleep(0.5)
             else:
