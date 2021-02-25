@@ -11,7 +11,7 @@ Python 3.5 🐍
 * OpenCV 📷
 * Socket.IO ⚡
 
-## Installation
+## Installation 🔧
 BrunDoodle.io
 * Server - ``` $ node server.js ```
 * Client - ``` $ npm run serve ```
