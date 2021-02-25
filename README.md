@@ -1,7 +1,7 @@
 # Team 4: BruinDoodle.io :bear::pencil2:
 skribbl.io but better
 
-No one has 💸 to buy a domain. 😔
+No one has 💸 to buy a domain. 😔 \
 Play the game here! ➡️ https://bruindoodleio.herokuapp.com/
 
 ## Dependencies
