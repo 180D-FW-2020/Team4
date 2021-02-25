@@ -73,18 +73,18 @@ io.on("connection", socket => {
     console.log(msg)
     //console.log('test1');
     //console.log(socket.handshake);
-    if (typeof(socket.handshake.headers.origin)=='undefined'){
-      console.log('test2');
-      clients.forEach(function (cl) {
-        console.log(socket.handshake.address);
-        if (socket.handshake.address==cl.handshake.address){
-          console.log(socket.handshake.address);
-          if (cl.handshake.headers.origin == 'http://localhost:8081'){
-            other = cl;
-          }
-        }
-    });
-    }
+    // if (typeof(socket.handshake.headers.origin)=='undefined'){
+    //   console.log('test2');
+    //   clients.forEach(function (cl) {
+    //     console.log(socket.handshake.address);
+    //     if (socket.handshake.address==cl.handshake.address){
+    //       console.log(socket.handshake.address);
+    //       if (cl.handshake.headers.origin == 'http://localhost:8081'){
+    //         other = cl;
+    //       }
+    //     }
+    // });
+    // }
     let room = ROOMS.getSocketRoom(other);
     if (room) {
 
