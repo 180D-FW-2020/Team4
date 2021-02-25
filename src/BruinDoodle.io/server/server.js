@@ -78,7 +78,7 @@ io.on("connection", socket => {
       clients.forEach(function (cl) {
         console.log(socket.handshake.address);
         if (socket.handshake.address==cl.handshake.address){
-          console.log(socket.handshake.address);
+          console.log(socket.handshake.headers.origin);
           if (cl.handshake.headers.origin == 'http://localhost:8081'){
             other = cl;
           }
