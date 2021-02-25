@@ -7,7 +7,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     //});
 
     var sockets = io('http://localhost:5050', { withCredentials: false  });//,transports: ["websocket"]
-    sockets.emit('setName', "Laptop1")
+    //sockets.emit('setName', "Laptop1")
     //sockets.on('connection', function(){
         //console.log("Connected...!", sockets.connected)
     //});
@@ -78,6 +78,10 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         };
         img.src = url;
     };
+
+    this.nameStuff = function(fname) {
+        sockets.emit('setName', fname+"9");
+    }
 
     this.executeCode = function(textAreaId, streaming) {
         try {

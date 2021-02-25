@@ -173,6 +173,56 @@ io.on("connection", socket => {
       room.startRound(word);
     }
   });
+
+  socket.on("gesture_detected", gesture => {
+    other = console;
+    clients.forEach(function (cl){
+      if(socket.name == (cl.name+"8")) {
+        other = cl;
+      }
+    });
+
+    let room = ROOMS.getSocketRoom(other);
+    if(room.round != null) {
+      switch(gesture) {
+        case "Upward_Lift":
+          if(room.painter == other.id) {
+            room.useArtistPowerUp_1(other.id);
+            console.log("Upward Lift Artist");
+          }
+          else {
+            room.useGuesserPowerUp_1(other.id);
+            console.log("Upward Lift Guesser");
+          }
+
+          break
+        case "Clockwise_Twist":
+          if(room.painter == other.id && room.round != null) {
+            room.useArtistPowerUp_2(other.id);
+            console.log("Clockwise Twist Artist");
+          }
+          else {
+            room.useGuesserPowerUp_2(other.id);
+            console.log("Clockwise Twist Guesser");
+          }
+          break
+        case "Vertical_Chop":
+          if(room.painter == other.id && room.round != null) {
+            console.log("Vertical Chop Artist");
+          }
+          else {
+            room.useGuesserPowerUp_3(other.id);
+            console.log("Vertical Chop Guesser");
+          }
+          break
+        default:
+          console.log("Invalid Gesture");
+      }
+    }
+    else {
+      console.log("Game has not started yet...");
+    }
+  });
 });
 
 let port = process.env.PORT || 5050;

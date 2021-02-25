@@ -29,6 +29,18 @@ class ROOM {
       {
         ...options.AllCorrectStreak,
       } || {};
+    this.guessStreak = 
+      {
+        ...options.guessStreak,
+      } || {};
+    this.firstGuessStreak = 
+      {
+        ...options.firstGuessStreak,
+      } || {};
+    this.roundResults = 
+      {
+        ...options.roundResults,
+      } || {};
     this.painter = null;
     this.created = true;
     this.round = null;
@@ -124,9 +136,17 @@ class ROOM {
       //if the streak is 1
       if(this.artist_AllCorrectStreak[this.painter] == 1){
         //check if they already have this power up
-        var valid = Math.floor(this.powerUps[this.painter]/16);
+        var valid = Math.floor(this.powerUps[this.painter]/32);
         if(valid == 0){
-          //if they don't, assign the fifth bit by adding 16 (2^4 = 16)
+          //if they don't, assign the sixth bit by adding 32 (2^5 = 32)
+          this.powerUps[this.painter] += 32;
+        }
+      }
+      //if they get 2 in a row:
+      else if(this.artist_AllCorrectStreak[this.painter] == 2){
+        var temp = this.powerUps[this.painter]%32;
+        var valid = Math.floor(temp/16);
+        if(valid == 0){
           this.powerUps[this.painter] += 16;
         }
       }
@@ -135,12 +155,10 @@ class ROOM {
       {
         //check if they have it already
         
-        //to get fourth bit value, mod by 16 to remove the 16
-        var temp = this.powerUps[this.painter]%16;
-        //divide by 8 and round down (8 or larger -> 1, 7 or smaller -> 0)
+        var temp = this.powerUps[this.painter]%32;
+        temp = temp%16;
         var valid = Math.floor(temp/8);
         if(valid == 0){
-          //assign it if they don't have it
           this.powerUps[this.painter] += 8;
         }
       }
@@ -150,7 +168,7 @@ class ROOM {
       this.artist_AllCorrectStreak[this.painter] = 0;
     }
 
-    //Artist Points
+    /////////////////////////////////// Artist Points //////////////////////////////////////////
 
     //artist gets half the points of first place plus an incentive for the more people guess
     var artist_points = parseInt(this.topPoints/2) + parseInt((this.numCorrect/(this.users.length-1)) * (this.topPoints/4));
@@ -163,6 +181,7 @@ class ROOM {
       //check if they have the double points power up
       var temp = this.powerUps[this.painter]%16;
       var valid = Math.floor(temp/8);
+
       //if they do, double the points from this round
       if(valid == 1)
       {
@@ -170,11 +189,25 @@ class ROOM {
         this.updateUsers();
       }
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+    //If a guesser does not guess correctly, we need to reset their guess streaks to 0
+    for(let user of this.users){
+      //only look at guessers 
+      if(user != this.painter){
+        if(this.roundResults[user] == 0){
+          this.guessStreak[user] = 0;
+          this.firstGuessStreak[user] = 0;
+        }
+      }
+      this.roundResults[user] = 0;
+    }
 
     this.clearBoard();
     io.to(this.id).emit("round_stopped");
     CHAT.sendServerMessage(this.id, `Round finished!`);
     io.to(this.id).emit("countdown", 0);
+
     this.numRounds++;
     this.numCorrect = 0;
     this.topPoints = 0;
@@ -224,6 +257,9 @@ class ROOM {
     this.points[id] = 0;
     this.powerUps[id] = 0;
     this.artist_AllCorrectStreak[id] = 0;
+    this.guessStreak[id] = 0;
+    this.firstGuessStreak[id] = 0;
+    this.roundResults[id] = 0;
     this.queue.unshift(id);
     this.updateUsers();
   }
@@ -252,9 +288,48 @@ class ROOM {
     if(this.numCorrect == 0){
       //store the points that go to first guesser in order to assign to artist at the end
       this.topPoints = parseInt(points*(this.TimeLeft/this.roundTime));
+      this.firstGuessStreak[id] += 1;
+
+      var temp = this.powerUps[id]%32;
+      temp = temp%16;
+      temp = temp%8;
+      var valid = Math.floor(temp/4);
+      if(valid == 0){
+        this.powerUps[id] += 4;
+      }
+
+      //if user guesses first three times in row
+      if(this.firstGuessStreak[id] == 3)
+      {
+        temp = temp%4;
+        valid = Math.floor(temp/2);
+        if(valid == 0){
+          this.powerUps[id] += 2;
+        }
+      }
     }
+    //if it is not the first person to guess -> need to reset firstGuessStreak
+    else{
+      this.firstGuessStreak[id] = 0;
+    }
+
     //update score of guesser
     this.points[id] += parseInt(points*(this.TimeLeft/this.roundTime));
+    this.guessStreak[id] += 1;
+
+    //if user guesses three in a row
+    if(this.guessStreak[id] == 3){
+      var temp = this.powerUps[id]%32;
+      temp = temp%16;
+      temp = temp%8;
+      temp = temp%4;
+      valid = temp%2;
+      if(valid == 0){
+        this.powerUps[id] += 1;
+      }
+    }
+    //this person guessed right, so roundResults should be 1 for them
+    this.roundResults[id] = 1;
     this.numCorrect++;
     this.updateUsers();
   }
@@ -267,9 +342,6 @@ class ROOM {
     let usrs = [];
     
     for (let user of this.users) {
-      //console.log(io.sockets.sockets.get(user).name);
-      //console.log(Array.from(io.sockets.sockets)[0]);
-      //console.log(io.sockets.sockets)
       usrs.push({
         id: user,
         points: this.points[user] || 0,
@@ -278,16 +350,73 @@ class ROOM {
     }
     return usrs;
   }
-  usePowerUp_1({ id }){
-    var valid = Math.floor(powerUps[id]/16);
+  useArtistPowerUp_1({ id }){
+    var valid = Math.floor(this.powerUps[id]/32);
     if(valid == 1)
     {
-      powerUps[id] -= 16;
+      this.powerUps[id] -= 32;
       time += 20;
       this.TimeLeft = time;
       io.to(this.id).emit("countdown", time);
+    }
+    else {
+      console.log("Gesture not available");
+    }
+  }
+  useArtistPowerUp_2({ id }){
+    var temp = this.powerUps[id]%32;
+    temp = temp%16;
+    var valid = Math.floor(this.powerUps[id]/16);
+    if(valid == 1)
+    {
+      //do power up here
+      this.powerUps[id] -= 16;
+    }
+    else {
+      console.log("Gesture not available");
+    }
+  }
+  useGuesserPowerUp_1({ id }){
+    var temp = this.powerUps[id]%32;
+    temp = temp%16;
+    temp = temp%8;
+    var valid = Math.floor(this.powerUps[id]/4);
+    if(valid == 1)
+    {
+      //reveal letter here
+      this.powerUps[id] -= 4;
+    }
+  }
+  useGuesserPowerUp_2({ id }){
+    var temp = this.powerUps[id]%32;
+    temp = temp%16;
+    temp = temp%8;
+    temp = temp%4;
+    var valid = Math.floor(this.powerUps[id]/2);
+    if(valid == 1)
+    {
+      //remove all hints for everyone in round
+      this.powerUps[id] -= 2;
+    }
+  }
+  useGuesserPowerUp_3({ id }){
+    var temp = this.powerUps[id]%32;
+    temp = temp%16;
+    temp = temp%8;
+    temp = temp%4;
+    valid = temp%2;
+    if(valid == 1)
+    {
+      //extra points
+      this.powerUps[id] -= 1;
     }
   }
 }
 
 module.exports = ROOM;
+
+
+
+//TO TEST:
+//check if reset happens on guesser streaks
+//check if proper power ups awarded (console log everything)
