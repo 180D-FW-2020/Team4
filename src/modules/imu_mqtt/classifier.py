@@ -324,4 +324,4 @@ def connect():
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://192.168.1.34:5050') # Change your IPv4 Address!
+sio.connect('https://fathomless-river-82221.herokuapp.com') #http://192.168.1.34:5050') # Change your IPv4 Address!
