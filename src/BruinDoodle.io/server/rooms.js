@@ -26,6 +26,10 @@ const CREATE_ROOM = function (socket, options) {
     users: [],
     points: {},
     powerUps: {},
+    artist_AllCorrectStreak: {},
+    guessStreak: {},
+    firstGuessStreak: {},
+    roundResults: {},
     created: true,
   });
 
