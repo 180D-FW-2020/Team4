@@ -12,15 +12,23 @@ var audioContext //audio context to help us record
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 var pauseButton = document.getElementById("pauseButton");
+var playAndPauseButton = document.getElementById("playAndPause");
+var headerAudio = document.getElementById("headerAudio");
 
 //add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
 pauseButton.addEventListener("click", pauseRecording);
+playAndPauseButton.addEventListener("click", playAndPause);
 
+var listening = false;
 
 function startRecording() {
     console.log("recordButton clicked");
+    listening = true;
+    playAndPauseButton.innerText = 'Stop';
+    playAndPauseButton.className = 'button is-danger is-borderless';
+    headerAudio.innerText = '🔊';
 
     /*
         Simple constraints object, for more advanced audio features see
@@ -97,6 +105,10 @@ function pauseRecording(){
 
 function stopRecording() {
     console.log("stopButton clicked");
+    listening = false;
+    playAndPauseButton.innerText = 'Start';
+    playAndPauseButton.className = 'button is-primary is-borderless';
+    headerAudio.innerText = '🔈';
 
     //disable the stop button, enable the record too allow for new recordings
     stopButton.disabled = true;
@@ -114,6 +126,15 @@ function stopRecording() {
 
     //create the wav blob and pass it on to createDownloadLink
     rec.exportWAV(createDownloadLink);
+}
+
+function playAndPause() {
+  if (!listening) {
+    startRecording();
+  } else {
+    stopRecording();
+  }
+  console.log("No Way");
 }
 
 function createDownloadLink(blob) {
