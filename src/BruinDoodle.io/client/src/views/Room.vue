@@ -486,6 +486,8 @@ export default {
     //let webrtcScript = document.createElement('script');
       //webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
       //document.body.appendChild(webrtcScript);
+    document.onreadystatechange = () => { 
+    if (document.readyState == "complete") { 
     this.$loadScript('/static/js/utils.js')
     .then(()=> {
       let utils = new Utils('errorMessage');
@@ -539,7 +541,10 @@ export default {
     .catch((err)=> {
       console.log(err);
       console.log("Brokennnnnnnn")
+      this.$forceUpdate();
     });
+    }
+    }
   },
   watch: {
     "$route.params.id": function(id) {
