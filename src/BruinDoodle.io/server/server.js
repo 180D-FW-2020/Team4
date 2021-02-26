@@ -74,23 +74,8 @@ io.on("connection", socket => {
       clients.forEach(function (cl) {
         if (socket.name==(cl.name+"7")){
           other = cl;
-          console.log("yay")
           }
     });
-    //console.log('test1');
-    //console.log(socket.handshake);
-    // if (typeof(socket.handshake.headers.origin)=='undefined'){
-    //   console.log('test2');
-    //   clients.forEach(function (cl) {
-    //     console.log(socket.handshake.address);
-    //     if (socket.handshake.address==cl.handshake.address){
-    //       console.log(socket.handshake.address);
-    //       if (cl.handshake.headers.origin == 'http://localhost:8081'){
-    //         other = cl;
-    //       }
-    //     }
-    // });
-    // }
     let room = ROOMS.getSocketRoom(other);
     if (room) {
 
@@ -126,45 +111,16 @@ io.on("connection", socket => {
   socket.on("paint", (coords) => {
     //console.log('paint');
     other = socket;
-    //console.log(socket.handshake.headers);
-    if (socket.handshake.headers.origin=='https://bruindoodleio.herokuapp.com'){//'http://localhost:8081'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
-      //console.log("sssssssssssssssssssssssss");
-      clients.forEach(function (cl) {
-        //console.log(cl.name);
-        if (socket.name==(cl.name+"9")){
-          //console.log(typeof JSON.stringify(cl.handshake.headers.origin) == 'string');
-          //if (String(cl.handshake.headers.origin) == "https://mighty-headland-55869.herokuapp.com/"){ //'http://192.168.68.117:8081'){
-            //other = cl;
-            //console.log("double yay")
-          //}
-          //console.log(cl.handshake.headers.origin)
-          if (cl.handshake.headers.origin == 'https://bruindoodleio.herokuapp.com'){//'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
-            other = cl;
-            //console.log("double yay hi")
-          }
+    clients.forEach(function (cl) {
+      if (socket.name==(cl.name+"9")){
+        other = cl;
         }
-        //console.log("boop");
-        //console.log(cl.handshake.address);
-        //if (socket.handshake.address==cl.handshake.address){
-          //console.log(cl.handshake.headers);
-          //if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
-          //console.log("test");  
-          //other = cl;
-          //}
-        //}
     });
-    }
     let room = ROOMS.getSocketRoom(other);
     if (room.painter == other.id && room.round != null) {
       socket.to(room.id).emit('paint', coords);
       room.round.addLine(coords);
     }
-
-    //let room = ROOMS.getSocketRoom(socket);
-    //if (room.painter == socket.id && room.round != null) {
-      //socket.to(room.id).emit('paint', coords);
-      //room.round.addLine(coords);
-    //}
   });
 
   socket.on("gesture_detected", (coords) => {
