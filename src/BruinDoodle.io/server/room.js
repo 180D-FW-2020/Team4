@@ -21,7 +21,7 @@ class ROOM {
       {
         ...options.points,
       } || {};
-    //5 bit number (0 to 31) that stores the information of the power ups based on the id of the user
+    //6 bit number (0 to 63) that stores the information of the power ups based on the id of the user
     this.powerUps = 
       {
         ...options.powerUps,
@@ -108,23 +108,23 @@ class ROOM {
       } else {
         this.TimeLeft = time;
         time--;
-        if(this.TimeLeft == this.roundTime/2) {
+        if(this.TimeLeft == Math.floor(this.roundTime/2)) {
           this.displayWordHint();
         }
-        else if(this.TimeLeft == this.roundTime/4) {
+        else if(this.TimeLeft == Math.floor(this.roundTime/4)) {
           this.displayWordHint();
         }
-        else if(this.TimeLeft == this.roundTime/8) {
+        else if(this.TimeLeft == Math.floor(this.roundTime/8)) {
           if(this.letters.length > 6){
             this.displayWordHint();
           }
         }
-        else if(this.TimeLeft == this.roundTime/16) {
+        else if(this.TimeLeft == Math.floor(this.roundTime/16)) {
           if(this.letters.length > 9){
             this.displayWordHint();
           }
         }
-        else if(this.TimeLeft == this.roundTime/32) {
+        else if(this.TimeLeft == Math.floor(this.roundTime/32)) {
           if(this.letters.length > 11){
             this.displayWordHint();
           }
@@ -162,6 +162,7 @@ class ROOM {
         }
       }
       this.underscore_letters = resStr;
+      //Send thru this.underscore_letters here
       console.log(this.underscore_letters);
     } else {
       CHAT.sendCallbackID(
@@ -472,15 +473,27 @@ class ROOM {
     }
     else{
       if(index == 0) {
-        var temp = this.letters.charAt(index) + this.underscore_letters.substring(index+1);
-        this.underscore_letters = temp;
-        console.log(this.underscore_letters);
+        if(this.underscore_letters.charAt(index) == '_'){
+          var temp = this.letters.charAt(index) + this.underscore_letters.substring(index+1);
+          this.underscore_letters = temp;
+          console.log(this.underscore_letters);
+          //Send this.underscore_letters thru sockets here
+        }
+        else{
+          this.displayWordHint();
+        }
       }
       else {
         var index_new = index * 2;
-        var temp = this.underscore_letters.substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters.substring(index_new+1);
-        this.underscore_letters = temp;
-        console.log(this.underscore_letters);
+        if(this.underscore_letters.charAt(index_new) == '_'){
+          var temp = this.underscore_letters.substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters.substring(index_new+1);
+          this.underscore_letters = temp;
+          console.log(this.underscore_letters);
+          //Send this.underscore_letters thru sockets here
+        }
+        else{
+          this.displayWordHint();
+        }
       }
     }
   }
