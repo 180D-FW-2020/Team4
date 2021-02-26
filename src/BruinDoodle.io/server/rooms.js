@@ -19,6 +19,7 @@ const CREATE_ROOM = function (socket, options) {
     name: options.name,
     isPrivate: options.isPrivate || false,
     password: options.password || "",
+    underscore_letters: options.underscore_letters || "",
     maxPlayers: options.maxPlayers || 8,
     roundTime: options.roundTime || 120,
     wordTime: options.wordTime || 25,

@@ -9,6 +9,8 @@ class ROOM {
     this.name = options.name;
     this.isPrivate = options.isPrivate || false;
     this.password = options.password || "";
+    this.letters = options.letters || "";
+    this.underscore_letters = options.underscore_letters || "";
     this.maxPlayers = options.maxPlayers || 8;
     this.users = [...options.users] || [];
     this.queue = [...options.users] || [];
@@ -106,6 +108,27 @@ class ROOM {
       } else {
         this.TimeLeft = time;
         time--;
+        if(this.TimeLeft == this.roundTime/2) {
+          this.displayWordHint();
+        }
+        else if(this.TimeLeft == this.roundTime/4) {
+          this.displayWordHint();
+        }
+        else if(this.TimeLeft == this.roundTime/8) {
+          if(this.letters.length > 6){
+            this.displayWordHint();
+          }
+        }
+        else if(this.TimeLeft == this.roundTime/16) {
+          if(this.letters.length > 9){
+            this.displayWordHint();
+          }
+        }
+        else if(this.TimeLeft == this.roundTime/32) {
+          if(this.letters.length > 11){
+            this.displayWordHint();
+          }
+        }
         io.to(this.id).emit("countdown", time);
       }
     }, 1000);
@@ -119,6 +142,27 @@ class ROOM {
       CHAT.sendServerMessage(this.id, `Round started!`);
       CHAT.sendCallbackID(this.painter, `The chosen word is: ${word}`);
       this.countDown(this.roundTime);
+      this.letters = word;
+
+      var resStr = "";
+      var space_index = word.indexOf(' ');
+      var i;
+
+      for (i = 0; i < word.length; i++) {
+        if(i == 0) {
+          resStr = resStr + "_";
+        }
+        else {
+          if(i == space_index){
+            resStr = resStr + "  ";
+          }
+          else {
+            resStr = resStr + " _";
+          }
+        }
+      }
+      this.underscore_letters = resStr;
+      console.log(this.underscore_letters);
     } else {
       CHAT.sendCallbackID(
         this.painter,
@@ -355,9 +399,8 @@ class ROOM {
     if(valid == 1)
     {
       this.powerUps[id] -= 32;
-      time += 20;
-      this.TimeLeft = time;
-      io.to(this.id).emit("countdown", time);
+      this.TimeLeft = this.TimeLeft + 20;
+      io.to(this.id).emit("countdown", this.TimeLeft);
     }
     else {
       console.log("Gesture not available");
@@ -386,6 +429,9 @@ class ROOM {
       //reveal letter here
       this.powerUps[id] -= 4;
     }
+    else {
+      console.log("Gesture not available");
+    }
   }
   useGuesserPowerUp_2({ id }){
     var temp = this.powerUps[id]%32;
@@ -398,6 +444,9 @@ class ROOM {
       //remove all hints for everyone in round
       this.powerUps[id] -= 2;
     }
+    else {
+      console.log("Gesture not available");
+    }
   }
   useGuesserPowerUp_3({ id }){
     var temp = this.powerUps[id]%32;
@@ -409,6 +458,30 @@ class ROOM {
     {
       //extra points
       this.powerUps[id] -= 1;
+    }
+    else {
+      console.log("Gesture not available");
+    }
+  }
+
+  displayWordHint(){
+    var index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
+    var space_index = this.letters.indexOf(' ');
+    if(index == space_index){
+      this.displayWordHint();
+    }
+    else{
+      if(index == 0) {
+        var temp = this.letters.charAt(index) + this.underscore_letters.substring(index+1);
+        this.underscore_letters = temp;
+        console.log(this.underscore_letters);
+      }
+      else {
+        var index_new = index * 2;
+        var temp = this.underscore_letters.substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters.substring(index_new+1);
+        this.underscore_letters = temp;
+        console.log(this.underscore_letters);
+      }
     }
   }
 }
