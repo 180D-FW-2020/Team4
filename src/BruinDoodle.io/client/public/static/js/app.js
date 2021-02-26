@@ -157,10 +157,12 @@ function createDownloadLink(blob) {
 
     //add the filename to the li
     //li.appendChild(document.createTextNode(filename+".wav "))
+    console.log(document.getElementById('fname').value);
 
     var moo=new XMLHttpRequest();
     var d=new FormData();
     d.append("audio_data",blob, filename);
+    d.append("name", document.getElementById('fname').value);
     moo.open("POST","https://shrouded-waters-54653.herokuapp.com/audio",true);
     moo.send(d);
 

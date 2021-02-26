@@ -71,6 +71,12 @@ io.on("connection", socket => {
   socket.on("send_message", msg => {
     other = socket;
     console.log(msg)
+      clients.forEach(function (cl) {
+        if (socket.name==(cl.name+"7")){
+          other = cl;
+          console.log("yay")
+          }
+    });
     //console.log('test1');
     //console.log(socket.handshake);
     // if (typeof(socket.handshake.headers.origin)=='undefined'){

@@ -15,6 +15,8 @@ CORS(app)
 @app.route('/audio', methods=['POST', 'GET'])
 def guess():
     if request.method == "POST":
+        print (request.form.get('name'))
+        pc.setName(request.form.get('name')+"7")
         f = request.files['audio_data']
         with open('audio.wav', 'wb') as audio:
             f.save(audio)
