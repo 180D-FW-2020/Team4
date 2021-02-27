@@ -21,5 +21,4 @@ Combos
 * Video - ``` $ python main.py ```
 
 \
-\
 Made with 💙 at [UCLA](https://www.youtube.com/watch?v=jWsx2iqO1ks). 
