@@ -21,7 +21,7 @@ script: [
           {{ parseInt(time / 60) }}:{{ time % 60 <= 9 ? "0" + (time % 60) : time % 60 }}
         </h2>
         <h2 v-if="room && time > 0" class="subtitle is-4 has-text-centered has-text-weight-bold hint">
-          <span class="hint-word">{{ wordHint }}</span>
+          <span class="hint-word">{{ wordHint.toUpperCase() }}</span>
         </h2>
       </div>
 
