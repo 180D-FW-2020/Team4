@@ -79,7 +79,7 @@ io.on("connection", socket => {
         console.log(socket.handshake.address);
         if (socket.handshake.address==cl.handshake.address){
           console.log(socket.handshake.headers.origin);
-          if (cl.handshake.headers.origin == 'http://localhost:8081'){
+          if (cl.handshake.headers.origin == 'http://localhost:8080'){
             other = cl;
           }
         }
@@ -120,7 +120,7 @@ io.on("connection", socket => {
   socket.on("paint", (coords) => {
     //console.log('paint');
     other = socket;
-    if (socket.handshake.headers.origin=='http://localhost:8081'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
+    if (socket.handshake.headers.origin=='http://localhost:8080'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
       //console.log("sssssssssssssssssssssssss")
       clients.forEach(function (cl) {
         //console.log(cl.name);
@@ -131,7 +131,7 @@ io.on("connection", socket => {
             //console.log("double yay")
           //}
           //console.log(cl.handshake.headers.origin)
-          if (cl.handshake.headers.origin == 'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
+          if (cl.handshake.headers.origin == 'http://localhost:8080'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
             other = cl;
             //console.log("double yay")
           }
@@ -194,10 +194,9 @@ io.on("connection", socket => {
             room.useGuesserPowerUp_1(other.id);
             console.log("Upward Lift Guesser");
           }
-
           break
         case "Clockwise_Twist":
-          if(room.painter == other.id && room.round != null) {
+          if(room.painter == other.id) {
             room.useArtistPowerUp_2(other.id);
             console.log("Clockwise Twist Artist");
           }
@@ -207,11 +206,11 @@ io.on("connection", socket => {
           }
           break
         case "Vertical_Chop":
-          if(room.painter == other.id && room.round != null) {
+          if(room.painter == other.id) {
             console.log("Vertical Chop Artist");
           }
           else {
-            room.useGuesserPowerUp_3(other.id);
+            //room.useGuesserPowerUp_3(other.id);
             console.log("Vertical Chop Guesser");
           }
           break

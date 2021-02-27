@@ -10,7 +10,6 @@ class ROOM {
     this.isPrivate = options.isPrivate || false;
     this.password = options.password || "";
     this.letters = options.letters || "";
-    this.underscore_letters = options.underscore_letters || "";
     this.maxPlayers = options.maxPlayers || 8;
     this.users = [...options.users] || [];
     this.queue = [...options.users] || [];
@@ -20,6 +19,10 @@ class ROOM {
     this.points =
       {
         ...options.points,
+      } || {};
+    this.underscore_letters =
+      {
+        ...options.underscore_letters,
       } || {};
     //6 bit number (0 to 63) that stores the information of the power ups based on the id of the user
     this.powerUps = 
@@ -109,24 +112,34 @@ class ROOM {
         this.TimeLeft = time;
         time--;
         if(this.TimeLeft == Math.floor(this.roundTime/2)) {
-          this.displayWordHint();
+          for (let user of this.users) {
+            this.displayWordHint(user);
+          }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/4)) {
-          this.displayWordHint();
+          if(this.letters.length > 3){
+            for (let user of this.users) {
+              this.displayWordHint(user);
+            }
+          }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/8)) {
           if(this.letters.length > 6){
-            this.displayWordHint();
+            for (let user of this.users) {
+              this.displayWordHint(user);
+            }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/16)) {
           if(this.letters.length > 9){
-            this.displayWordHint();
+            for (let user of this.users) {
+              this.displayWordHint(user);
+            }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/32)) {
           if(this.letters.length > 11){
-            this.displayWordHint();
+            this.displayWordHint(user);
           }
         }
         io.to(this.id).emit("countdown", time);
@@ -161,10 +174,10 @@ class ROOM {
           }
         }
       }
-      this.underscore_letters = resStr;
-      io.to(this.id).emit("receive_hint", this.underscore_letters);
-      //Send thru this.underscore_letters here
-      console.log(this.underscore_letters);
+      for (let user of this.users) {
+        this.underscore_letters[user] = resStr;
+        io.to(user).emit("receive_hint", this.underscore_letters[user]);
+      }
     } else {
       CHAT.sendCallbackID(
         this.painter,
@@ -285,7 +298,6 @@ class ROOM {
     this.painter = newPainter;
     io.to(this.id).emit("painter_changed", newPainter);
     CHAT.sendCallbackID(this.painter, "You are the new painter!");
-
     return true;
   }
 
@@ -396,10 +408,12 @@ class ROOM {
     }
     return usrs;
   }
-  useArtistPowerUp_1({ id }){
+
+  useArtistPowerUp_1(id){
     var valid = Math.floor(this.powerUps[id]/32);
     if(valid == 1)
     {
+      //Test this
       this.powerUps[id] -= 32;
       this.TimeLeft = this.TimeLeft + 20;
       io.to(this.id).emit("countdown", this.TimeLeft);
@@ -408,10 +422,10 @@ class ROOM {
       console.log("Gesture not available");
     }
   }
-  useArtistPowerUp_2({ id }){
+  useArtistPowerUp_2(id){
     var temp = this.powerUps[id]%32;
     temp = temp%16;
-    var valid = Math.floor(this.powerUps[id]/16);
+    var valid = Math.floor(temp/16);
     if(valid == 1)
     {
       //do power up here
@@ -421,26 +435,26 @@ class ROOM {
       console.log("Gesture not available");
     }
   }
-  useGuesserPowerUp_1({ id }){
+  useGuesserPowerUp_1(id) {
     var temp = this.powerUps[id]%32;
     temp = temp%16;
     temp = temp%8;
-    var valid = Math.floor(this.powerUps[id]/4);
+    var valid = Math.floor(temp/4);
     if(valid == 1)
     {
-      //reveal letter here
+      this.displayWordHint(id);
       this.powerUps[id] -= 4;
     }
     else {
       console.log("Gesture not available");
     }
   }
-  useGuesserPowerUp_2({ id }){
+  useGuesserPowerUp_2(id) {
     var temp = this.powerUps[id]%32;
     temp = temp%16;
     temp = temp%8;
     temp = temp%4;
-    var valid = Math.floor(this.powerUps[id]/2);
+    var valid = Math.floor(temp/2);
     if(valid == 1)
     {
       //remove all hints for everyone in round
@@ -450,12 +464,12 @@ class ROOM {
       console.log("Gesture not available");
     }
   }
-  useGuesserPowerUp_3({ id }){
+  useGuesserPowerUp_3(id) {
     var temp = this.powerUps[id]%32;
     temp = temp%16;
     temp = temp%8;
     temp = temp%4;
-    valid = temp%2;
+    var valid = temp%2;
     if(valid == 1)
     {
       //extra points
@@ -466,36 +480,39 @@ class ROOM {
     }
   }
 
-  displayWordHint(){
+  displayWordHint(id){
+    //find a random index 
     var index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
+    //find index of space if it exists, -1 if it doesn't
     var space_index = this.letters.indexOf(' ');
+
+    //if the random index is the same as the index of the space, recall the function in order to retry
     if(index == space_index){
-      this.displayWordHint();
+      this.displayWordHint(id);
     }
     else{
+      //if the index is the first letter of the word, just substitute it straight up
       if(index == 0) {
-        if(this.underscore_letters.charAt(index) == '_'){
-          var temp = this.letters.charAt(index) + this.underscore_letters.substring(index+1);
-          this.underscore_letters = temp;
-          console.log(this.underscore_letters);
-          io.to(this.id).emit("receive_hint", this.underscore_letters);
-          //Send this.underscore_letters thru sockets here
+        //if for some reason there is a space at this index, try again, otherwise display the letter
+        if(this.underscore_letters[id].charAt(index) == '_'){
+          var temp = this.letters.charAt(index) + this.underscore_letters[id].substring(index+1);
+          this.underscore_letters[id] = temp;
+          io.to(id).emit("receive_hint", this.underscore_letters[id]);
         }
         else{
-          this.displayWordHint();
+          this.displayWordHint(id);
         }
       }
       else {
+        //if it isn't the first index, the index from the word maps to twice the index of the underscores string index
         var index_new = index * 2;
-        if(this.underscore_letters.charAt(index_new) == '_'){
-          var temp = this.underscore_letters.substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters.substring(index_new+1);
-          this.underscore_letters = temp;
-          console.log(this.underscore_letters);
-          io.to(this.id).emit("receive_hint", this.underscore_letters);
-          //Send this.underscore_letters thru sockets here
+        if(this.underscore_letters[id].charAt(index_new) == '_'){
+          var temp = this.underscore_letters[id].substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters[id].substring(index_new+1);
+          this.underscore_letters[id] = temp;
+          io.to(id).emit("receive_hint", this.underscore_letters[id]);
         }
         else{
-          this.displayWordHint();
+          this.displayWordHint(id);
         }
       }
     }
