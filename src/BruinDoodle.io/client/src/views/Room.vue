@@ -11,18 +11,17 @@ script: [
   <div class="section-xs container">
     <div class="columns is-multiline">
       <div class="column is-full">
-        <h1 class="title is-2 has-text-centered" v-if="room">
+        <h1 class="title is-2 has-text-centered has-text-primary" v-if="room">
           {{ room.name.toUpperCase() }}
         </h1>
         <h2 v-if="room && time >= 10" class="subtitle is-4 has-text-centered">
-          {{ parseInt(time / 60) }}:{{
-            time % 60 <= 9 ? "0" + (time % 60) : time % 60
-          }}
+          {{ parseInt(time / 60) }}:{{ time % 60 <= 9 ? "0" + (time % 60) : time % 60 }}
         </h2>
         <h2 v-else-if="room && time > 0" class="subtitle is-4 has-text-centered has-text-danger has-text-weight-bold">
-          {{ parseInt(time / 60) }}:{{
-            time % 60 <= 9 ? "0" + (time % 60) : time % 60
-          }}
+          {{ parseInt(time / 60) }}:{{ time % 60 <= 9 ? "0" + (time % 60) : time % 60 }}
+        </h2>
+        <h2 v-if="room && time > 0" class="subtitle is-4 has-text-centered has-text-weight-bold hint">
+          <span class="hint-word">{{ wordHint }}</span>
         </h2>
       </div>
 
@@ -288,6 +287,7 @@ export default {
       wordTime: 0,
       numRounds: 0,
       maxRounds: 0,
+      wordHint: "",
     };
   },
   components: { Whiteboard },
@@ -452,6 +452,9 @@ export default {
     get_maxRounds(maxRounds) {
       this.maxRounds = maxRounds;
     },
+    receive_hint(wordHint) {
+      this.wordHint = wordHint;
+    },
   },
   computed: {
     sortedUsers() {
@@ -615,5 +618,14 @@ export default {
 .content-video {
   padding: 0rem;
   font-size: 0em;
+}
+
+.hint {
+  margin-top: -1rem;
+  margin-bottom: -0.5rem;
+}
+
+.hint-word {
+  white-space: pre;
 }
 </style>

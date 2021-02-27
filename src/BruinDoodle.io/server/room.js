@@ -162,6 +162,7 @@ class ROOM {
         }
       }
       this.underscore_letters = resStr;
+      io.to(this.id).emit("receive_hint", this.underscore_letters);
       //Send thru this.underscore_letters here
       console.log(this.underscore_letters);
     } else {
@@ -477,6 +478,7 @@ class ROOM {
           var temp = this.letters.charAt(index) + this.underscore_letters.substring(index+1);
           this.underscore_letters = temp;
           console.log(this.underscore_letters);
+          io.to(this.id).emit("receive_hint", this.underscore_letters);
           //Send this.underscore_letters thru sockets here
         }
         else{
@@ -489,6 +491,7 @@ class ROOM {
           var temp = this.underscore_letters.substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters.substring(index_new+1);
           this.underscore_letters = temp;
           console.log(this.underscore_letters);
+          io.to(this.id).emit("receive_hint", this.underscore_letters);
           //Send this.underscore_letters thru sockets here
         }
         else{
