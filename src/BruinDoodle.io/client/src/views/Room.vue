@@ -28,7 +28,7 @@ script: [
       <div class="column is-3">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">🏆</p>
+            <p class="card-header-title"> 🏆 <span v-if="room && wordHint"> &nbsp; Round {{numRounds}} of {{maxRounds}}</span></p>
           </header>
           <div class="card-content">
             <ul class="content playerlist" v-if="showUsers">
@@ -621,7 +621,7 @@ export default {
 }
 
 .hint {
-  margin-top: -1rem;
+  margin-top: -1.25rem;
   margin-bottom: -0.5rem;
 }
 
