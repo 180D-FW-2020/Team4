@@ -70,9 +70,12 @@ class ROOM {
     ];
     this.setPainter();
     io.to(this.painter).emit("round_initialized", words);
-
+    
     let time = this.wordTime;
     io.to(this.id).emit("countdown_painter", time);
+    io.to(this.id).emit("get_maxRounds", this.maxRounds);
+    io.to(this.id).emit("get_numRounds", Math.floor(this.numRounds / this.users.length) + 1);
+    
     let interval = setInterval(() => {
       if (this.users.length > 1) {
         if (time <= 0) {
@@ -257,7 +260,7 @@ class ROOM {
     this.numRounds++;
     this.numCorrect = 0;
     this.topPoints = 0;
-    
+
     // Restart
     if (this.numRounds < (this.maxRounds*this.users.length)) {
       this.initRound();
