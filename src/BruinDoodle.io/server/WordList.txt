@@ -236,7 +236,6 @@ Ice Fishing
 Darkness
 Dripping
 Wobble
-Brunette
 Rubber
 Tutor
 Migrate
@@ -460,7 +459,6 @@ Amelia Earhart
 Mother Teresa
 J.R.R. Tolkien
 Oprah Winfrey
-Vincent Van Gogh
 Muhammad Ali
 Steve Jobs
 Thomas Edison
@@ -475,7 +473,6 @@ Anne Frank
 Albert Einstein
 Henry Ford
 Michael Jordan
-Martin Luther King
 Mahatma Gandhi
 Tiger Woods
 Paul McCartney
@@ -493,7 +490,6 @@ Elvis Presley
 Sting
 Walt Disney
 Abraham Lincoln
-John F. Kennedy
 Barack Obama
 Sigmund Freud
 Bill Gates
@@ -546,7 +542,6 @@ IEEE
 ACM
 Tinder
 Bumble
-Trapped in the Closet
 Minecraft
 Thirsty Thursday
 UCPD
@@ -556,13 +551,12 @@ Lakers
 Dodgers
 Crying
 Finals Week
-De Neve Late Night
+Late Night
 Chicken Tenders
-Hedrick Fire Alarms
+Hedrick Alarms
 In N Out
 Trader Joes
 Netflix
-Netflix n Chill
 Resflix
 Game of Thrones
 Feast

@@ -11,25 +11,24 @@ script: [
   <div class="section-xs container">
     <div class="columns is-multiline">
       <div class="column is-full">
-        <h1 class="title is-2 has-text-centered" v-if="room">
+        <h1 class="title is-2 has-text-centered has-text-primary" v-if="room">
           {{ room.name.toUpperCase() }}
         </h1>
         <h2 v-if="room && time >= 10" class="subtitle is-4 has-text-centered">
-          {{ parseInt(time / 60) }}:{{
-            time % 60 <= 9 ? "0" + (time % 60) : time % 60
-          }}
+          {{ parseInt(time / 60) }}:{{ time % 60 <= 9 ? "0" + (time % 60) : time % 60 }}
         </h2>
         <h2 v-else-if="room && time > 0" class="subtitle is-4 has-text-centered has-text-danger has-text-weight-bold">
-          {{ parseInt(time / 60) }}:{{
-            time % 60 <= 9 ? "0" + (time % 60) : time % 60
-          }}
+          {{ parseInt(time / 60) }}:{{ time % 60 <= 9 ? "0" + (time % 60) : time % 60 }}
+        </h2>
+        <h2 v-if="room && time > 0" class="subtitle is-4 has-text-centered has-text-weight-bold hint">
+          <span class="hint-word">{{ wordHint.toUpperCase() }}</span>
         </h2>
       </div>
 
       <div class="column is-3">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">🏆</p>
+            <p class="card-header-title"> 🏆 <span v-if="room && wordHint"> &nbsp; Round {{numRounds}} of {{maxRounds}}</span></p>
           </header>
           <div class="card-content">
             <ul class="content playerlist" v-if="showUsers">
@@ -289,6 +288,7 @@ export default {
       wordTime: 0,
       numRounds: 0,
       maxRounds: 0,
+      wordHint: "",
     };
   },
   components: { Whiteboard },
@@ -457,6 +457,9 @@ export default {
     },
     get_maxRounds(maxRounds) {
       this.maxRounds = maxRounds;
+    },
+    receive_hint(wordHint) {
+      this.wordHint = wordHint;
     },
   },
   computed: {
@@ -628,5 +631,14 @@ export default {
 .content-video {
   padding: 0rem;
   font-size: 0em;
+}
+
+.hint {
+  margin-top: -1.25rem;
+  margin-bottom: -0.5rem;
+}
+
+.hint-word {
+  white-space: pre;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <section class="hero">
-      <div class="hero-body">
+      <div class="hero-body room-header">
         <div class="container">
-          <h1 class="title">Rooms</h1>
-          <h2 class="subtitle">
+          <h1 class="title room">Rooms</h1>
+          <h2 class="subtitle room-title">
             Choose a room, or create a new one to start playing! 🤓
           </h2>
         </div>
@@ -58,3 +58,13 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.room-title {
+  padding-top: 1rem;
+}
+
+.room-header {
+  padding-bottom: 0rem;
+}
+</style>
