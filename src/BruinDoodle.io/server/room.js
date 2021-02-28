@@ -342,54 +342,57 @@ class ROOM {
   }
 
   givePoints({ id }, points = 500) {
-    //if this is the first person to guess
-    if(this.numCorrect == 0){
-      //store the points that go to first guesser in order to assign to artist at the end
-      this.topPoints = parseInt(points*(this.TimeLeft/this.roundTime));
-      this.firstGuessStreak[id] += 1;
+    if(this.roundResults[id] == 0){
+      //if this is the first person to guess
+      if(this.numCorrect == 0){
+        //store the points that go to first guesser in order to assign to artist at the end
+        this.topPoints = parseInt(points*(this.TimeLeft/this.roundTime));
+        this.firstGuessStreak[id] += 1;
 
-      var temp = this.powerUps[id]%32;
-      temp = temp%16;
-      temp = temp%8;
-      var valid = Math.floor(temp/4);
-      if(valid == 0){
-        this.powerUps[id] += 4;
-      }
-
-      //if user guesses first three times in row
-      if(this.firstGuessStreak[id] == 3)
-      {
-        temp = temp%4;
-        valid = Math.floor(temp/2);
+        var temp = this.powerUps[id]%32;
+        temp = temp%16;
+        temp = temp%8;
+        var valid = Math.floor(temp/4);
         if(valid == 0){
-          this.powerUps[id] += 2;
+          this.powerUps[id] += 4;
+        }
+
+        //if user guesses first three times in row
+        if(this.firstGuessStreak[id] == 3)
+        {
+          temp = temp%4;
+          valid = Math.floor(temp/2);
+          if(valid == 0){
+            this.powerUps[id] += 2;
+          }
         }
       }
-    }
-    //if it is not the first person to guess -> need to reset firstGuessStreak
-    else{
-      this.firstGuessStreak[id] = 0;
-    }
-
-    //update score of guesser
-    this.points[id] += parseInt(points*(this.TimeLeft/this.roundTime));
-    this.guessStreak[id] += 1;
-
-    //if user guesses three in a row
-    if(this.guessStreak[id] == 3){
-      var temp = this.powerUps[id]%32;
-      temp = temp%16;
-      temp = temp%8;
-      temp = temp%4;
-      valid = temp%2;
-      if(valid == 0){
-        this.powerUps[id] += 1;
+      //if it is not the first person to guess -> need to reset firstGuessStreak
+      else{
+        this.firstGuessStreak[id] = 0;
       }
+    
+
+      //update score of guesser
+      this.points[id] += parseInt(points*(this.TimeLeft/this.roundTime));
+      this.guessStreak[id] += 1;
+
+      //if user guesses three in a row
+      if(this.guessStreak[id] == 3){
+        var temp = this.powerUps[id]%32;
+        temp = temp%16;
+        temp = temp%8;
+        temp = temp%4;
+        valid = temp%2;
+        if(valid == 0){
+          this.powerUps[id] += 1;
+        }
+      }
+      //this person guessed right, so roundResults should be 1 for them
+      this.roundResults[id] = 1;
+      this.numCorrect++;
+      this.updateUsers();
     }
-    //this person guessed right, so roundResults should be 1 for them
-    this.roundResults[id] = 1;
-    this.numCorrect++;
-    this.updateUsers();
   }
 
   updateUsers() {
