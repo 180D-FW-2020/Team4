@@ -12,6 +12,11 @@ def send_message(msg):
     siow.emit('send_message', msg)
 
 @siow.event
+def clear_board():
+    print('clearboard')
+    siow.emit('clear', )
+
+@siow.event
 def setName(name):
     #print('message received with ', paintObj)
     siow.emit('setName', name)

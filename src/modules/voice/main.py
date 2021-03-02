@@ -21,7 +21,10 @@ def guess():
         with open('audio.wav', 'wb') as audio:
             f.save(audio)
         guess = mr()
-        pc.send_message(guess)
+        if (guess=="clear"):
+            pc.clear_board()
+        else:
+            pc.send_message(guess)
         return "OK"
     else:
         return render_template("index.html")

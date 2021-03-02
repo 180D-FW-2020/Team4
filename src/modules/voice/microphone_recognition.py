@@ -28,6 +28,7 @@ def mr():
         print("Google Speech Recognition thinks you said " + google)
         thing.append(google)
     except sr.UnknownValueError:
+        thing.append("Could not understand audio. Please try again!")
         print("Google Speech Recognition could not understand audio")
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))

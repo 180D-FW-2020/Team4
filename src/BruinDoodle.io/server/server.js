@@ -118,29 +118,20 @@ io.on("connection", socket => {
     });
     let room = ROOMS.getSocketRoom(other);
     if (room.painter == other.id && room.round != null) {
-      socket.to(room.id).emit('paint', coords);
-      room.round.addLine(coords);
-    }
-  });
-
-  socket.on("gesture_detected", (coords) => {
-    other = socket;
-      clients.forEach(function (cl) {
-        if (socket.name==(cl.name+"8")){
-          other = cl;
-          }
-    });
-    
-    let room = ROOMS.getSocketRoom(other);
-    if (room.painter == other.id && room.round != null) {
-      socket.to(room.id).emit('paint', coords);
+      other.to(room.id).emit('paint', coords);
       room.round.addLine(coords);
     }
   });
 
   socket.on("clear", () => {
-    let room = ROOMS.getSocketRoom(socket);
-    if (room.painter == socket.id && room.round != null) {
+    other = socket;
+    clients.forEach(function (cl) {
+      if (socket.name==(cl.name+"7")){
+        other = cl;
+        }
+    });
+    let room = ROOMS.getSocketRoom(other);
+    if (room.painter == other.id && room.round != null) {
       room.clearBoard();
     }
   });
