@@ -8,6 +8,7 @@ const io = require("socket.io")(http, {
 });
 const ROOMS = require("./rooms");
 const CHAT = require("./chat");
+const e = require("express");
 
 global.io = io;
 global.CHAT = CHAT;
@@ -194,33 +195,77 @@ io.on("connection", socket => {
       switch(gesture) {
         case "Upward_Lift":
           if(room.painter == other.id) {
-            room.useArtistPowerUp_1(other.id);
-            console.log("Upward Lift Artist");
+            if(room.useArtistPowerUp_1(other.id) == 1){
+              CHAT.sendCallback(other, {
+                self: `Extra time successfully added!`
+              });
+            }
+            else{
+              CHAT.sendCallback(other, {
+                self: `You don't have this power up...`
+              });
+            }
           }
           else {
-            room.useGuesserPowerUp_1(other.id);
-            console.log("Upward Lift Guesser");
+            if(room.useGuesserPowerUp_1(other.id) == 1){
+              CHAT.sendCallback(other, {
+                self: `Extra hint successfully added!`
+              });
+            }
+            else{
+              CHAT.sendCallback(other, {
+                self: `You don't have this power up...`
+              });
+            }
           }
-          break
+          break;
         case "Clockwise_Twist":
           if(room.painter == other.id) {
-            room.useArtistPowerUp_2(other.id);
-            console.log("Clockwise Twist Artist");
+            if(room.useArtistPowerUp_2(other.id) == 1){
+              CHAT.sendCallback(other, {
+                //fill this in
+                self: `...!`
+              });
+            }
+            else{
+              CHAT.sendCallback(other, {
+                //fill this in
+                self: `You don't have this power up...`
+              });
+            }
           }
           else {
-            room.useGuesserPowerUp_2(other.id);
-            console.log("Clockwise Twist Guesser");
+            if(room.useGuesserPowerUp_2(other.id) == 1){
+              CHAT.sendCallback(other, {
+                self: `Successfully removed hints for everyone!`
+              });
+            }
+            else{
+              CHAT.sendCallback(other, {
+                self: `You don't have this power up...`
+              });
+            }
           }
-          break
+          break;
         case "Vertical_Chop":
           if(room.painter == other.id) {
-            console.log("Vertical Chop Artist");
+            CHAT.sendCallback(other, {
+              self: `Gesture not available for an artist...`
+            });
           }
           else {
-            //room.useGuesserPowerUp_3(other.id);
-            console.log("Vertical Chop Guesser");
+            if(room.useGuesserPowerUp_3(other.id) == 1){
+              CHAT.sendCallback(other, {
+                self: `Successfully removed hints for everyone!`
+              });
+            }
+            else{
+              CHAT.sendCallback(other, {
+                self: `You don't have this power up...`
+              });
+            }
           }
-          break
+          break;
         default:
           console.log("Invalid Gesture");
       }

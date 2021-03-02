@@ -53,6 +53,8 @@ class ROOM {
     this.TimeLeft = 0;
     this.numCorrect = 0;
     this.topPoints = 0;
+    this.hintLockActivated = 0;
+    this.hintLockActivatedUser = "";
   }
 
   async getWord() {
@@ -113,33 +115,68 @@ class ROOM {
         time--;
         if(this.TimeLeft == Math.floor(this.roundTime/2)) {
           for (let user of this.users) {
-            this.displayWordHint(user);
+            if(this.hintLockActivated == 0){
+              this.displayWordHint(user);
+            }
+            else{
+              if(this.hintLockActivatedUser == user){
+                this.displayWordHint(user);
+              }
+            }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/4)) {
           if(this.letters.length > 3){
             for (let user of this.users) {
-              this.displayWordHint(user);
+              if(this.hintLockActivated == 0){
+                this.displayWordHint(user);
+              }
+              else{
+                if(this.hintLockActivatedUser == user){
+                  this.displayWordHint(user);
+                }
+              }
             }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/8)) {
           if(this.letters.length > 6){
             for (let user of this.users) {
-              this.displayWordHint(user);
+              if(this.hintLockActivated == 0){
+                this.displayWordHint(user);
+              }
+              else{
+                if(this.hintLockActivatedUser == user){
+                  this.displayWordHint(user);
+                }
+              }
             }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/16)) {
           if(this.letters.length > 9){
             for (let user of this.users) {
-              this.displayWordHint(user);
+              if(this.hintLockActivated == 0){
+                this.displayWordHint(user);
+              }
+              else{
+                if(this.hintLockActivatedUser == user){
+                  this.displayWordHint(user);
+                }
+              }
             }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/32)) {
-          if(this.letters.length > 11){
-            this.displayWordHint(user);
+          for (let user of this.users) {
+            if(this.hintLockActivated == 0){
+              this.displayWordHint(user);
+            }
+            else{
+              if(this.hintLockActivatedUser == user){
+                this.displayWordHint(user);
+              }
+            }
           }
         }
         io.to(this.id).emit("countdown", time);
@@ -188,6 +225,10 @@ class ROOM {
 
   stopRound() {
     this.round = null;
+
+    if(this.TimeLeft >= 30){
+      this.powerUps[this.painter] += 16;
+    }
     
     //If everyone guessed correctly
     if(this.numCorrect == this.users.length - 1){
@@ -202,13 +243,13 @@ class ROOM {
         }
       }
       //if they get 2 in a row:
-      else if(this.artist_AllCorrectStreak[this.painter] == 2){
-        var temp = this.powerUps[this.painter]%32;
-        var valid = Math.floor(temp/16);
-        if(valid == 0){
-          this.powerUps[this.painter] += 16;
-        }
-      }
+      // else if(this.artist_AllCorrectStreak[this.painter] == 2){
+      //   var temp = this.powerUps[this.painter]%32;
+      //   var valid = Math.floor(temp/16);
+      //   if(valid == 0){
+      //     this.powerUps[this.painter] += 16;
+      //   }
+      // }
       //if they get 3 in a row:
       else if(this.artist_AllCorrectStreak[this.painter] == 3)
       {
@@ -242,7 +283,7 @@ class ROOM {
       var valid = Math.floor(temp/8);
 
       //if they do, double the points from this round
-      if(valid == 1)
+      if(valid == 1) 
       {
         this.points[this.painter] += artist_points;
         this.updateUsers();
@@ -270,6 +311,8 @@ class ROOM {
     this.numRounds++;
     this.numCorrect = 0;
     this.topPoints = 0;
+    this.hintLockActivated = 0;
+    this.hintLockActivatedUser = "";
     
     // Restart
     if (this.numRounds < (this.maxRounds*this.users.length)) {
@@ -420,27 +463,29 @@ class ROOM {
     var valid = Math.floor(this.powerUps[id]/32);
     if(valid == 1)
     {
-      //Test this
       this.powerUps[id] -= 32;
       this.TimeLeft = this.TimeLeft + 20;
       io.to(this.id).emit("countdown", this.TimeLeft);
+      return 1;
     }
     else {
-      console.log("Gesture not available");
+      return 0;
     }
   }
 
+  //extra points
   useArtistPowerUp_2(id){
     var temp = this.powerUps[id]%32;
     temp = temp%16;
     var valid = Math.floor(temp/16);
     if(valid == 1)
     {
-      //do power up here
+      this.points[id] += 100;
       this.powerUps[id] -= 16;
+      return 1;
     }
     else {
-      console.log("Gesture not available");
+      return 0;
     }
   }
 
@@ -453,9 +498,10 @@ class ROOM {
     {
       this.displayWordHint(id);
       this.powerUps[id] -= 4;
+      return 1;
     }
     else {
-      console.log("Gesture not available");
+      return 0;
     }
   }
 
@@ -467,11 +513,36 @@ class ROOM {
     var valid = Math.floor(temp/2);
     if(valid == 1)
     {
-      //remove all hints for everyone in round
+      var resStr = "";
+      var space_index = this.letters.indexOf(' ');
+      var i;
+
+      for (i = 0; i < this.letters.length; i++) {
+        if(i == 0) {
+          resStr = resStr + "_";
+        }
+        else {
+          if(i == space_index){
+            resStr = resStr + "  ";
+          }
+          else {
+            resStr = resStr + " _";
+          }
+        }
+      }
+      for (let user of this.users) {
+        if(user != id){
+          this.underscore_letters[user] = resStr;
+          io.to(user).emit("receive_hint", this.underscore_letters[user]);
+        }
+      }
+      this.hintLockActivated = 1;
+      this.hintLockActivatedUser = id;
       this.powerUps[id] -= 2;
+      return 1;
     }
     else {
-      console.log("Gesture not available");
+      return 0;
     }
   }
   useGuesserPowerUp_3(id) {
@@ -483,10 +554,12 @@ class ROOM {
     if(valid == 1)
     {
       //extra points
+      this.points[id] += 100;
       this.powerUps[id] -= 1;
+      return 1;
     }
     else {
-      console.log("Gesture not available");
+      return 0;
     }
   }
 
