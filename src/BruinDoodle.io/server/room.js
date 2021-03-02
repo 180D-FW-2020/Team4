@@ -388,7 +388,6 @@ class ROOM {
           this.powerUps[id] += 1;
         }
       }
-      console.log("guessing here");
       //this person guessed right, so roundResults should be 1 for them
       this.roundResults[id] = 1;
       this.numCorrect++;
