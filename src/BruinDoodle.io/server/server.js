@@ -18,7 +18,6 @@ var num_guessed = 0;
 io.on("connection", socket => {
   // Connect
   console.log(`User connected: ${socket.id}`);
-  console.log(JSON.stringify(socket.handshake.headers.origin));
   socket.name = socket.id;
   clients.push(socket);
 
@@ -84,9 +83,9 @@ io.on("connection", socket => {
         if (room.round.check(msg)) {
           ROOMS.givePoints(other);
           CHAT.sendCallback(other, {
-            self: `Congratulations! You've guessed the word!`,
-            broadcast: `${other.name} guessed the word`
+            self: `Congratulations! You've guessed the word!`
           });
+          CHAT.sendServerMessage(room.id, `${other.name} guessed the word`);
           num_guessed++;
           if(num_guessed == (room.getUsers().length - 1))
           {
@@ -109,7 +108,6 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    //console.log('paint');
     other = socket;
     clients.forEach(function (cl) {
       if (socket.name==(cl.name+"9")){
@@ -144,7 +142,7 @@ io.on("connection", socket => {
   });
 
   socket.on("gesture_detected", gesture => {
-    other = console;
+    other = socket;
     clients.forEach(function (cl){
       if(socket.name == (cl.name+"8")) {
         other = cl;
