@@ -91,16 +91,23 @@ io.on("connection", socket => {
       if (room.round != null && other.id != room.painter) {
         // Checking if the message is correct
         if (room.round.check(msg)) {
-          ROOMS.givePoints(other);
-          CHAT.sendCallback(other, {
-            self: `Congratulations! You've guessed the word!`,
-            broadcast: `${other.name} guessed the word`
-          });
-          num_guessed++;
-          if(num_guessed == (room.getUsers().length - 1))
-          {
-            num_guessed = 0;
-            room.stopRound();
+          if(room.userGuessStatus(other.id) == 0){
+            ROOMS.givePoints(other);
+            CHAT.sendCallback(other, {
+              self: `Congratulations! You've guessed the word!`,
+              broadcast: `${other.name} guessed the word`
+            });
+            num_guessed++;
+            if(num_guessed == (room.getUsers().length - 1))
+            {
+              num_guessed = 0;
+              room.stopRound();
+            }
+          }
+          else{
+            CHAT.sendCallback(other, {
+              self: `You cannot guess more than once`
+            });
           }
         } else {
           CHAT.sendMessage(room.id, {

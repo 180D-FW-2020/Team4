@@ -388,6 +388,7 @@ class ROOM {
           this.powerUps[id] += 1;
         }
       }
+      console.log("guessing here");
       //this person guessed right, so roundResults should be 1 for them
       this.roundResults[id] = 1;
       this.numCorrect++;
@@ -412,6 +413,10 @@ class ROOM {
     return usrs;
   }
 
+  userGuessStatus(id) {
+    return this.roundResults[id];
+  }
+
   useArtistPowerUp_1(id){
     var valid = Math.floor(this.powerUps[id]/32);
     if(valid == 1)
@@ -425,6 +430,7 @@ class ROOM {
       console.log("Gesture not available");
     }
   }
+
   useArtistPowerUp_2(id){
     var temp = this.powerUps[id]%32;
     temp = temp%16;
@@ -438,6 +444,7 @@ class ROOM {
       console.log("Gesture not available");
     }
   }
+
   useGuesserPowerUp_1(id) {
     var temp = this.powerUps[id]%32;
     temp = temp%16;
@@ -452,6 +459,7 @@ class ROOM {
       console.log("Gesture not available");
     }
   }
+
   useGuesserPowerUp_2(id) {
     var temp = this.powerUps[id]%32;
     temp = temp%16;
