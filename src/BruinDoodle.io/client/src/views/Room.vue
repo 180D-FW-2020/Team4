@@ -28,7 +28,7 @@ script: [
       <div class="column is-3">
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title">🏆</p>
+            <p class="card-header-title"> 🏆 <span v-if="room && wordHint"> &nbsp; Round {{numRounds}} of {{maxRounds}}</span></p>
           </header>
           <div class="card-content">
             <ul class="content playerlist" v-if="showUsers">
@@ -59,24 +59,24 @@ script: [
           <header class="card-header">
             <p class="card-header-title">⚡</p>
           </header>
-          <!--
           <div class="card-content">
-            <ul class="content playerlist" v-if="showUsers">
-              <li
-                v-for="user in sortedUsers"
-                :key="user.id"
-                v-if="painter == user.id"
-              >
-                <strong>{{ user.name }} ✏️</strong> :
-                <span class="has-text-weight-bold">{{ user.points }}</span>
+            <ul class="content playerlist" v-if="iDraw">
+              <li v-if="!artistUps.length" class="has-text-danger">
+                No artist power-ups available.
               </li>
-              <li :key="user.id" v-else>
-                {{ user.name }} :
-                <span class="has-text-weight-bold">{{ user.points }}</span>
+              <li v-else v-for="power in artistUps">
+                {{ power }}
+              </li>
+            </ul>
+            <ul class="content playerlist" v-else>
+              <li v-if="!guesserUps.length" class="has-text-danger">
+                No guesser power-ups available.
+              </li>
+              <li v-else v-for="power in guesserUps">
+                {{ power }}
               </li>
             </ul>
           </div>
-          -->
         </div>
 
         <div
@@ -288,6 +288,8 @@ export default {
       numRounds: 0,
       maxRounds: 0,
       wordHint: "",
+      guesserUps: [],
+      artistUps: [],
     };
   },
   components: { Whiteboard },
@@ -455,6 +457,30 @@ export default {
     receive_hint(wordHint) {
       this.wordHint = wordHint;
     },
+    get_powerups(points) {
+      var power_list = ['Extend Time ⏳','Reveal Hint 👁️','Double Points ✌️','Reveal Hint 👁️','Remove Hint ❌','Extra Points 💯'];
+      var guesser = [];
+      var artist = [];
+
+      var i;
+      for (i = 0; i < 6; i++) {
+        points = points % (2 ** (6 - i));
+        var valid = Math.floor(points/(2 ** (5 - i)));
+        if (valid == 1) {
+          if (i < 3) {
+            artist.push(power_list[i]);
+          } else {
+            guesser.push(power_list[i]);
+          }
+        }
+      }
+
+      this.artistUps = artist;
+      console.log(this.artistUps);
+
+      this.guesserUps = guesser;
+      console.log(this.guesserUps);
+    },
   },
   computed: {
     sortedUsers() {
@@ -621,7 +647,7 @@ export default {
 }
 
 .hint {
-  margin-top: -1rem;
+  margin-top: -1.25rem;
   margin-bottom: -0.5rem;
 }
 
