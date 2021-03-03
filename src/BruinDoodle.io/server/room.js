@@ -304,7 +304,7 @@ class ROOM {
         }
       }
       this.roundResults[user] = 0;
-      io.to(id).emit("get_powerups", this.powerUps[id]);
+      io.to(user).emit("get_powerups", this.powerUps[user]);
     }
 
     this.clearBoard();
@@ -576,39 +576,38 @@ class ROOM {
   }
 
   displayWordHint(id){
-    //find a random index 
     var index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
-    //find index of space if it exists, -1 if it doesn't
     var space_index = this.letters.indexOf(' ');
 
-    //if the random index is the same as the index of the space, recall the function in order to retry
-    if(index == space_index){
-      this.displayWordHint(id);
-    }
-    else{
-      //if the index is the first letter of the word, just substitute it straight up
-      if(index == 0) {
-        //if for some reason there is a space at this index, try again, otherwise display the letter
-        if(this.underscore_letters[id].charAt(index) == '_'){
-          var temp = this.letters.charAt(index) + this.underscore_letters[id].substring(index+1);
-          this.underscore_letters[id] = temp;
-          io.to(id).emit("receive_hint", this.underscore_letters[id]);
+    var done = 0;
+    while(done == 0) {
+      if(index != space_index) {
+        if(index == 0) {
+          if(this.underscore_letters[id].charAt(index) == '_') {
+            var temp = this.letters.charAt(index) + this.underscore_letters[id].substring(index+1);
+            this.underscore_letters[id] = temp;
+            io.to(id).emit("receive_hint", this.underscore_letters[id]);
+            done = 1;
+          }
+          else {
+            index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
+          }
         }
-        else{
-          this.displayWordHint(id);
+        else {
+          var new_index = index*2;
+          if(this.underscore_letters[id].charAt(index) == '_') {
+            var temp = this.underscore_letters[id].substring(0,new_index) + this.letters.charAt(index) + this.underscore_letters[id].substring(new_index+1);
+            this.underscore_letters[id] = temp;
+            io.to(id).emit("receive_hint", this.underscore_letters[id]);
+            done = 1;
+          }
+          else {
+            index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
+          }
         }
       }
       else {
-        //if it isn't the first index, the index from the word maps to twice the index of the underscores string index
-        var index_new = index * 2;
-        if(this.underscore_letters[id].charAt(index_new) == '_'){
-          var temp = this.underscore_letters[id].substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters[id].substring(index_new+1);
-          this.underscore_letters[id] = temp;
-          io.to(id).emit("receive_hint", this.underscore_letters[id]);
-        }
-        else{
-          this.displayWordHint(id);
-        }
+        index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
       }
     }
   }
