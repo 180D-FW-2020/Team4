@@ -301,6 +301,7 @@ class ROOM {
         }
       }
       this.roundResults[user] = 0;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
     }
 
     this.clearBoard();
@@ -313,6 +314,7 @@ class ROOM {
     this.topPoints = 0;
     this.hintLockActivated = 0;
     this.hintLockActivatedUser = "";
+  
     
     // Restart
     if (this.numRounds < (this.maxRounds*this.users.length)) {
@@ -464,6 +466,8 @@ class ROOM {
     if(valid == 1)
     {
       this.powerUps[id] -= 32;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
+
       this.TimeLeft = this.TimeLeft + 20;
       io.to(this.id).emit("countdown", this.TimeLeft);
       return 1;
@@ -482,6 +486,7 @@ class ROOM {
     {
       this.points[id] += 100;
       this.powerUps[id] -= 16;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
       return 1;
     }
     else {
@@ -498,6 +503,7 @@ class ROOM {
     {
       this.displayWordHint(id);
       this.powerUps[id] -= 4;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
       return 1;
     }
     else {
@@ -539,6 +545,7 @@ class ROOM {
       this.hintLockActivated = 1;
       this.hintLockActivatedUser = id;
       this.powerUps[id] -= 2;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
       return 1;
     }
     else {
@@ -556,6 +563,7 @@ class ROOM {
       //extra points
       this.points[id] += 100;
       this.powerUps[id] -= 1;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
       return 1;
     }
     else {
