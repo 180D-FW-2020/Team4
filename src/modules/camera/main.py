@@ -10,6 +10,10 @@ import io
 import base64
 from PIL import Image
 import numpy as np
+import eventlet
+
+eventlet.monkey_patch(thread=False)
+
 
 #sio = socketio.Server()
 

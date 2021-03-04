@@ -6,6 +6,7 @@ import numpy as np
 import argparse
 import imutils
 import time
+#import simplejpeg
 
 ap = argparse.ArgumentParser()
 #ap.add_argument("-v","--video",help="path to the (optional) video file")
@@ -101,5 +102,7 @@ class VideoCamera(object):
             #draw a line
             cv2.line(frame, pts[i-1], pts[i], color, thickness)
         
-        ret, jpeg = cv2.imencode('.jpg', frame)
-        return jpeg.tobytes()
+        #ret, jpeg = cv2.imencode('.jpg', frame)
+        #jpeg = simplejpeg.encode_jpeg('.jpg', frame)
+        #return jpeg.tobytes()
+        return "OK"
