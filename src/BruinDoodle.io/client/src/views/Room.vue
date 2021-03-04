@@ -458,7 +458,7 @@ export default {
       this.wordHint = wordHint;
     },
     get_powerups(points) {
-      var power_list = ['Extend Time ⏳','Reveal Hint 👁️','Double Points ✌️','Reveal Hint 👁️','Remove Hint ❌','Extra Points 💯'];
+      var power_list = ['Extend Time ⏳','Reveal Hint to Guessers 👁️','Double Points ✌️','Reveal Hint 👁️','Remove Hints ❌','Extra 💯 Points'];
       var guesser = [];
       var artist = [];
 

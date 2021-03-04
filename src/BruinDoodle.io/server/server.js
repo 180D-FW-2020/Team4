@@ -223,13 +223,11 @@ io.on("connection", socket => {
           if(room.painter == other.id) {
             if(room.useArtistPowerUp_2(other.id) == 1){
               CHAT.sendCallback(other, {
-                //fill this in
-                self: `...!`
+                self: `Revealed Hint to the Guessers!`
               });
             }
             else{
               CHAT.sendCallback(other, {
-                //fill this in
                 self: `You don't have this power up...`
               });
             }
@@ -256,7 +254,7 @@ io.on("connection", socket => {
           else {
             if(room.useGuesserPowerUp_3(other.id) == 1){
               CHAT.sendCallback(other, {
-                self: `Successfully removed hints for everyone!`
+                self: `Extra 💯 points will be added to your score!`
               });
             }
             else{

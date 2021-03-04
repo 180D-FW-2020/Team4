@@ -101,10 +101,10 @@ class ROOM {
     }, 1000);
   }
 
-  countDown(time) {
-    io.to(this.id).emit("countdown", time);
+  countDown() {
+    io.to(this.id).emit("countdown", this.roundTime);
     let interval = setInterval(() => {
-      if (time <= 0) {
+      if (this.TimeLeft <= 0) {
         CHAT.sendServerMessage(
           this.id,
           `No one guessed the word: ${this.round.word}`
@@ -114,8 +114,6 @@ class ROOM {
       } else if (this.round == null) {
         clearInterval(interval);
       } else {
-        this.TimeLeft = time;
-        time--;
         if(this.TimeLeft == Math.floor(this.roundTime/2)) {
           for (let user of this.users) {
             if(this.hintLockActivated == 0){
@@ -182,7 +180,8 @@ class ROOM {
             }
           }
         }
-        io.to(this.id).emit("countdown", time);
+        this.TimeLeft = this.TimeLeft - 1;
+        io.to(this.id).emit("countdown", this.TimeLeft);
       }
     }, 1000);
   }
@@ -194,7 +193,8 @@ class ROOM {
       io.to(this.painter).emit("receive_password", word);
       CHAT.sendServerMessage(this.id, `Round started!`);
       CHAT.sendCallbackID(this.painter, `The chosen word is: ${word}`);
-      this.countDown(this.roundTime);
+      this.TimeLeft = this.roundTime;
+      this.countDown();
       this.letters = word;
 
       var resStr = "";
@@ -230,7 +230,13 @@ class ROOM {
     this.round = null;
 
     if(this.TimeLeft >= 30){
-      this.powerUps[this.painter] += 16;
+
+      var temp = this.powerUps[this.painter]%32;
+      var valid = Math.floor(temp/16);
+      if(valid == 0)
+      {
+        this.powerUps[this.painter] += 16;
+      }
     }
     
     //If everyone guessed correctly
@@ -245,15 +251,7 @@ class ROOM {
           this.powerUps[this.painter] += 32;
         }
       }
-      //if they get 2 in a row:
-      // else if(this.artist_AllCorrectStreak[this.painter] == 2){
-      //   var temp = this.powerUps[this.painter]%32;
-      //   var valid = Math.floor(temp/16);
-      //   if(valid == 0){
-      //     this.powerUps[this.painter] += 16;
-      //   }
-      // }
-      //if they get 3 in a row:
+      
       else if(this.artist_AllCorrectStreak[this.painter] == 3)
       {
         //check if they have it already
@@ -305,6 +303,7 @@ class ROOM {
       }
       this.roundResults[user] = 0;
       io.to(user).emit("get_powerups", this.powerUps[user]);
+      console.log(this.powerUps[user]);
     }
 
     this.clearBoard();
@@ -472,7 +471,7 @@ class ROOM {
       this.powerUps[id] -= 32;
       io.to(id).emit("get_powerups", this.powerUps[id]);
 
-      this.TimeLeft = this.TimeLeft + 20;
+      this.TimeLeft = this.TimeLeft + 15;
       io.to(this.id).emit("countdown", this.TimeLeft);
       return 1;
     }
@@ -484,11 +483,12 @@ class ROOM {
   //extra points
   useArtistPowerUp_2(id){
     var temp = this.powerUps[id]%32;
-    temp = temp%16;
     var valid = Math.floor(temp/16);
     if(valid == 1)
     {
-      this.points[id] += 100;
+      for (let user of this.users) {
+        this.displayWordHint(user);
+      }
       this.powerUps[id] -= 16;
       io.to(id).emit("get_powerups", this.powerUps[id]);
       return 1;
@@ -519,7 +519,6 @@ class ROOM {
     var temp = this.powerUps[id]%32;
     temp = temp%16;
     temp = temp%8;
-    temp = temp%4;
     var valid = Math.floor(temp/2);
     if(valid == 1)
     {
