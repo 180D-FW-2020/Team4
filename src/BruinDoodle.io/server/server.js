@@ -116,7 +116,7 @@ io.on("connection", socket => {
     });
     let room = ROOMS.getSocketRoom(other);
     if (room.painter == other.id && room.round != null) {
-      other.to(room.id).emit('paint', coords);
+      socket.to(room.id).emit('paint', coords);
       room.round.addLine(coords);
     }
   });
