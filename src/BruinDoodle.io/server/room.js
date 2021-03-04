@@ -10,7 +10,6 @@ class ROOM {
     this.isPrivate = options.isPrivate || false;
     this.password = options.password || "";
     this.letters = options.letters || "";
-    this.underscore_letters = options.underscore_letters || "";
     this.maxPlayers = options.maxPlayers || 8;
     this.users = [...options.users] || [];
     this.queue = [...options.users] || [];
@@ -20,6 +19,10 @@ class ROOM {
     this.points =
       {
         ...options.points,
+      } || {};
+    this.underscore_letters =
+      {
+        ...options.underscore_letters,
       } || {};
     //6 bit number (0 to 63) that stores the information of the power ups based on the id of the user
     this.powerUps = 
@@ -50,6 +53,8 @@ class ROOM {
     this.TimeLeft = 0;
     this.numCorrect = 0;
     this.topPoints = 0;
+    this.hintLockActivated = 0;
+    this.hintLockActivatedUser = "";
   }
 
   async getWord() {
@@ -96,10 +101,10 @@ class ROOM {
     }, 1000);
   }
 
-  countDown(time) {
-    io.to(this.id).emit("countdown", time);
+  countDown() {
+    io.to(this.id).emit("countdown", this.roundTime);
     let interval = setInterval(() => {
-      if (time <= 0) {
+      if (this.TimeLeft <= 0) {
         CHAT.sendServerMessage(
           this.id,
           `No one guessed the word: ${this.round.word}`
@@ -109,30 +114,74 @@ class ROOM {
       } else if (this.round == null) {
         clearInterval(interval);
       } else {
-        this.TimeLeft = time;
-        time--;
         if(this.TimeLeft == Math.floor(this.roundTime/2)) {
-          this.displayWordHint();
+          for (let user of this.users) {
+            if(this.hintLockActivated == 0){
+              this.displayWordHint(user);
+            }
+            else{
+              if(this.hintLockActivatedUser == user){
+                this.displayWordHint(user);
+              }
+            }
+          }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/4)) {
-          this.displayWordHint();
+          if(this.letters.length > 3){
+            for (let user of this.users) {
+              if(this.hintLockActivated == 0){
+                this.displayWordHint(user);
+              }
+              else{
+                if(this.hintLockActivatedUser == user){
+                  this.displayWordHint(user);
+                }
+              }
+            }
+          }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/8)) {
           if(this.letters.length > 6){
-            this.displayWordHint();
+            for (let user of this.users) {
+              if(this.hintLockActivated == 0){
+                this.displayWordHint(user);
+              }
+              else{
+                if(this.hintLockActivatedUser == user){
+                  this.displayWordHint(user);
+                }
+              }
+            }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/16)) {
           if(this.letters.length > 9){
-            this.displayWordHint();
+            for (let user of this.users) {
+              if(this.hintLockActivated == 0){
+                this.displayWordHint(user);
+              }
+              else{
+                if(this.hintLockActivatedUser == user){
+                  this.displayWordHint(user);
+                }
+              }
+            }
           }
         }
         else if(this.TimeLeft == Math.floor(this.roundTime/32)) {
-          if(this.letters.length > 11){
-            this.displayWordHint();
+          for (let user of this.users) {
+            if(this.hintLockActivated == 0){
+              this.displayWordHint(user);
+            }
+            else{
+              if(this.hintLockActivatedUser == user){
+                this.displayWordHint(user);
+              }
+            }
           }
         }
-        io.to(this.id).emit("countdown", time);
+        this.TimeLeft = this.TimeLeft - 1;
+        io.to(this.id).emit("countdown", this.TimeLeft);
       }
     }, 1000);
   }
@@ -144,7 +193,8 @@ class ROOM {
       io.to(this.painter).emit("receive_password", word);
       CHAT.sendServerMessage(this.id, `Round started!`);
       CHAT.sendCallbackID(this.painter, `The chosen word is: ${word}`);
-      this.countDown(this.roundTime);
+      this.TimeLeft = this.roundTime;
+      this.countDown();
       this.letters = word;
 
       var resStr = "";
@@ -164,10 +214,10 @@ class ROOM {
           }
         }
       }
-      this.underscore_letters = resStr;
-      io.to(this.id).emit("receive_hint", this.underscore_letters);
-      //Send thru this.underscore_letters here
-      console.log(this.underscore_letters);
+      for (let user of this.users) {
+        this.underscore_letters[user] = resStr;
+        io.to(user).emit("receive_hint", this.underscore_letters[user]);
+      }
     } else {
       CHAT.sendCallbackID(
         this.painter,
@@ -178,6 +228,16 @@ class ROOM {
 
   stopRound() {
     this.round = null;
+
+    if(this.TimeLeft >= 30){
+
+      var temp = this.powerUps[this.painter]%32;
+      var valid = Math.floor(temp/16);
+      if(valid == 0)
+      {
+        this.powerUps[this.painter] += 16;
+      }
+    }
     
     //If everyone guessed correctly
     if(this.numCorrect == this.users.length - 1){
@@ -191,15 +251,7 @@ class ROOM {
           this.powerUps[this.painter] += 32;
         }
       }
-      //if they get 2 in a row:
-      else if(this.artist_AllCorrectStreak[this.painter] == 2){
-        var temp = this.powerUps[this.painter]%32;
-        var valid = Math.floor(temp/16);
-        if(valid == 0){
-          this.powerUps[this.painter] += 16;
-        }
-      }
-      //if they get 3 in a row:
+      
       else if(this.artist_AllCorrectStreak[this.painter] == 3)
       {
         //check if they have it already
@@ -232,7 +284,7 @@ class ROOM {
       var valid = Math.floor(temp/8);
 
       //if they do, double the points from this round
-      if(valid == 1)
+      if(valid == 1) 
       {
         this.points[this.painter] += artist_points;
         this.updateUsers();
@@ -250,6 +302,8 @@ class ROOM {
         }
       }
       this.roundResults[user] = 0;
+      io.to(user).emit("get_powerups", this.powerUps[user]);
+      console.log(this.powerUps[user]);
     }
 
     this.clearBoard();
@@ -261,6 +315,10 @@ class ROOM {
     this.numCorrect = 0;
     this.topPoints = 0;
 
+    this.hintLockActivated = 0;
+    this.hintLockActivatedUser = "";
+  
+    
     // Restart
     if (this.numRounds < (this.maxRounds*this.users.length)) {
       this.initRound();
@@ -288,7 +346,6 @@ class ROOM {
     this.painter = newPainter;
     io.to(this.id).emit("painter_changed", newPainter);
     CHAT.sendCallbackID(this.painter, "You are the new painter!");
-
     return true;
   }
 
@@ -333,54 +390,57 @@ class ROOM {
   }
 
   givePoints({ id }, points = 500) {
-    //if this is the first person to guess
-    if(this.numCorrect == 0){
-      //store the points that go to first guesser in order to assign to artist at the end
-      this.topPoints = parseInt(points*(this.TimeLeft/this.roundTime));
-      this.firstGuessStreak[id] += 1;
+    if(this.roundResults[id] == 0){
+      //if this is the first person to guess
+      if(this.numCorrect == 0){
+        //store the points that go to first guesser in order to assign to artist at the end
+        this.topPoints = parseInt(points*(this.TimeLeft/this.roundTime));
+        this.firstGuessStreak[id] += 1;
 
-      var temp = this.powerUps[id]%32;
-      temp = temp%16;
-      temp = temp%8;
-      var valid = Math.floor(temp/4);
-      if(valid == 0){
-        this.powerUps[id] += 4;
-      }
-
-      //if user guesses first three times in row
-      if(this.firstGuessStreak[id] == 3)
-      {
-        temp = temp%4;
-        valid = Math.floor(temp/2);
+        var temp = this.powerUps[id]%32;
+        temp = temp%16;
+        temp = temp%8;
+        var valid = Math.floor(temp/4);
         if(valid == 0){
-          this.powerUps[id] += 2;
+          this.powerUps[id] += 4;
+        }
+
+        //if user guesses first three times in row
+        if(this.firstGuessStreak[id] == 3)
+        {
+          temp = temp%4;
+          valid = Math.floor(temp/2);
+          if(valid == 0){
+            this.powerUps[id] += 2;
+          }
         }
       }
-    }
-    //if it is not the first person to guess -> need to reset firstGuessStreak
-    else{
-      this.firstGuessStreak[id] = 0;
-    }
-
-    //update score of guesser
-    this.points[id] += parseInt(points*(this.TimeLeft/this.roundTime));
-    this.guessStreak[id] += 1;
-
-    //if user guesses three in a row
-    if(this.guessStreak[id] == 3){
-      var temp = this.powerUps[id]%32;
-      temp = temp%16;
-      temp = temp%8;
-      temp = temp%4;
-      valid = temp%2;
-      if(valid == 0){
-        this.powerUps[id] += 1;
+      //if it is not the first person to guess -> need to reset firstGuessStreak
+      else{
+        this.firstGuessStreak[id] = 0;
       }
+    
+
+      //update score of guesser
+      this.points[id] += parseInt(points*(this.TimeLeft/this.roundTime));
+      this.guessStreak[id] += 1;
+
+      //if user guesses three in a row
+      if(this.guessStreak[id] == 3){
+        var temp = this.powerUps[id]%32;
+        temp = temp%16;
+        temp = temp%8;
+        temp = temp%4;
+        valid = temp%2;
+        if(valid == 0){
+          this.powerUps[id] += 1;
+        }
+      }
+      //this person guessed right, so roundResults should be 1 for them
+      this.roundResults[id] = 1;
+      this.numCorrect++;
+      this.updateUsers();
     }
-    //this person guessed right, so roundResults should be 1 for them
-    this.roundResults[id] = 1;
-    this.numCorrect++;
-    this.updateUsers();
   }
 
   updateUsers() {
@@ -399,107 +459,154 @@ class ROOM {
     }
     return usrs;
   }
-  useArtistPowerUp_1({ id }){
+
+  userGuessStatus(id) {
+    return this.roundResults[id];
+  }
+
+  useArtistPowerUp_1(id){
     var valid = Math.floor(this.powerUps[id]/32);
     if(valid == 1)
     {
       this.powerUps[id] -= 32;
-      this.TimeLeft = this.TimeLeft + 20;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
+
+      this.TimeLeft = this.TimeLeft + 15;
       io.to(this.id).emit("countdown", this.TimeLeft);
+      return 1;
     }
     else {
-      console.log("Gesture not available");
-    }
-  }
-  useArtistPowerUp_2({ id }){
-    var temp = this.powerUps[id]%32;
-    temp = temp%16;
-    var valid = Math.floor(this.powerUps[id]/16);
-    if(valid == 1)
-    {
-      //do power up here
-      this.powerUps[id] -= 16;
-    }
-    else {
-      console.log("Gesture not available");
-    }
-  }
-  useGuesserPowerUp_1({ id }){
-    var temp = this.powerUps[id]%32;
-    temp = temp%16;
-    temp = temp%8;
-    var valid = Math.floor(this.powerUps[id]/4);
-    if(valid == 1)
-    {
-      //reveal letter here
-      this.powerUps[id] -= 4;
-    }
-    else {
-      console.log("Gesture not available");
-    }
-  }
-  useGuesserPowerUp_2({ id }){
-    var temp = this.powerUps[id]%32;
-    temp = temp%16;
-    temp = temp%8;
-    temp = temp%4;
-    var valid = Math.floor(this.powerUps[id]/2);
-    if(valid == 1)
-    {
-      //remove all hints for everyone in round
-      this.powerUps[id] -= 2;
-    }
-    else {
-      console.log("Gesture not available");
-    }
-  }
-  useGuesserPowerUp_3({ id }){
-    var temp = this.powerUps[id]%32;
-    temp = temp%16;
-    temp = temp%8;
-    temp = temp%4;
-    valid = temp%2;
-    if(valid == 1)
-    {
-      //extra points
-      this.powerUps[id] -= 1;
-    }
-    else {
-      console.log("Gesture not available");
+      return 0;
     }
   }
 
-  displayWordHint(){
+  //extra points
+  useArtistPowerUp_2(id){
+    var temp = this.powerUps[id]%32;
+    var valid = Math.floor(temp/16);
+    if(valid == 1)
+    {
+      for (let user of this.users) {
+        this.displayWordHint(user);
+      }
+      this.powerUps[id] -= 16;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  useGuesserPowerUp_1(id) {
+    var temp = this.powerUps[id]%32;
+    temp = temp%16;
+    temp = temp%8;
+    var valid = Math.floor(temp/4);
+    if(valid == 1)
+    {
+      this.displayWordHint(id);
+      this.powerUps[id] -= 4;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  useGuesserPowerUp_2(id) {
+    var temp = this.powerUps[id]%32;
+    temp = temp%16;
+    temp = temp%8;
+    var valid = Math.floor(temp/2);
+    if(valid == 1)
+    {
+      var resStr = "";
+      var space_index = this.letters.indexOf(' ');
+      var i;
+
+      for (i = 0; i < this.letters.length; i++) {
+        if(i == 0) {
+          resStr = resStr + "_";
+        }
+        else {
+          if(i == space_index){
+            resStr = resStr + "  ";
+          }
+          else {
+            resStr = resStr + " _";
+          }
+        }
+      }
+      for (let user of this.users) {
+        if(user != id){
+          this.underscore_letters[user] = resStr;
+          io.to(user).emit("receive_hint", this.underscore_letters[user]);
+        }
+      }
+      this.hintLockActivated = 1;
+      this.hintLockActivatedUser = id;
+      this.powerUps[id] -= 2;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+  useGuesserPowerUp_3(id) {
+    var temp = this.powerUps[id]%32;
+    temp = temp%16;
+    temp = temp%8;
+    temp = temp%4;
+    var valid = temp%2;
+    if(valid == 1)
+    {
+      //extra points
+      this.points[id] += 100;
+      this.powerUps[id] -= 1;
+      io.to(id).emit("get_powerups", this.powerUps[id]);
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+
+  displayWordHint(id){
     var index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
     var space_index = this.letters.indexOf(' ');
-    if(index == space_index){
-      this.displayWordHint();
-    }
-    else{
-      if(index == 0) {
-        if(this.underscore_letters.charAt(index) == '_'){
-          var temp = this.letters.charAt(index) + this.underscore_letters.substring(index+1);
-          this.underscore_letters = temp;
-          console.log(this.underscore_letters);
-          io.to(this.id).emit("receive_hint", this.underscore_letters);
-          //Send this.underscore_letters thru sockets here
+
+    var done = 0;
+    while(done == 0) {
+      if(index != space_index) {
+        if(index == 0) {
+          if(this.underscore_letters[id].charAt(index) == '_') {
+            var temp = this.letters.charAt(index) + this.underscore_letters[id].substring(index+1);
+            this.underscore_letters[id] = temp;
+            io.to(id).emit("receive_hint", this.underscore_letters[id]);
+            done = 1;
+          }
+          else {
+            index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
+          }
         }
-        else{
-          this.displayWordHint();
+        else {
+          var new_index = index*2;
+          if(this.underscore_letters[id].charAt(index) == '_') {
+            var temp = this.underscore_letters[id].substring(0,new_index) + this.letters.charAt(index) + this.underscore_letters[id].substring(new_index+1);
+            this.underscore_letters[id] = temp;
+            io.to(id).emit("receive_hint", this.underscore_letters[id]);
+            done = 1;
+          }
+          else {
+            index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
+          }
         }
       }
       else {
-        var index_new = index * 2;
-        if(this.underscore_letters.charAt(index_new) == '_'){
-          var temp = this.underscore_letters.substring(0,index_new) + this.letters.charAt(index) + this.underscore_letters.substring(index_new+1);
-          this.underscore_letters = temp;
-          console.log(this.underscore_letters);
-          io.to(this.id).emit("receive_hint", this.underscore_letters);
-          //Send this.underscore_letters thru sockets here
-        }
-        else{
-          this.displayWordHint();
-        }
+        index = Math.floor((Math.random() * (this.letters.length-1)) + 1);
       }
     }
   }
