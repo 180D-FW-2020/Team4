@@ -4,6 +4,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
 
 
     var sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
+    var prevPos= { x: null, y: null };
 
     this.errorOutput = document.getElementById(errorOutputId);
 
@@ -115,11 +116,17 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     socket.emit('image', data);
                         //         }, 10000/FPS);
                         
-                    socket.on('pos', function(paintObj){
+                    socket.on('pos', function(pos){
                         ////this.$socket.emit("paint", paintObj);
+                        let coords = { prevPos: prevPos, currPos: pos };
+                        let paintObj = { color: "#000", coords };
                         sockets.emit('paint', paintObj);
+                        prevPos.x = pos.x;
+                        prevPos.y = pos.y
                     });
                     // schedule the next one.
+                    
+
                     let delay = 5000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);
                     //socket.close();

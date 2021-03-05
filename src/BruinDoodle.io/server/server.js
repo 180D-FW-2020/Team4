@@ -117,6 +117,7 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
+    //console.log (coords);
     other = socket;
     clients.forEach(function (cl) {
       if (socket.name==(cl.name+"9")){

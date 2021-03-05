@@ -42,21 +42,16 @@ def image(data_image):
     currX = cam.get_currX()
     currY = cam.get_currY()
     activeColor = "#000"
-    if(prevX==-1 or prevY==-1):
-        prevPos= { "x": "null", "y": "null" }
-    else:
-        prevPos= { "x": prevX, "y": prevY}
     if(currX==-1 or currY==-1):
         pos= { "x": "null", "y": "null" }
     else:
+        #prevPos= { "x": "null", "y": "null" }
         pos= { "x": currX, "y": currY }
-        coords = { "prevPos": prevPos, "currPos": pos }
-        paintObj = { "color": activeColor, "coords": coords }
-        sio.emit('pos', paintObj)
+        #coords = { "prevPos": prevPos, "currPos": pos }
+        #paintObj = { "color": activeColor, "coords": coords }
+        #sio.emit('pos', paintObj)
+        sio.emit('pos', pos)
             
-    #coords = { "prevPos": prevPos, "currPos": pos }
-    #paintObj = { "color": activeColor, "coords": coords }
-    #sio.emit('pos', paintObj)
 
 
 if __name__ == "__main__":
