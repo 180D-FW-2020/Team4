@@ -93,16 +93,4 @@ class VideoCamera(object):
 
         #Add the point to the pts list => create drawing
         pts.appendleft(center)
-        #connect the points with a line
-        for i in range(1,len(pts)):
-            if pts[i-1] is None or pts[i] is None:
-                continue
-            #user can control the thickness with the global thickness_amt
-            thickness = int(np.sqrt(args["buffer"] / float(i+1))*thickness_amt)
-            #draw a line
-            cv2.line(frame, pts[i-1], pts[i], color, thickness)
-        
-        #ret, jpeg = cv2.imencode('.jpg', frame)
-        #jpeg = simplejpeg.encode_jpeg('.jpg', frame)
-        #return jpeg.tobytes()
         return "OK"

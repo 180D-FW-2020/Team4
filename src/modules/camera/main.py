@@ -50,10 +50,13 @@ def image(data_image):
         pos= { "x": "null", "y": "null" }
     else:
         pos= { "x": currX, "y": currY }
+        coords = { "prevPos": prevPos, "currPos": pos }
+        paintObj = { "color": activeColor, "coords": coords }
+        sio.emit('pos', paintObj)
             
-    coords = { "prevPos": prevPos, "currPos": pos }
-    paintObj = { "color": activeColor, "coords": coords }
-    sio.emit('pos', paintObj)
+    #coords = { "prevPos": prevPos, "currPos": pos }
+    #paintObj = { "color": activeColor, "coords": coords }
+    #sio.emit('pos', paintObj)
 
 
 if __name__ == "__main__":

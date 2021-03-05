@@ -2,15 +2,8 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     let self = this;
     var socket = io('https://polar-mesa-13022.herokuapp.com/', { withCredentials: false  });
 
-    //socket.on('connect', function(){
-        //console.log("Connected...!", socket.connected)
-    //});
 
     var sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
-    //sockets.emit('setName', "Laptop1a")
-    //sockets.on('connection', function(){
-        //console.log("Connected...!", sockets.connected)
-    //});
 
     this.errorOutput = document.getElementById(errorOutputId);
 
@@ -114,30 +107,23 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     //var data = document.getElementById("videoInput").toDataURL(type);
                     //console.log(data)
                     data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
-                    
+                    //sockets.on('connect', function(){
+                        //sockets.sendBuffer = [];
+                    //});
+                    //console.log(document.getElementById('fname').value);
+                    //sockets.emit('setName', document.getElementById('fname').value+"9");
                     socket.emit('image', data);
                         //         }, 10000/FPS);
                         
-                    //socket.on('response_back', function(image){
-                        //cv.imshow('canvasOutput', image);
-                        //console.log(image)
-                    //});
                     socket.on('pos', function(paintObj){
                         ////this.$socket.emit("paint", paintObj);
                         sockets.emit('paint', paintObj);
-                        ////console.log('hi');
                     });
-                    ////socket.on('response_back', function(image){
-                                    //const image_id = document.getElementById('image');
-                                    //var image_id = document.getElementById('sockOutput');
-                                    //console.log(image);
-                                    ////self.loadImageToCanvas(image, 'sockOutput');
-                                    //image_id.src = image;
-                                    //cv.imshow('canvasOutput', image)
-                                ////});
                     // schedule the next one.
                     let delay = 5000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);
+                    //socket.close();
+                    //sockets.close();
                 } catch (err) {
                     self.printError(err);
                 }
