@@ -37,8 +37,8 @@ def image(data_image):
     #frame = imutils.resize(frame, width=700)
     #frame = cv2.flip(frame, 1)
     #imgencode = cv2.imencode('.jpg', frame)[1]
-    prevX = cam.get_prevX()
-    prevY = cam.get_prevY()
+    #prevX = cam.get_prevX()
+    #prevY = cam.get_prevY()
     currX = cam.get_currX()
     currY = cam.get_currY()
     activeColor = "#000"
