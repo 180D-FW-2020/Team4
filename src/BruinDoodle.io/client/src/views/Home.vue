@@ -56,6 +56,14 @@ export default {
       })
     }
   },
+  // mounted() {
+  //   let utilsScript = document.createElement('script');
+  //     utilsScript.setAttribute('src', './static/js/utils.js');
+  //     document.body.appendChild(utilsScript);
+  //   let utils = new Utils('errorMessage');
+  //   utils.loadOpenCv(() => {
+  //     });
+  // },
 };
 </script>
 

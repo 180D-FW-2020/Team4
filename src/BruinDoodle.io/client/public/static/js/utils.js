@@ -207,6 +207,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         const constraints = {
             'qvga': {width: {exact: 320}, height: {exact: 240}},
             'vga': {width: {exact: 640}, height: {exact: 480}}};
+        console.log("test");
         let video = document.getElementById(videoId);
         if (!video) {
             video = document.createElement('video');

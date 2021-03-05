@@ -17,8 +17,8 @@ pts = deque(maxlen=args['buffer'])
 pts.appendleft(None)
 pts.appendleft(None)
 #We want to track the color pink
-pinkLower = (94,113,175)
-pinkUpper = (179,255,255)
+pinkLower = (94,113,175) #(10,100,200)# (94,113,175)
+pinkUpper = (179,255,255)#(35,160,255)#(179,255,255)
 
 #Globals (User can change)
 thickness_amt = 5

@@ -191,43 +191,8 @@ script: [
               </div>
             </form>
           </footer>
-
-          <footer class="card-footer" hidden>
-            <form class="field has-addons voice-input" hideen>
-              <div class="control" hidden>
-                <button
-                  id = "recordButton"
-                  class="button is-primary is-borderless"
-                  value="Record"
-                  hidden
-                  >
-                  Record
-                </button>
-              </div>
-              <div class="control" hidden>
-                <button
-                  id = "pauseButton"
-                  class="button is-primary is-borderless"
-                  value="Pause"
-                  hidden
-                  >
-                  Pause
-                </button>
-              </div>
-              <div class="control" hidden>
-                <button
-                  id = "stopButton"
-                  type="submit"
-                  class="button is-primary is-borderless"
-                  value="Stop"
-                  hidden
-                  >
-                  Stop
-                </button>
-              </div>
-            </form>
-          </footer>
         </div>
+
 
         <div class="card card--painter">
           <header class="card-header card-audio">
@@ -438,7 +403,6 @@ export default {
       this.roundStarted = false;
     },
     game_ended() {
-      console.log(this.sortedUsers)
       this.$swal({ 
         title: "Goodbye", 
         text: this.displayUsers(this.sortedUsers),
@@ -482,10 +446,8 @@ export default {
       }
 
       this.artistUps = artist;
-      console.log(this.artistUps);
 
       this.guesserUps = guesser;
-      console.log(this.guesserUps);
     },
   },
   computed: {
@@ -500,18 +462,20 @@ export default {
   },
   mounted() {
     this.getRoomInfo();
-    let recorderScript = document.createElement('script');
-      recorderScript.setAttribute('src', '/static/js/recorder.js');
-      document.body.appendChild(recorderScript);
-    let appScript = document.createElement('script');
-      appScript.setAttribute('src', '/static/js/app.js');
-      document.body.appendChild(appScript);
     let socketScript = document.createElement('script');
       socketScript.setAttribute('src', './static/js/socket.io.js');
       document.body.appendChild(socketScript);
     let utilsScript = document.createElement('script');
       utilsScript.setAttribute('src', './static/js/utils.js');
       document.body.appendChild(utilsScript);
+    let recorderScript = document.createElement('script');
+      recorderScript.setAttribute('src', '/static/js/recorder.js');
+      document.body.appendChild(recorderScript);
+    let appScript = document.createElement('script');
+      appScript.setAttribute('src', '/static/js/app.js');
+      document.body.appendChild(appScript);
+    
+    
     //let webrtcScript = document.createElement('script');
       //webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
       //document.body.appendChild(webrtcScript);
@@ -529,9 +493,14 @@ export default {
       let sockContext = sockOutput.getContext('2d');
       let headerVideo = document.getElementById('headerVideo');
 
+       utils.loadOpenCv(() => {
+        startAndStop.removeAttribute('disabled');
+      });
+
       startAndStop.addEventListener('click', () => {
         if (!streaming) {
             //utils.clearError();
+            console.log("testingggggg")
             utils.startCamera('qvga', onVideoStarted, 'videoInput');
         } else {
             utils.stopCamera();
@@ -540,8 +509,6 @@ export default {
       });
 
       function onVideoStarted() {
-        console.log("ble");
-        console.log(document.getElementById('fname').value);
         utils.nameStuff(document.getElementById('fname').value);
         streaming = true;
         startAndStop.innerText = 'Stop';
@@ -563,9 +530,7 @@ export default {
         videoInput.hidden = true;
       }
 
-      utils.loadOpenCv(() => {
-        startAndStop.removeAttribute('disabled');
-      });
+     
     })
     .catch((err)=> {
       console.log(err);
