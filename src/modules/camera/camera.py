@@ -35,21 +35,11 @@ time.sleep(2.0)
 class VideoCamera(object):
     def __init__(self):
         self.video = VideoStream(src=0).start()
-    #def get_prevX():#get_prevX(self):
-        #if(pts[1] is not None):
-            #return pts[1][0]
-        #else:
-            #return -1
     def get_currX():#get_currX(self):
         if(pts[0] is not None):
             return pts[0][0]
         else:
             return -1
-    #def get_prevY():#get_prevY(self):
-        #if(pts[1] is not None):
-            #return pts[1][1]
-        #else:
-            #return -1
     def get_currY():#get_currY(self):
         if(pts[0] is not None):
             return pts[0][1]

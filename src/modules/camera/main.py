@@ -34,22 +34,13 @@ def image(data_image):
     frame = cv2.cvtColor(np.array(pimg), cv2.COLOR_RGB2BGR)
     imgencode = cam.get_frame(frame)
     # Process the image frame
-    #frame = imutils.resize(frame, width=700)
-    #frame = cv2.flip(frame, 1)
-    #imgencode = cv2.imencode('.jpg', frame)[1]
-    #prevX = cam.get_prevX()
-    #prevY = cam.get_prevY()
     currX = cam.get_currX()
     currY = cam.get_currY()
     activeColor = "#000"
     if(currX==-1 or currY==-1):
         pos= { "x": "null", "y": "null" }
     else:
-        #prevPos= { "x": "null", "y": "null" }
         pos= { "x": currX, "y": currY }
-        #coords = { "prevPos": prevPos, "currPos": pos }
-        #paintObj = { "color": activeColor, "coords": coords }
-        #sio.emit('pos', paintObj)
         sio.emit('pos', pos)
             
 
