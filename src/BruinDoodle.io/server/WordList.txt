@@ -7,7 +7,6 @@ Bunk Bed
 Board Game
 Beehive
 Lemon
-Wreath
 Waffles
 Bubble
 Whistle
@@ -32,7 +31,6 @@ Paris
 Beach
 Mountains
 Hawaii
-Mount Rushmore
 USA
 Hospital
 Attic
@@ -62,16 +60,15 @@ Eagle
 Mailman
 Superman
 Justin Bieber
-Cowboy 
-Alexander Hamilton
+Cowboy
 Robin Hood
 Vampire
 Pirate
 Girl Scout
 Pikachu
+Ben Shapiro
 SpongeBob
 Baby Yoda
-Pilgrim
 Cinderella
 Baker
 Thief
@@ -79,18 +76,14 @@ Leprechaun
 Harry Potter
 Shrek
 Yoshi
-Queen Elizabeth
 Skip
 Burp
 Cook
-Scratch
 Sleep
 Plant
-Purchase
 Text
 Tie
 Snore
-Catch
 Study
 Olympics
 Sandcastle
@@ -99,10 +92,8 @@ Black hole
 Applause
 Blizzard
 Sunburn
-Time machine
 Monday
 Swamp
-Panama Canal
 Sunscreen
 Dictionary
 Vanilla
@@ -173,7 +164,6 @@ Bread
 Nose
 House
 Airplane
-Darabi
 Hippo
 Light
 Turtle
@@ -188,7 +178,6 @@ Girl
 Glasses
 Flower
 Mouse
-Alligator
 Bell
 Robot
 Smile
@@ -200,47 +189,21 @@ Bunny
 Cookie
 Bowl
 Clog
-Chestnut
-Commercial
-Atlantis
-Mine
-Comfy
 Lie
-Philosopher
 Hang
 Vision
 Hail
 Upgrade
-Peasant
-Stout
 Yolk
 Car
-Retail
 Laser
-Crisp
-Blacksmith
-Ditch
-Exercise
-Mime
 Pastry
-Kilogram
-Ligament
-Opaque
-Drought
-Tinting
-Lyrics
 Neutron
-Stockholder
-Cartography
 Ice Fishing
 Darkness
 Dripping
-Wobble
 Rubber
 Tutor
-Migrate
-Myth
-Psychologist
 Quarantine
 Landfill
 Diagonal
@@ -250,35 +213,25 @@ Exponential
 Neighborhood
 Jazz
 Catalog
-Gallop
 Snag
 Acre
 Bikini
 Random
-Twang
-Fireside
 Clue
-Ringleader
 Parody
 Jungle
 Mirror
 Newsletter
 Sauce
-Observatory
 Bookend
-Drawback
 Fabric
-Siesta
 Coronavirus
 Rainwater
 Barber
 Scream
 Glitter
-Archaeologist
-Loiterer
 Positive
 Dizzy
-Czar
 Hydrogen
 Horse
 Door
@@ -298,7 +251,6 @@ Dominoes
 Photograph
 Computer
 Hockey
-Flavio
 Aircraft
 Pepper
 Key
@@ -311,11 +263,9 @@ Skate
 Electricity
 Lightsaber
 Nature
-Shallow
 Toast
 Outside
 America
-Roller
 Gingerbread
 Man
 Bowtie
@@ -327,7 +277,6 @@ Pineapple
 Tusk
 Sprinkler
 Money
-Spool
 Lighthouse
 Doormat
 Face
@@ -378,8 +327,6 @@ Rug
 Thermometer
 Stockings
 CD
-Fake Flowers
-Model Car
 Check Book
 Vase
 Hanger
@@ -387,17 +334,13 @@ Cookie Jar
 Speakers
 Screw
 Grid Paper
-Boom Box
 Sailboat
 Toothpick
 Helmet
 Puddle
-Toe Ring
-Clay Pot
 Thread
 Bow
 Flag
-Plastic Fork
 Scotch Tape
 Lamp Shade
 Sketch Pad
@@ -416,16 +359,13 @@ Twister
 Photo Album
 Sandpaper
 Bookmark
-White Out
 Outlet
 Quilt
 Seat Belt
 Mouse Pad
 Tire Swing
-Nail Filer
 Cork
 Stop Sign
-Rusty Nail
 Rubber Band
 Zipper
 Canvas
@@ -436,7 +376,6 @@ Bottle Cap
 Candle
 Face Wash
 Lace
-Lip Gloss
 Buckle
 Shovel
 Slipper
@@ -451,83 +390,26 @@ Hair Tie
 Charger
 Blouse
 Card
-Pablo Picasso
-J.K. Rowling
-Joseph Stalin
-Nelson Mandela
-Amelia Earhart
-Mother Teresa
-J.R.R. Tolkien
-Oprah Winfrey
-Muhammad Ali
-Steve Jobs
-Thomas Edison
-George Bush 
-Usain Bolt
-Ludwig Beethoven
-Leonardo da Vinci
-Michael Jackson
-Pope Francis
-Vin Diesel
-Anne Frank
-Albert Einstein
-Henry Ford
-Michael Jordan
-Mahatma Gandhi
-Tiger Woods
-Paul McCartney
-Neil Armstrong
-Charles Darwin
-Marilyn Monroe
-Roger Federer
-George Orwell
-John Lennon
-Winston Churchill
-Coco Chanel
-Madonna
-Cleopatra
-Elvis Presley
-Sting
-Walt Disney
-Abraham Lincoln
-Barack Obama
-Sigmund Freud
-Bill Gates
-David Beckham
-Vladimir Putin
-Dalai Lama
 UCLA
 Avocado
-BPlate
 Royce Hall
-Lonzo Ball
-Bomb Shelter
 Bruin Bear
-Habibi Cafe
-Roccos Tavern
 Triangle
 Ackerman
 Greenhouse
-Diddy Riese
 Rose Bowl
 Westwood
-Postmates
 Bird Scooter
 Lime
 Janss Steps
-Andre
 Bruinwalk
 CCLE
-Daily Bruin
 Boelter
 Sculpture Garden
-Sawtelle
 The Hill
 Death Stairs
 Awkward Steps
-19P
 Tunneling
-Midnight Yell
 Undie Run
 Wooden
 Powell Cat
@@ -542,22 +424,13 @@ IEEE
 ACM
 Tinder
 Bumble
+Grindr
 Minecraft
-Thirsty Thursday
 UCPD
-Midterm Szn
-Rona Szn
 Lakers
 Dodgers
 Crying
 Finals Week
 Late Night
 Chicken Tenders
-Hedrick Alarms
-In N Out
-Trader Joes
-Netflix
-Resflix
-Game of Thrones
-Feast
 Kerckhoff

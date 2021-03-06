@@ -105,24 +105,20 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                     cv.imshow('canvasOutput', dst);
                     var type = "image/png"
                     var data = document.getElementById("canvasOutput").toDataURL(type);
-                    //var data = document.getElementById("videoInput").toDataURL(type);
-                    //console.log(data)
                     data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
-                    //sockets.on('connect', function(){
-                        //sockets.sendBuffer = [];
-                    //});
-                    //console.log(document.getElementById('fname').value);
-                    //sockets.emit('setName', document.getElementById('fname').value+"9");
                     socket.emit('image', data);
                         //         }, 10000/FPS);
                         
                     socket.on('pos', function(pos){
                         ////this.$socket.emit("paint", paintObj);
-                        let coords = { prevPos: prevPos, currPos: pos };
-                        let paintObj = { color: "#000", coords };
-                        sockets.emit('paint', paintObj);
-                        prevPos.x = pos.x;
-                        prevPos.y = pos.y
+                        
+                        if (prevPos.x!=pos.x && prevPos.y!=pos.y){
+                            let coords = { prevPos: prevPos, currPos: pos };
+                            let paintObj = { color: "#000", coords };
+                            sockets.emit('paint', paintObj);
+                            prevPos.x = pos.x;
+                            prevPos.y = pos.y
+                        }
                     });
                     // schedule the next one.
                     
