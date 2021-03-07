@@ -17,8 +17,8 @@ pts = deque(maxlen=args['buffer'])
 pts.appendleft(None)
 pts.appendleft(None)
 #We want to track the color pink
-pinkLower = (94,113,175) #(10,100,200)# (94,113,175)
-pinkUpper = (179,255,255)#(35,160,255)#(179,255,255)
+pinkLower = (160,140,200) #(94,113,175) #(10,100,200)
+pinkUpper = (180,200,255) #(179,255,255)#(35,160,255)
 
 #Globals (User can change)
 thickness_amt = 5
@@ -77,9 +77,10 @@ class VideoCamera(object):
         center = None
         if len(cnts) > 0:
             c = max(cnts, key=cv2.contourArea)
-            ((x,y), radius) = cv2.minEnclosingCircle(c)
-            M = cv2.moments(c)
-            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+            if (cv2.contourArea(c) > 100):
+                ((x,y), radius) = cv2.minEnclosingCircle(c)
+                M = cv2.moments(c)
+                center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
         #Add the point to the pts list => create drawing
         pts.appendleft(center)

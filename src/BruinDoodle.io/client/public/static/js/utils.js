@@ -111,7 +111,10 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                         
                     socket.on('pos', function(pos){
                         ////this.$socket.emit("paint", paintObj);
-                        
+                        if (prevPos.x==null && prevPos.y==null){
+                            prevPos.x = pos.x;
+                            prevPos.y = pos.y;
+                        }
                         if (prevPos.x!=pos.x && prevPos.y!=pos.y){
                             let coords = { prevPos: prevPos, currPos: pos };
                             let paintObj = { color: "#000", coords };
