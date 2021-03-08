@@ -77,10 +77,10 @@ class VideoCamera(object):
         center = None
         if len(cnts) > 0:
             c = max(cnts, key=cv2.contourArea)
-            if (cv2.contourArea(c) > 100):
-                ((x,y), radius) = cv2.minEnclosingCircle(c)
-                M = cv2.moments(c)
-                center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+            #if (cv2.contourArea(c) > 100):
+            ((x,y), radius) = cv2.minEnclosingCircle(c)
+            M = cv2.moments(c)
+            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
         #Add the point to the pts list => create drawing
         pts.appendleft(center)
