@@ -1,18 +1,16 @@
 function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     let self = this;
-    //var socket = io('http://localhost:5000', { withCredentials: false  });
+    var socket = io('http://localhost:5000', { withCredentials: false  });
 
     //socket.on('connect', function(){
         //console.log("Connected...!", socket.connected)
     //});
 
     var sockets = io('http://localhost:5050', { withCredentials: false  });//,transports: ["websocket"]
-    sockets.emit('setName', "Laptop1")
+    //sockets.emit('setName', "Laptop1")
     //sockets.on('connection', function(){
         //console.log("Connected...!", sockets.connected)
     //});
-
-    var prevPos= { x: null, y: null };
 
     this.errorOutput = document.getElementById(errorOutputId);
 
@@ -76,7 +74,6 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         img.onload = function() {
             canvas.width = img.width;
             canvas.height = img.height;
-
             ctx.drawImage(img, 0, 0, img.width, img.height);
         };
         img.src = url;
@@ -91,25 +88,9 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
             let video = document.getElementById('videoInput');
             let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
             let dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
-
-            //let dst_gray = new cv.Mat(video.height, video.width, cv.CV_8UC3);
-
-            let hsv = new cv.Mat();
-
             let cap = new cv.VideoCapture(video);
 
-            let lower_pink = new cv.Scalar(90, 110, 150);
-            let upper_pink = new cv.Scalar(120, 200, 255);
-
-            let mask = new cv.Mat(video.height, video.width, cv.CV_8UC1);
-
             const FPS = 30;
-            
-            let ksize = new cv.Size(25,25);
-
-            var contours = new cv.MatVector();
-            var hierarchy = new cv.Mat();
-
             function processVideo() {
                 try {
                     if (!streaming) {
@@ -119,66 +100,42 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
                         return;
                     }
                     let begin = Date.now();
-
+                    // start processing.
                     cap.read(src);
-
-                    if(src.size().width > 0 && src.size().height > 0){
-
-                        cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
-
-                        cv.cvtColor(dst, hsv, cv.COLOR_BGR2HSV);
-
-                        let low = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), lower_pink);
-                        let high = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), upper_pink);
-
-                        cv.inRange(hsv,low,high,mask);
-
-
-                        cv.findContours(mask, contours, hierarchy, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
+                    //setInterval(() => {
+                        //             cap.read(src);
                         
-                        var max_contour = contours.get(0);
-
-                        if(typeof contours.get(0) != 'undefined'){
-
-                            for(let i = 0; i< contours.size(); i++){
-                                if(cv.contourArea(contours.get(i)) > max_contour){
-                                    max_contour = contours.get(i);
-                                }
-                            }
-                            //var circle = cv.minEnclosingCircle(max_contour);
-                            var M = cv.moments(max_contour);
-                            var X = ((M.m10/M.m00)/video.width)*800;
-                            var Y = ((M.m01/M.m00)/video.height)*600;
-                            var pos= { x: X, y: Y };
-                            
-                            console.log(pos.x);
-                            
-                            if (prevPos.x == null || prevPos.y == null){
-                                prevPos.x = pos.x;
-                                prevPos.y = pos.y;
-                            }
-
-                            if(Number.isNaN(pos.x) == false && Number.isNaN(pos.y) == false){
-                                if (prevPos.x != pos.x && prevPos.y != pos.y){
-                                    let coords = { prevPos: prevPos, currPos: pos };
-                                    let paintObj = { color: "#000", coords };
-                                    console.log("GOODNESS");
-                                    sockets.emit('paint', paintObj);
-                                    prevPos.x = pos.x;
-                                    prevPos.y = pos.y;
-                                }
-                            }
-                        }
+                    
+                    //cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+                    cv.cvtColor(src, dst, cv.COLOR_RGBA2RGB);
+                    cv.imshow('canvasOutput', dst);
+                    var type = "image/png"
+                    var data = document.getElementById("canvasOutput").toDataURL(type);
+                    //var data = document.getElementById("videoInput").toDataURL(type);
+                    //console.log(data)
+                    data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
+                    
+                    socket.emit('image', data);
+                        //         }, 10000/FPS);
                         
-                        cv.imshow('canvasOutput', mask);
-                    }
-                    else{
-                        console.log("mucho no bueno");
-                    }
-                  
-                    //socket.on('pos', function(paintObj){
-                    //     sockets.emit('paint', paintObj);
-                    // });
+                    //socket.on('response_back', function(image){
+                        //cv.imshow('canvasOutput', image);
+                        //console.log(image)
+                    //});
+                    socket.on('pos', function(paintObj){
+                        ////this.$socket.emit("paint", paintObj);
+                        sockets.emit('paint', paintObj);
+                        ////console.log('hi');
+                    });
+                    ////socket.on('response_back', function(image){
+                                    //const image_id = document.getElementById('image');
+                                    //var image_id = document.getElementById('sockOutput');
+                                    //console.log(image);
+                                    ////self.loadImageToCanvas(image, 'sockOutput');
+                                    //image_id.src = image;
+                                    //cv.imshow('canvasOutput', image)
+                                ////});
+                    // schedule the next one.
                     let delay = 5000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);
                 } catch (err) {
