@@ -73,6 +73,7 @@ class ROOM {
       await this.getWord(),
       await this.getWord(),
     ];
+
     this.setPainter();
     io.to(this.painter).emit("round_initialized", words);
     
@@ -84,11 +85,6 @@ class ROOM {
     let interval = setInterval(() => {
       if (this.users.length > 1) {
         if (time <= 0) {
-          //CHAT.sendServerMessage(
-            //this.id,
-            //`Painter didn't choose a word, skipping round...`
-          //);
-          //this.initRound();
           var num = Math.floor(Math.random() * (2 - 0) + 0);
           this.startRound(words[num])
           clearInterval(interval);
