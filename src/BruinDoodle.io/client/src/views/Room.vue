@@ -254,7 +254,7 @@ script: [
                 </td>
                 -->
                 <td>
-                    <canvas id="canvasOutput" width=320 height=240 hidden></canvas>
+                    <canvas id="canvasOutput" width=320 height=240></canvas>
                 </td>
                 <td>
                     <canvas id="sockOutput" width=320 height=240 hidden></canvas>

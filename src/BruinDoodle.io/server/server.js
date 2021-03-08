@@ -126,13 +126,13 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    //console.log('paint');
+    console.log(coords);
     other = socket;
     if (socket.handshake.headers.origin=='http://localhost:8080'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
       //console.log("sssssssssssssssssssssssss")
       clients.forEach(function (cl) {
         //console.log(cl.name);
-        if (cl.name!='Laptop1'){
+        if (cl.name == 'Laptop1'){
           //console.log(typeof JSON.stringify(cl.handshake.headers.origin) == 'string');
           //if (String(cl.handshake.headers.origin) == "https://mighty-headland-55869.herokuapp.com/"){ //'http://192.168.68.117:8081'){
             //other = cl;
