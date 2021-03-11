@@ -462,15 +462,15 @@ export default {
   },
   mounted() {
     this.getRoomInfo();
-    //let socketScript = document.createElement('script');
-      //socketScript.setAttribute('src', './static/js/socket.io.js');
-      //document.body.appendChild(socketScript);
-    //let utilsScript = document.createElement('script');
-      //utilsScript.setAttribute('src', './static/js/utils.js');
-      //document.body.appendChild(utilsScript);
-    let utilScript = document.createElement('script');
-      utilScript.setAttribute('src', './static/js/util.js');
-      document.body.appendChild(utilScript);
+    let socketScript = document.createElement('script');
+      socketScript.setAttribute('src', './static/js/socket.io.js');
+      document.body.appendChild(socketScript);
+    let utilsScript = document.createElement('script');
+      utilsScript.setAttribute('src', './static/js/utils.js');
+      document.body.appendChild(utilsScript);
+    //let utilScript = document.createElement('script');
+      //utilScript.setAttribute('src', './static/js/util.js');
+      //document.body.appendChild(utilScript);
     let recorderScript = document.createElement('script');
       recorderScript.setAttribute('src', '/static/js/recorder.js');
       document.body.appendChild(recorderScript);
@@ -482,66 +482,66 @@ export default {
     //let webrtcScript = document.createElement('script');
       //webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
       //document.body.appendChild(webrtcScript);
-    // document.onreadystatechange = () => { 
-    // if (document.readyState == "complete") { 
-    // this.$loadScript('/static/js/utils.js')
-    // .then(()=> {
-    //   let utils = new Utils('errorMessage');
-    //   let streaming = false;
-    //   let videoInput = document.getElementById('videoInput');
-    //   let startAndStop = document.getElementById('startAndStop');
-    //   let canvasOutput = document.getElementById('canvasOutput');
-    //   let canvasContext = canvasOutput.getContext('2d');
-    //   let sockOutput = document.getElementById('sockOutput');
-    //   let sockContext = sockOutput.getContext('2d');
-    //   let headerVideo = document.getElementById('headerVideo');
+    document.onreadystatechange = () => { 
+    if (document.readyState == "complete") { 
+    this.$loadScript('/static/js/utils.js')
+    .then(()=> {
+      let utils = new Utils('errorMessage');
+      let streaming = false;
+      let videoInput = document.getElementById('videoInput');
+      let startAndStop = document.getElementById('startAndStop');
+      let canvasOutput = document.getElementById('canvasOutput');
+      let canvasContext = canvasOutput.getContext('2d');
+      let sockOutput = document.getElementById('sockOutput');
+      let sockContext = sockOutput.getContext('2d');
+      let headerVideo = document.getElementById('headerVideo');
 
-    //    utils.loadOpenCv(() => {
-    //     startAndStop.removeAttribute('disabled');
-    //   });
+       utils.loadOpenCv(() => {
+        startAndStop.removeAttribute('disabled');
+      });
 
-    //   startAndStop.addEventListener('click', () => {
-    //     if (!streaming) {
-    //         //utils.clearError();
-    //         console.log("testingggggg")
-    //         utils.startCamera('qvga', onVideoStarted, 'videoInput');
-    //     } else {
-    //         utils.stopCamera();
-    //         onVideoStopped();
-    //     }
-    //   });
+      startAndStop.addEventListener('click', () => {
+        if (!streaming) {
+            //utils.clearError();
+            console.log("testingggggg")
+            utils.startCamera('qvga', onVideoStarted, 'videoInput');
+        } else {
+            utils.stopCamera();
+            onVideoStopped();
+        }
+      });
 
-    //   function onVideoStarted() {
-    //     utils.nameStuff(document.getElementById('fname').value);
-    //     streaming = true;
-    //     startAndStop.innerText = 'Stop';
-    //     startAndStop.className = 'button is-danger is-borderless';
-    //     headerVideo.innerText = '📸';
-    //     videoInput.width = videoInput.videoWidth;
-    //     videoInput.height = videoInput.videoHeight;
-    //     videoInput.hidden = false;
-    //     utils.executeCode('codeEditor', streaming);
-    //   }
+      function onVideoStarted() {
+        utils.nameStuff(document.getElementById('fname').value);
+        streaming = true;
+        startAndStop.innerText = 'Stop';
+        startAndStop.className = 'button is-danger is-borderless';
+        headerVideo.innerText = '📸';
+        videoInput.width = videoInput.videoWidth;
+        videoInput.height = videoInput.videoHeight;
+        videoInput.hidden = false;
+        utils.executeCode('codeEditor', streaming);
+      }
 
-    //   function onVideoStopped() {
-    //     streaming = false;
-    //     canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
-    //     sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
-    //     startAndStop.innerText = 'Start';
-    //     startAndStop.className = 'button is-primary is-borderless';
-    //     headerVideo.innerText = '📷';
-    //     videoInput.hidden = true;
-    //   }
+      function onVideoStopped() {
+        streaming = false;
+        canvasContext.clearRect(0, 0, canvasOutput.width, canvasOutput.height);
+        sockContext.clearRect(0, 0, sockOutput.width, sockOutput.height);
+        startAndStop.innerText = 'Start';
+        startAndStop.className = 'button is-primary is-borderless';
+        headerVideo.innerText = '📷';
+        videoInput.hidden = true;
+      }
 
      
-    // })
-    // .catch((err)=> {
-    //   console.log(err);
-    //   console.log("Brokennnnnnnn")
-    //   this.$forceUpdate();
-    // });
-    // }
-    // }
+    })
+    .catch((err)=> {
+      console.log(err);
+      console.log("Brokennnnnnnn")
+      this.$forceUpdate();
+    });
+    }
+    }
   },
   watch: {
     "$route.params.id": function(id) {

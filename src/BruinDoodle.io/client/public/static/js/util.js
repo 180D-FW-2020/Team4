@@ -40,13 +40,13 @@ var OPENCV_URL = '/static/js/opencv.js';
 var script = document.createElement('script');
 script.setAttribute('async', '');
 script.addEventListener('load', async () => {
-    //if (cv.getBuildInformation)
-    //{
-        //console.log(cv.getBuildInformation());
+    if (cv.getBuildInformation)
+    {
+        console.log(cv.getBuildInformation());
         //onloadCallback();
-    //}
-    //else
-    //{
+    }
+    else
+    {
         // WASM
         if (cv instanceof Promise) {
             cv = await cv;
@@ -58,7 +58,7 @@ script.addEventListener('load', async () => {
             //onloadCallback();
             }
         }
-    //}
+    }
 });
 script.addEventListener('error', () => {
     self.printError('Failed to load ' + OPENCV_URL);
@@ -132,7 +132,7 @@ function executeCode (textAreaId, streaming) {
         var w_height = whiteboardPositionInfo.height;
         var w_width = whiteboardPositionInfo.width;
 
-        var FPS = 500;
+        var FPS = 100;
             //const FPS = 50;
         function processVideo() {
             try {

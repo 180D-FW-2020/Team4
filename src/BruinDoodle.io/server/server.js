@@ -15,7 +15,6 @@ global.io = io;
 global.CHAT = CHAT;
 
 var clients = [];
-var num_guessed = 0;
 
 io.on("connection", socket => {
   // Connect
@@ -89,10 +88,8 @@ io.on("connection", socket => {
               self: `Congratulations! You've guessed the word!`
             });
             CHAT.sendServerMessage(room.id, `${other.name} guessed the word`);
-            num_guessed++;
-            if(num_guessed == (room.getUsers().length - 1))
+            if(room.getNumGuessed() == (room.getUsers().length - 1))
             {
-              num_guessed = 0;
               room.stopRound();
             }
           }
@@ -125,8 +122,16 @@ io.on("connection", socket => {
     });
     let room = ROOMS.getSocketRoom(other);
     if (room.painter == other.id && room.round != null) {
-      socket.to(room.id).emit('paint', coords);
-      room.round.addLine(coords);
+      if(room.getButtonStatus(other.id) == 1){
+        if(room.getDrawStatus() == true) {
+          socket.to(room.id).emit('paint', coords);
+          room.round.addLine(coords);
+        }
+      }
+      else{
+        socket.to(room.id).emit('paint', coords);
+        room.round.addLine(coords);
+      }
     }
   });
 
@@ -147,6 +152,23 @@ io.on("connection", socket => {
     let room = ROOMS.getSocketRoom(socket);
     if (room.painter == socket.id && room.round == null) {
       room.startRound(word);
+    }
+  });
+
+  socket.on("button_detected", draw => {
+    let room = ROOMS.getSocketRoom(socket);
+    if(draw == "Drawing!"){
+      room.changeDrawStatus(true);
+    }
+    else{
+      room.changeDrawStatus(false);
+    }
+  });
+
+  socket.on("button_status", draw => {
+    let room = ROOMS.getSocketRoom(socket);
+    if(draw == "Yes"){
+      room.changeButtonStatus(socket.id);
     }
   });
 

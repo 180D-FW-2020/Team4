@@ -46,6 +46,10 @@ class ROOM {
       {
         ...options.roundResults,
       } || {};
+    this.buttonStatus = 
+      {
+        ...options.buttonStatus,
+      } || {};
     this.painter = null;
     this.created = true;
     this.round = null;
@@ -53,6 +57,7 @@ class ROOM {
     this.TimeLeft = 0;
     this.numCorrect = 0;
     this.topPoints = 0;
+    this.drawStatus = false;
     this.hintLockActivated = 0;
     this.hintLockActivatedUser = "";
   }
@@ -189,6 +194,8 @@ class ROOM {
   startRound(word) {
     if (this.users.length > 1) {
       this.round = new ROUND(word);
+      io.to(this.id).emit("get_maxRounds", this.maxRounds);
+      io.to(this.id).emit("get_numRounds", Math.floor(this.numRounds / this.users.length) + 1);
       io.to(this.id).emit("round_started");
       io.to(this.painter).emit("receive_password", word);
       CHAT.sendServerMessage(this.id, `Round started!`);
@@ -196,6 +203,7 @@ class ROOM {
       this.TimeLeft = this.roundTime;
       this.countDown();
       this.letters = word;
+      this.drawStatus = false;
 
       var resStr = "";
       var space_index = word.indexOf(' ');
@@ -229,8 +237,7 @@ class ROOM {
   stopRound() {
     this.round = null;
 
-    if(this.TimeLeft >= 30){
-
+    if(this.TimeLeft >= Math.floor(this.roundTime/2)){
       var temp = this.powerUps[this.painter]%32;
       var valid = Math.floor(temp/16);
       if(valid == 0)
@@ -360,19 +367,49 @@ class ROOM {
 
   addUser({ id }) {
     this.users.push(id);
+    if(this.numRounds > 0){
+      this.numRounds += Math.floor(this.numRounds / (this.users.length-1));
+      this.underscore_letters[id] = this.underscore_letters[this.users[0]];
+
+      io.to(id).emit("receive_hint", this.underscore_letters[id]);
+      io.to(this.id).emit("get_numRounds", Math.floor(this.numRounds / this.users.length) + 1);
+      io.to(this.id).emit("get_maxRounds", this.maxRounds);
+    }
+    else{
+      if(this.TimeLeft != 0){
+        this.underscore_letters[id] = this.underscore_letters[this.users[0]];
+        io.to(id).emit("get_numRounds", 1);
+        io.to(this.id).emit("get_maxRounds", this.maxRounds);
+        io.to(this.id).emit("receive_hint", this.underscore_letters[id]);
+      }
+    }
     this.points[id] = 0;
     this.powerUps[id] = 0;
     this.artist_AllCorrectStreak[id] = 0;
     this.guessStreak[id] = 0;
     this.firstGuessStreak[id] = 0;
     this.roundResults[id] = 0;
-    this.queue.unshift(id);
+    this.buttonStatus[id] = 0;
+    if(this.numRounds > 0){
+      var person = this.queue.shift();
+      this.queue.unshift(id);
+      this.queue.unshift(person);
+    }
+    else{
+      this.queue.unshift(id);
+    }
     this.updateUsers();
   }
 
   removeUser({ id, name }) {
     this.users.splice(this.users.indexOf(id), 1);
     this.queue.splice(this.queue.indexOf(id), 1);
+
+  if(this.numRounds > 0){
+    this.numRounds -= Math.floor(this.numRounds / (this.users.length+1));
+    io.to(this.id).emit("get_numRounds", Math.floor(this.numRounds / this.users.length) + 1);
+    io.to(this.id).emit("get_maxRounds", this.maxRounds);
+  }
 
     // If user who left was a painter, replace him.
     if (this.painter == id) {
@@ -458,6 +495,26 @@ class ROOM {
       });
     }
     return usrs;
+  }
+
+  getNumGuessed(){
+    return this.numCorrect;
+  }
+
+  changeButtonStatus(id){
+    this.buttonStatus[id] = 1;
+  }
+
+  getButtonStatus(id){
+    return this.buttonStatus[id];
+  }
+
+  getDrawStatus(){
+    return this.drawStatus;
+  }
+
+  changeDrawStatus(status){
+    this.drawStatus = status;
   }
 
   userGuessStatus(id) {
