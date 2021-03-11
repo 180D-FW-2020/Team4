@@ -462,9 +462,9 @@ export default {
   },
   mounted() {
     this.getRoomInfo();
-    let socketScript = document.createElement('script');
-      socketScript.setAttribute('src', './static/js/socket.io.js');
-      document.body.appendChild(socketScript);
+    //let socketScript = document.createElement('script');
+      //socketScript.setAttribute('src', './static/js/socket.io.js');
+      //document.body.appendChild(socketScript);
     //let utilsScript = document.createElement('script');
       //utilsScript.setAttribute('src', './static/js/utils.js');
       //document.body.appendChild(utilsScript);

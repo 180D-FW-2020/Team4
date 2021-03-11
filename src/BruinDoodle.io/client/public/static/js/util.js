@@ -11,21 +11,42 @@ var sockOutput = document.getElementById('sockOutput');
 var sockContext = sockOutput.getContext('2d');
 var headerVideo = document.getElementById('headerVideo');
 
-//var sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
+var sockets;
+
 var prevPos= { x: null, y: null };
+var SOCKET_URL = '/static/js/socket.io.js';
+var sscripts = document.createElement('script');
+sscripts.setAttribute('async', '');
+sscripts.addEventListener('load', async () => {
+    if (io instanceof Promise) {
+        io = await io;
+        console.log("yy");
+        //onloadCallback();
+    }
+    sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
+    console.log("yay")
+});
+sscripts.addEventListener('error', () => {
+    self.printError('Failed to load ' + SOCKET_URL);
+});
+sscripts.src = SOCKET_URL;
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(sscripts, node);
+
+//var sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
 
 
 var OPENCV_URL = '/static/js/opencv.js';
 var script = document.createElement('script');
 script.setAttribute('async', '');
 script.addEventListener('load', async () => {
-    if (cv.getBuildInformation)
-    {
-        console.log(cv.getBuildInformation());
+    //if (cv.getBuildInformation)
+    //{
+        //console.log(cv.getBuildInformation());
         //onloadCallback();
-    }
-    else
-    {
+    //}
+    //else
+    //{
         // WASM
         if (cv instanceof Promise) {
             cv = await cv;
@@ -37,7 +58,7 @@ script.addEventListener('load', async () => {
             //onloadCallback();
             }
         }
-    }
+    //}
 });
 script.addEventListener('error', () => {
     self.printError('Failed to load ' + OPENCV_URL);
@@ -58,7 +79,7 @@ startAndStop.addEventListener('click', () => {
 });
 
 function onVideoStarted() {
-    //nameStuff(document.getElementById('fname').value);
+    nameStuff(document.getElementById('fname').value);
     streaming = true;
     startAndStop.innerText = 'Stop';
     startAndStop.className = 'button is-danger is-borderless';
@@ -179,8 +200,8 @@ function executeCode (textAreaId, streaming) {
                                     if (prevPos.x != pos.x && prevPos.y != pos.y){
                                         var coords = { prevPos: prevPos, currPos: pos };
                                         var paintObj = { color: "#000", coords };
-                                        console.log(pos);
-                                        //sockets.emit('paint', paintObj);
+                                        //console.log(pos);
+                                        sockets.emit('paint', paintObj);
                                         prevPos.x = pos.x;
                                         prevPos.y = pos.y;
                                     }
