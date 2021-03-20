@@ -1,5 +1,3 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require("constants");
 const ROUND = require("./round");
 
@@ -261,8 +259,6 @@ class ROOM {
       
       else if(this.artist_AllCorrectStreak[this.painter] == 3)
       {
-        //check if they have it already
-        
         var temp = this.powerUps[this.painter]%32;
         temp = temp%16;
         var valid = Math.floor(temp/8);
@@ -275,8 +271,6 @@ class ROOM {
       //if they do not all guess correctly, the streak is over, so assign it 0
       this.artist_AllCorrectStreak[this.painter] = 0;
     }
-
-    /////////////////////////////////// Artist Points //////////////////////////////////////////
 
     //artist gets half the points of first place plus an incentive for the more people guess
     var artist_points = parseInt(this.topPoints/2) + parseInt((this.numCorrect/(this.users.length-1)) * (this.topPoints/4));
@@ -297,9 +291,7 @@ class ROOM {
         this.updateUsers();
       }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////
 
-    //If a guesser does not guess correctly, we need to reset their guess streaks to 0
     for(let user of this.users){
       //only look at guessers 
       if(user != this.painter){
@@ -483,6 +475,7 @@ class ROOM {
   updateUsers() {
     io.to(this.id).emit("receive_users", this.getUsers());
   }
+
 
   getUsers() {
     let usrs = [];
@@ -670,9 +663,3 @@ class ROOM {
 }
 
 module.exports = ROOM;
-
-
-
-//TO TEST:
-//check if reset happens on guesser streaks
-//check if proper power ups awarded (console log everything)

@@ -89,7 +89,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
 
             let cap = new cv.VideoCapture(video);
 
-            let lower_pink = new cv.Scalar(90, 110, 150);
+            let lower_pink = new cv.Scalar(90, 130, 150);
             let upper_pink = new cv.Scalar(120, 200, 255);
 
             let mask = new cv.Mat(video.height, video.width, cv.CV_8UC1);
@@ -104,7 +104,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
             var w_height = whiteboardPositionInfo.height;
             var w_width = whiteboardPositionInfo.width;
 
-            const FPS = 500;
+            const FPS = 100;
             //const FPS = 50;
             function processVideo() {
                 try {

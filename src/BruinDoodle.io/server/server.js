@@ -156,7 +156,13 @@ io.on("connection", socket => {
   });
 
   socket.on("button_detected", draw => {
-    let room = ROOMS.getSocketRoom(socket);
+    other = socket;
+    clients.forEach(function (cl){
+      if(socket.name == (cl.name+"8")) {
+        other = cl;
+      }
+    });
+    let room = ROOMS.getSocketRoom(other);
     if(draw == "Drawing!"){
       room.changeDrawStatus(true);
     }
@@ -166,9 +172,15 @@ io.on("connection", socket => {
   });
 
   socket.on("button_status", draw => {
-    let room = ROOMS.getSocketRoom(socket);
+    other = socket;
+    clients.forEach(function (cl){
+      if(socket.name == (cl.name+"8")) {
+        other = cl;
+      }
+    });
+    let room = ROOMS.getSocketRoom(other);
     if(draw == "Yes"){
-      room.changeButtonStatus(socket.id);
+      room.changeButtonStatus(other.id);
     }
   });
 
