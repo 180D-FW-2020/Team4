@@ -1,0 +1,14 @@
+eventlet
+Flask==0.12.2
+Flask-Cors==3.0.10
+Flask-SocketIO==5.0.0
+gunicorn
+imutils==0.5.3
+numpy==1.19.4
+opencv-python==3.4.2.17
+Pillow==4.2.1
+python-dateutil==2.8.1
+python-engineio==4.0.0
+python-socketio==5.0.4
+requests
+websocket-client

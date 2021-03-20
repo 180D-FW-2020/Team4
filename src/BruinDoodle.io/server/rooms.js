@@ -27,6 +27,7 @@ const CREATE_ROOM = function (socket, options) {
     points: {},
     underscore_letters: {},
     powerUps: {},
+    buttonStatus: {},
     artist_AllCorrectStreak: {},
     guessStreak: {},
     firstGuessStreak: {},
@@ -45,6 +46,7 @@ const CREATE_ROOM = function (socket, options) {
 
   return true;
 };
+
 
 const GET_ROOMS = function () {
   let rooms = [];

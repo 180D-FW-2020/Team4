@@ -137,7 +137,7 @@ script: [
         </div>
       </div>
 
-      <whiteboard :iDraw="iDraw" :started="roundStarted"/>
+      <whiteboard id="whiteboardID" :iDraw="iDraw" :started="roundStarted"/>
 
       <div class="column is-3" id="chat">
         <div class="card chat">
@@ -191,43 +191,8 @@ script: [
               </div>
             </form>
           </footer>
-
-          <footer class="card-footer" hidden>
-            <form class="field has-addons voice-input" hideen>
-              <div class="control" hidden>
-                <button
-                  id = "recordButton"
-                  class="button is-primary is-borderless"
-                  value="Record"
-                  hidden
-                  >
-                  Record
-                </button>
-              </div>
-              <div class="control" hidden>
-                <button
-                  id = "pauseButton"
-                  class="button is-primary is-borderless"
-                  value="Pause"
-                  hidden
-                  >
-                  Pause
-                </button>
-              </div>
-              <div class="control" hidden>
-                <button
-                  id = "stopButton"
-                  type="submit"
-                  class="button is-primary is-borderless"
-                  value="Stop"
-                  hidden
-                  >
-                  Stop
-                </button>
-              </div>
-            </form>
-          </footer>
         </div>
+
 
         <div class="card card--painter">
           <header class="card-header card-audio">
@@ -246,6 +211,7 @@ script: [
 
       <div class="column is-full">
         <div>
+          <input type="hidden" id="fname"><br>
           <table cellpadding="0" cellspacing="0" width="0" border="0">
               <tr>
                 <!--
@@ -306,6 +272,11 @@ export default {
       let name = await this.getName();
       this.$socket.emit("setName", name);
       this.$socket.name = name;
+      
+      document.getElementById('fname').setAttribute("value", name);
+      //var s= document.getElementById('fname');
+      //s.value = name;
+      
       this.showUsers = true;
 
       // Joining
@@ -432,7 +403,6 @@ export default {
       this.roundStarted = false;
     },
     game_ended() {
-      console.log(this.sortedUsers)
       this.$swal({ 
         title: "Goodbye", 
         text: this.displayUsers(this.sortedUsers),
@@ -476,10 +446,8 @@ export default {
       }
 
       this.artistUps = artist;
-      console.log(this.artistUps);
 
       this.guesserUps = guesser;
-      console.log(this.guesserUps);
     },
   },
   computed: {
@@ -494,23 +462,29 @@ export default {
   },
   mounted() {
     this.getRoomInfo();
-    let recorderScript = document.createElement('script');
-      recorderScript.setAttribute('src', '/static/js/recorder.js');
-      document.body.appendChild(recorderScript);
-    let appScript = document.createElement('script');
-      appScript.setAttribute('src', '/static/js/app.js');
-      document.body.appendChild(appScript);
     let socketScript = document.createElement('script');
       socketScript.setAttribute('src', './static/js/socket.io.js');
       document.body.appendChild(socketScript);
     let utilsScript = document.createElement('script');
       utilsScript.setAttribute('src', './static/js/utils.js');
       document.body.appendChild(utilsScript);
+    //let utilScript = document.createElement('script');
+      //utilScript.setAttribute('src', './static/js/util.js');
+      //document.body.appendChild(utilScript);
+    let recorderScript = document.createElement('script');
+      recorderScript.setAttribute('src', '/static/js/recorder.js');
+      document.body.appendChild(recorderScript);
+    let appScript = document.createElement('script');
+      appScript.setAttribute('src', '/static/js/app.js');
+      document.body.appendChild(appScript);
+    
+    
     //let webrtcScript = document.createElement('script');
       //webrtcScript.setAttribute('src', 'https://webrtc.github.io/adapter/adapter-5.0.4.js');
       //document.body.appendChild(webrtcScript);
-    
-    this.$loadScript('/static/js/utils')
+    document.onreadystatechange = () => { 
+    if (document.readyState == "complete") { 
+    this.$loadScript('/static/js/utils.js')
     .then(()=> {
       let utils = new Utils('errorMessage');
       let streaming = false;
@@ -522,9 +496,14 @@ export default {
       let sockContext = sockOutput.getContext('2d');
       let headerVideo = document.getElementById('headerVideo');
 
+       utils.loadOpenCv(() => {
+        startAndStop.removeAttribute('disabled');
+      });
+
       startAndStop.addEventListener('click', () => {
         if (!streaming) {
             //utils.clearError();
+            console.log("testingggggg")
             utils.startCamera('qvga', onVideoStarted, 'videoInput');
         } else {
             utils.stopCamera();
@@ -533,6 +512,7 @@ export default {
       });
 
       function onVideoStarted() {
+        utils.nameStuff(document.getElementById('fname').value);
         streaming = true;
         startAndStop.innerText = 'Stop';
         startAndStop.className = 'button is-danger is-borderless';
@@ -553,14 +533,15 @@ export default {
         videoInput.hidden = true;
       }
 
-      utils.loadOpenCv(() => {
-        startAndStop.removeAttribute('disabled');
-      });
+     
     })
     .catch((err)=> {
       console.log(err);
       console.log("Brokennnnnnnn")
+      this.$forceUpdate();
     });
+    }
+    }
   },
   watch: {
     "$route.params.id": function(id) {
@@ -644,6 +625,9 @@ export default {
 .content-video {
   padding: 0rem;
   font-size: 0em;
+   transform: rotateY(180deg);
+  -webkit-transform:rotateY(180deg); // Safari and Chrome 
+  -moz-transform:rotateY(180deg); // Firefox 
 }
 
 .hint {

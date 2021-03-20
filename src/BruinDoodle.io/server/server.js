@@ -3,7 +3,8 @@ const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http, { 
   cors: {
-    origin: '*'
+    origin: '*',
+    methods: 'GET, POST'
   }
 });
 const ROOMS = require("./rooms");
@@ -14,12 +15,10 @@ global.io = io;
 global.CHAT = CHAT;
 
 var clients = [];
-var num_guessed = 0;
 
 io.on("connection", socket => {
   // Connect
   console.log(`User connected: ${socket.id}`);
-  console.log(JSON.stringify(socket.handshake.headers.origin));
   socket.name = socket.id;
   clients.push(socket);
 
@@ -72,20 +71,11 @@ io.on("connection", socket => {
   socket.on("send_message", msg => {
     other = socket;
     console.log(msg)
-    //console.log('test1');
-    //console.log(socket.handshake);
-    if (typeof(socket.handshake.headers.origin)=='undefined'){
-      console.log('test2');
       clients.forEach(function (cl) {
-        console.log(socket.handshake.address);
-        if (socket.handshake.address==cl.handshake.address){
-          console.log(socket.handshake.headers.origin);
-          if (cl.handshake.headers.origin == 'http://localhost:8081'){
-            other = cl;
+        if (socket.name==(cl.name+"7")){
+          other = cl;
           }
-        }
     });
-    }
     let room = ROOMS.getSocketRoom(other);
     if (room) {
 
@@ -95,13 +85,11 @@ io.on("connection", socket => {
           if(room.userGuessStatus(other.id) == 0){
             ROOMS.givePoints(other);
             CHAT.sendCallback(other, {
-              self: `Congratulations! You've guessed the word!`,
-              broadcast: `${other.name} guessed the word`
+              self: `Congratulations! You've guessed the word!`
             });
-            num_guessed++;
-            if(num_guessed == (room.getUsers().length - 1))
+            CHAT.sendServerMessage(room.id, `${other.name} guessed the word`);
+            if(room.getNumGuessed() == (room.getUsers().length - 1))
             {
-              num_guessed = 0;
               room.stopRound();
             }
           }
@@ -126,51 +114,36 @@ io.on("connection", socket => {
   });
 
   socket.on("paint", (coords) => {
-    //console.log('paint');
     other = socket;
-    if (socket.handshake.headers.origin=='http://localhost:8081'){ //(typeof(socket.handshake.headers.origin)=='undefined'){
-      //console.log("sssssssssssssssssssssssss")
-      clients.forEach(function (cl) {
-        //console.log(cl.name);
-        if (cl.name!='Laptop1'){
-          //console.log(typeof JSON.stringify(cl.handshake.headers.origin) == 'string');
-          //if (String(cl.handshake.headers.origin) == "https://mighty-headland-55869.herokuapp.com/"){ //'http://192.168.68.117:8081'){
-            //other = cl;
-            //console.log("double yay")
-          //}
-          //console.log(cl.handshake.headers.origin)
-          if (cl.handshake.headers.origin == 'http://localhost:8081'){//(typeof JSON.stringify(cl.handshake.headers.origin) == 'string'){ //'http://192.168.68.117:8081'){
-            other = cl;
-            //console.log("double yay")
-          }
+    clients.forEach(function (cl) {
+      if (socket.name==(cl.name+"9")){
+        other = cl;
         }
-        //console.log("boop");
-        //console.log(cl.handshake.address);
-        //if (socket.handshake.address==cl.handshake.address){
-          //console.log(cl.handshake.headers);
-          //if (cl.handshake.headers.origin == 'http://192.168.68.117:8081'){
-          //console.log("test");  
-          //other = cl;
-          //}
-        //}
     });
-    }
     let room = ROOMS.getSocketRoom(other);
     if (room.painter == other.id && room.round != null) {
-      socket.to(room.id).emit('paint', coords);
-      room.round.addLine(coords);
+      if(room.getButtonStatus(other.id) == 1){
+        if(room.getDrawStatus() == true) {
+          socket.to(room.id).emit('paint', coords);
+          room.round.addLine(coords);
+        }
+      }
+      else{
+        socket.to(room.id).emit('paint', coords);
+        room.round.addLine(coords);
+      }
     }
-
-    //let room = ROOMS.getSocketRoom(socket);
-    //if (room.painter == socket.id && room.round != null) {
-      //socket.to(room.id).emit('paint', coords);
-      //room.round.addLine(coords);
-    //}
   });
 
   socket.on("clear", () => {
-    let room = ROOMS.getSocketRoom(socket);
-    if (room.painter == socket.id && room.round != null) {
+    other = socket;
+    clients.forEach(function (cl) {
+      if (socket.name==(cl.name+"7")){
+        other = cl;
+        }
+    });
+    let room = ROOMS.getSocketRoom(other);
+    if (room.painter == other.id && room.round != null) {
       room.clearBoard();
     }
   });
@@ -182,8 +155,37 @@ io.on("connection", socket => {
     }
   });
 
+  socket.on("button_detected", draw => {
+    other = socket;
+    clients.forEach(function (cl){
+      if(socket.name == (cl.name+"8")) {
+        other = cl;
+      }
+    });
+    let room = ROOMS.getSocketRoom(other);
+    if(draw == "Drawing!"){
+      room.changeDrawStatus(true);
+    }
+    else{
+      room.changeDrawStatus(false);
+    }
+  });
+
+  socket.on("button_status", draw => {
+    other = socket;
+    clients.forEach(function (cl){
+      if(socket.name == (cl.name+"8")) {
+        other = cl;
+      }
+    });
+    let room = ROOMS.getSocketRoom(other);
+    if(draw == "Yes"){
+      room.changeButtonStatus(other.id);
+    }
+  });
+
   socket.on("gesture_detected", gesture => {
-    other = console;
+    other = socket;
     clients.forEach(function (cl){
       if(socket.name == (cl.name+"8")) {
         other = cl;

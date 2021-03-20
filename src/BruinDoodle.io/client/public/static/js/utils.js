@@ -1,16 +1,10 @@
 function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
     let self = this;
-    var socket = io('http://localhost:5000', { withCredentials: false  });
+    //var socket = io('https://polar-mesa-13022.herokuapp.com/', { withCredentials: false  });
 
-    //socket.on('connect', function(){
-        //console.log("Connected...!", socket.connected)
-    //});
 
-    var sockets = io('http://localhost:5050', { withCredentials: false  });//,transports: ["websocket"]
-    //sockets.emit('setName', "Laptop1")
-    //sockets.on('connection', function(){
-        //console.log("Connected...!", sockets.connected)
-    //});
+    var sockets = io('https://fathomless-river-82221.herokuapp.com/', { withCredentials: false  });//,transports: ["websocket"]
+    var prevPos= { x: null, y: null };
 
     this.errorOutput = document.getElementById(errorOutputId);
 
@@ -19,6 +13,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         let script = document.createElement('script');
         script.setAttribute('async', '');
         script.setAttribute('type', 'text/javascript');
+        console.log("OpenCv shit")
         script.addEventListener('load', async () => {
             if (cv.getBuildInformation)
             {
@@ -66,8 +61,8 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         request.send();
     };
 
-    this.loadImageToCanvas = function(url, cavansId) {
-        let canvas = document.getElementById(cavansId);
+    this.loadImageToCanvas = function(url, canvasId) {
+        let canvas = document.getElementById(canvasId);
         let ctx = canvas.getContext('2d');
         let img = new Image();
         img.crossOrigin = 'anonymous';
@@ -88,56 +83,139 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
             let video = document.getElementById('videoInput');
             let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
             let dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
+            
+            
+            let hsv = new cv.Mat();
+
             let cap = new cv.VideoCapture(video);
 
-            const FPS = 30;
+            let lower_pink = new cv.Scalar(90, 130, 150);
+            let upper_pink = new cv.Scalar(120, 200, 255);
+
+            let mask = new cv.Mat(video.height, video.width, cv.CV_8UC1);
+
+            let ksize = new cv.Size(25,25);
+
+            var contours = new cv.MatVector();
+            var hierarchy = new cv.Mat();
+
+            var whiteboard = document.getElementById('whiteboardID').getElementsByClassName("whiteboard")[0];
+            var whiteboardPositionInfo = whiteboard.getBoundingClientRect();
+            var w_height = whiteboardPositionInfo.height;
+            var w_width = whiteboardPositionInfo.width;
+
+            const FPS = 100;
+            //const FPS = 50;
             function processVideo() {
                 try {
                     if (!streaming) {
                         // clean and stop.
                         src.delete();
                         dst.delete();
+                        hsv.delete();
+                        cap.delete();
+                        lower_pink.delete();
+                        upper_pink.delete();
+                        mask.delete();
+                        ksize.delete();
+                        contours.delete();
+                        hierarchy.delete();
                         return;
                     }
                     let begin = Date.now();
                     // start processing.
                     cap.read(src);
-                    //setInterval(() => {
-                        //             cap.read(src);
-                        
+                    cv.flip(src,src,1);
                     
-                    //cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-                    cv.cvtColor(src, dst, cv.COLOR_RGBA2RGB);
-                    cv.imshow('canvasOutput', dst);
-                    var type = "image/png"
-                    var data = document.getElementById("canvasOutput").toDataURL(type);
-                    //var data = document.getElementById("videoInput").toDataURL(type);
-                    //console.log(data)
-                    data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
-                    
-                    socket.emit('image', data);
-                        //         }, 10000/FPS);
+                    if(src.size().width > 0 && src.size().height > 0){
+
+                        cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
+
+                        cv.cvtColor(dst, hsv, cv.COLOR_BGR2HSV);
+
+                        let low = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), lower_pink);
+                        let high = new cv.Mat(hsv.rows, hsv.cols, hsv.type(), upper_pink);
+
+                        cv.inRange(hsv,low,high,mask);
+
+
+                        cv.findContours(mask, contours, hierarchy, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
                         
-                    //socket.on('response_back', function(image){
-                        //cv.imshow('canvasOutput', image);
-                        //console.log(image)
-                    //});
-                    socket.on('pos', function(paintObj){
-                        ////this.$socket.emit("paint", paintObj);
-                        sockets.emit('paint', paintObj);
-                        ////console.log('hi');
-                    });
-                    ////socket.on('response_back', function(image){
-                                    //const image_id = document.getElementById('image');
-                                    //var image_id = document.getElementById('sockOutput');
-                                    //console.log(image);
-                                    ////self.loadImageToCanvas(image, 'sockOutput');
-                                    //image_id.src = image;
-                                    //cv.imshow('canvasOutput', image)
-                                ////});
+                        var max_contour = contours.get(0);
+
+                        if(typeof contours.get(0) != 'undefined'){
+
+                            for(let i = 0; i< contours.size(); i++){
+                                if(cv.contourArea(contours.get(i)) > max_contour){
+                                    max_contour = contours.get(i);
+                                }
+                            }
+                            if(cv.contourArea(max_contour) > 100){
+                                var circle = cv.minEnclosingCircle(max_contour);
+                                var area = 3.14*circle.radius*circle.radius;
+
+                                if(area > 700){
+                                    var M = cv.moments(max_contour);
+                                    var X = ((M.m10/M.m00)/video.width)*w_width;
+                                    var Y = ((M.m01/M.m00)/video.height)*w_height;
+                                    var pos= { x: X, y: Y};
+                                    
+
+                                    if (prevPos.x == null || prevPos.y == null){
+                                        prevPos.x = pos.x;
+                                        prevPos.y = pos.y;
+                                    }
+
+                                    if(Number.isNaN(pos.x) == false && Number.isNaN(pos.y) == false){
+                                        if (prevPos.x != pos.x && prevPos.y != pos.y){
+                                            let coords = { prevPos: prevPos, currPos: pos };
+                                            let paintObj = { color: "#000", coords };
+                                            sockets.emit('paint', paintObj);
+                                            prevPos.x = pos.x;
+                                            prevPos.y = pos.y;
+                                        }
+                                    }
+                                    let circle_color = new cv.Scalar(255,0,0);
+                                    cv.circle(mask, circle.center, circle.radius, circle_color);
+                                }
+                            }
+                        }
+                        
+                        //cv.imshow('canvasOutput', mask);
+                    }
+                    else{
+                        console.log("mucho no bueno");
+                    }
+
+                    // cv.cvtColor(src, dst, cv.COLOR_RGBA2RGB);
+                    // cv.imshow('canvasOutput', dst);
+                    // var type = "image/png"
+                    // var data = document.getElementById("canvasOutput").toDataURL(type);
+                    // data = data.replace('data:' + type + ';base64,', ''); //split off junk at the beginning
+                    // socket.emit('image', data);
+                    //     //         }, 10000/FPS);
+                        
+                    // socket.on('pos', function(pos){
+                    //     ////this.$socket.emit("paint", paintObj);
+                    //     if (prevPos.x==null && prevPos.y==null){
+                    //         prevPos.x = pos.x;
+                    //         prevPos.y = pos.y;
+                    //     }
+                    //     if (prevPos.x!=pos.x && prevPos.y!=pos.y){
+                    //         let coords = { prevPos: prevPos, currPos: pos };
+                    //         let paintObj = { color: "#000", coords };
+                    //         sockets.emit('paint', paintObj);
+                    //         prevPos.x = pos.x;
+                    //         prevPos.y = pos.y
+                    //     }
+                    // });
                     // schedule the next one.
+                    
+
                     let delay = 5000/FPS - (Date.now() - begin);
                     setTimeout(processVideo, delay);
+                    //socket.close();
+                    //sockets.close();
                 } catch (err) {
                     self.printError(err);
                 }
@@ -207,6 +285,7 @@ function Utils(errorOutputId) { // eslint-disable-line no-unused-vars
         const constraints = {
             'qvga': {width: {exact: 320}, height: {exact: 240}},
             'vga': {width: {exact: 640}, height: {exact: 480}}};
+        
         let video = document.getElementById(videoId);
         if (!video) {
             video = document.createElement('video');
